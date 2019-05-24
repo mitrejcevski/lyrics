@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Lyrics</string>
     <string name="songsOverview">Songs</string>
+    <string name="empty_songs_list">No songs added yet. Start by clicking the + button below</string>
 </resources>

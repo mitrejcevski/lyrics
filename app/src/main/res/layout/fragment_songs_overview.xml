@@ -7,9 +7,12 @@
     tools:context=".main.overview.SongsOverview">
 
     <TextView
+        android:id="@+id/songsOverviewEmptyStateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:gravity="center"
+        android:text="@string/empty_songs_list"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
