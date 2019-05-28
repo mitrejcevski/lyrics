@@ -1,21 +1,37 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("com.github.triplet.play") version "2.2.1"
+}
 
 android {
+
     compileSdkVersion 28
+
     defaultConfig {
         applicationId "nl.jovmit.lyrics"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("HOME") + "/keystores/jovmit")
+            storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
+            keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+            keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -44,4 +60,12 @@ dependencies {
     testImplementation "org.koin:koin-test:$koinVersion"
     testImplementation "androidx.arch.core:core-testing:2.0.1"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+}
+
+play {
+    serviceAccountCredentials = file("/Users/jovche/Desktop/api-5909141819248237050-589682-f249b0d8c5eb.json")
+    defaultToAppBundles = true
+    track = "internal" //[internal/alpha/beta/production]
+    releaseStatus = "draft" //[completed/draft/inProgress/halted]
+//    userFraction = 0.2 // [1 = 100%]
 }
