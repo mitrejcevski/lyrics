@@ -1,0 +1,38 @@
+task releaseNotes {
+    doLast {
+        println("Generating release notes")
+        def lastTag = "git describe --tags --abbrev=0".execute().text.trim()
+        def count = lastTag.isEmpty() ? 1 : lastTag.split("_")[1].toInteger() + 1
+        def tag = "beta_$count"
+        def releaseTitle = "Beta $count - Released on ${new Date().format("dd-MM-yyyy")}"
+        def commitMessages = commitMessagesSince(lastTag)
+
+        def result = new StringBuilder(releaseTitle).append("\n").append(commitMessages).toString()
+        createTag(tag, result)
+    }
+}
+
+private void createTag(String tag, String message) {
+    println(tag)
+    println(message)
+    exec {
+        commandLine "git", "tag", "-a", tag, "-m", message
+    }
+}
+
+private String commitMessagesSince(String lastTag) {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        if (lastTag.trim().isEmpty()) {
+            commandLine "git", "log", "--oneline"
+        } else {
+            commandLine "git", "log", "$lastTag..HEAD", "--oneline"
+        }
+        standardOutput = stdout
+    }
+    def linesBuilder = new StringBuilder()
+    stdout.toString().split("\n").each { line ->
+        linesBuilder.append("- ").append(line.split(" ", 2)[1]).append("\n")
+    }
+    return linesBuilder.toString()
+}
