@@ -31,8 +31,13 @@ private String commitMessagesSince(String lastTag) {
         standardOutput = stdout
     }
     def linesBuilder = new StringBuilder()
-    stdout.toString().split("\n").each { line ->
-        linesBuilder.append("- ").append(line.split(" ", 2)[1]).append("\n")
+    def lines = stdout.toString().split("\n")
+    lines.each { line ->
+        if (line.trim().isEmpty()) {
+            throw new StopActionException("No new commits since the last tag")
+        } else {
+            linesBuilder.append("- ").append(line.split(" ", 2)[1]).append("\n")
+        }
     }
     return linesBuilder.toString()
 }
