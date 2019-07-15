@@ -34,7 +34,7 @@ private String commitMessagesSince(String lastTag) {
     def lines = stdout.toString().split("\n")
     lines.each { line ->
         if (line.trim().isEmpty()) {
-            throw new StopActionException("No new commits since the last tag")
+            throw new GradleException("No new commits since the last tag")
         } else {
             linesBuilder.append("- ").append(line.split(" ", 2)[1]).append("\n")
         }
