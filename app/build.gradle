@@ -66,7 +66,7 @@ dependencies {
 }
 
 play {
-    serviceAccountCredentials = file("/Users/jovche/Desktop/api-5909141819248237050-589682-f249b0d8c5eb.json")
+    serviceAccountCredentials = file(System.getenv("HOME") + "/keystores/google_services_api.json")
     defaultToAppBundles = true
     track = "internal" //[internal/alpha/beta/production]
     releaseStatus = "draft" //[completed/draft/inProgress/halted]
