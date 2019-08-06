@@ -7,6 +7,7 @@ import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.SongsRepository
 import nl.jovmit.lyrics.main.data.Song
+import nl.jovmit.lyrics.main.overview.exceptions.SongsServiceException
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -59,6 +60,28 @@ class SongsOverviewScreenSpecification {
             //no operation
         } verify {
             songsEmptyStateIsGone()
+        }
+    }
+
+    @Test
+    fun shouldDisplayLoadedSongs() = runBlocking<Unit> {
+        given(songsService.fetchAllSongs()).willReturn(songsList)
+
+        launchSongsOverview {
+            //no operation
+        } verify {
+            songTitleAndSingerAreDisplayed(song)
+        }
+    }
+
+    @Test
+    fun shouldDisplayErrorIfLoadingSongsFails() = runBlocking<Unit> {
+        given(songsService.fetchAllSongs()).willThrow(SongsServiceException())
+
+        launchSongsOverview {
+            //no operation
+        } verify {
+            loadingErrorIsDisplayed()
         }
     }
 

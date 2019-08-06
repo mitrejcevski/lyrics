@@ -9,12 +9,14 @@ import kotlinx.android.synthetic.main.fragment_songs_overview.*
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.extensions.applyDefaultColors
 import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.extensions.setupWithLinearLayoutManager
 import nl.jovmit.lyrics.main.data.Song
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import org.koin.android.ext.android.inject
 
 class SongsOverview : Fragment() {
 
+    private val songsAdapter: SongsAdapter by lazy { SongsAdapter() }
     private val songsOverviewViewModel: SongsOverviewViewModel by inject()
 
     override fun onCreateView(
@@ -26,8 +28,14 @@ class SongsOverview : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         songsOverviewSwipeRefresh.applyDefaultColors()
+        setupRecyclerView()
         observeSongsLiveData()
         songsOverviewViewModel.fetchSongs()
+    }
+
+    private fun setupRecyclerView() {
+        songsOverviewRecycler.setupWithLinearLayoutManager()
+        songsOverviewRecycler.adapter = songsAdapter
     }
 
     private fun observeSongsLiveData() {
@@ -35,6 +43,7 @@ class SongsOverview : Fragment() {
             when (it) {
                 is SongsResult.Loading -> displayLoading(it.loading)
                 is SongsResult.Fetched -> displaySongs(it.songs)
+                is SongsResult.FetchingError -> displayFetchingError()
             }
         }
     }
@@ -44,7 +53,16 @@ class SongsOverview : Fragment() {
     }
 
     private fun displaySongs(songs: List<Song>) {
-        val emptyStateVisibility = if (songs.isEmpty()) View.VISIBLE else View.GONE
+        updateEmptyStatePreview(songs.isEmpty())
+        songsAdapter.addSongs(songs)
+    }
+
+    private fun updateEmptyStatePreview(isVisible: Boolean) {
+        val emptyStateVisibility = if (isVisible) View.VISIBLE else View.GONE
         songsOverviewEmptyStateLabel.visibility = emptyStateVisibility
+    }
+
+    private fun displayFetchingError() {
+        songsOverviewInfoView.displayError(R.string.errorFetchingSongs)
     }
 }

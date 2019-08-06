@@ -2,12 +2,13 @@ package nl.jovmit.lyrics.main.overview
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import nl.jovmit.lyrics.*
+import nl.jovmit.lyrics.main.data.Song
 
 @DslMarker
 annotation class SongsOverviewScreenRobot
 
 fun launchSongsOverview(block: SongsOverviewRobot.() -> Unit): SongsOverviewRobot {
-    launchFragmentInContainer<SongsOverview>()
+    launchFragmentInContainer<SongsOverview>(themeResId = R.style.AppTheme)
     return SongsOverviewRobot().apply(block)
 }
 
@@ -29,5 +30,14 @@ class SongsOverviewVerificationRobot {
 
     fun songsEmptyStateIsGone() {
         R.id.songsOverviewEmptyStateLabel check isNotDisplayed
+    }
+
+    fun songTitleAndSingerAreDisplayed(song: Song) {
+        text(song.title) check isDisplayed
+        text(song.singer) check isDisplayed
+    }
+
+    fun loadingErrorIsDisplayed() {
+        text(R.string.errorFetchingSongs) check isDisplayed
     }
 }

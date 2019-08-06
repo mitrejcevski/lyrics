@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/empty_songs_list"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,4 +35,13 @@
                 tools:listitem="@layout/song_list_item" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <nl.jovmit.lyrics.common.view.InfoView
+            android:id="@+id/songsOverviewInfoView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Error loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>

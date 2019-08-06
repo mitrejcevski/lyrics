@@ -23,6 +23,12 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = songs.size
 
+    fun addSongs(newSongs: List<Song>) {
+        val startPosition = songs.size
+        songs.addAll(newSongs)
+        notifyItemRangeInserted(startPosition, newSongs.size)
+    }
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val title: TextView = itemView.findViewById(R.id.songListItemTitle)
