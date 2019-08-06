@@ -46,7 +46,7 @@ class SongsOverviewScreenSpecification {
         given(songsService.fetchAllSongs()).willReturn(emptySongsList)
 
         launchSongsOverview {
-            //no operation
+            // no operation
         } verify {
             songsEmptyStateIsDisplayed()
         }
@@ -57,7 +57,7 @@ class SongsOverviewScreenSpecification {
         given(songsService.fetchAllSongs()).willReturn(songsList)
 
         launchSongsOverview {
-            //no operation
+            // no operation
         } verify {
             songsEmptyStateIsGone()
         }
@@ -68,7 +68,7 @@ class SongsOverviewScreenSpecification {
         given(songsService.fetchAllSongs()).willReturn(songsList)
 
         launchSongsOverview {
-            //no operation
+            // no operation
         } verify {
             songTitleAndSingerAreDisplayed(song)
         }
@@ -79,7 +79,7 @@ class SongsOverviewScreenSpecification {
         given(songsService.fetchAllSongs()).willThrow(SongsServiceException())
 
         launchSongsOverview {
-            //no operation
+            // no operation
         } verify {
             loadingErrorIsDisplayed()
         }
