@@ -23,7 +23,7 @@ class SongsOverviewFeature {
     val rule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var songsRepository: SongsRepository
+    private lateinit var songsService: SongsService
     @Mock
     private lateinit var songsObserver: Observer<SongsResult>
 
@@ -36,13 +36,14 @@ class SongsOverviewFeature {
     @Before
     fun setUp() {
         val dispatchers = TestCoroutineDispatchers()
+        val songsRepository = SongsRepository(songsService)
         songsOverviewViewModel = SongsOverviewViewModel(songsRepository, dispatchers)
         songsOverviewViewModel.songsLiveData().observeForever(songsObserver)
     }
 
     @Test
     fun shouldDisplayFetchedSongs() = runBlocking {
-        given(songsRepository.fetchAllSongs()).willReturn { fetchedSongs }
+        given(songsService.fetchAllSongs()).willReturn { emptyList() }
 
         songsOverviewViewModel.fetchSongs()
 

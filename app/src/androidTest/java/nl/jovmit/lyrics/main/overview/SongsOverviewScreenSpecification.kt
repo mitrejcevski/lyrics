@@ -7,7 +7,6 @@ import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.SongsRepository
 import nl.jovmit.lyrics.main.data.Song
-import nl.jovmit.lyrics.main.data.result.SongsResult
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -23,15 +22,16 @@ import org.mockito.MockitoAnnotations
 class SongsOverviewScreenSpecification {
 
     @Mock
-    private lateinit var songsRepository: SongsRepository
+    private lateinit var songsService: SongsService
 
-    private val emptySongsList = SongsResult.Fetched(emptyList())
+    private val emptySongsList = emptyList<Song>()
     private val song = Song("Title", "Singer Name", "The lyrics of the song")
-    private val songsList = SongsResult.Fetched(listOf(song))
+    private val songsList = listOf(song)
 
     private val songsOverviewModule = module {
+        factory { SongsRepository(songsService) }
         single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-        viewModel { SongsOverviewViewModel(songsRepository, get()) }
+        viewModel { SongsOverviewViewModel(get(), get()) }
     }
 
     @Before
@@ -42,7 +42,7 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun shouldDisplayEmptyStateWhenNoSongsAdded() = runBlocking<Unit> {
-        given(songsRepository.fetchAllSongs()).willReturn(emptySongsList)
+        given(songsService.fetchAllSongs()).willReturn(emptySongsList)
 
         launchSongsOverview {
             //no operation
@@ -53,7 +53,7 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun shouldNotDisplayEmptyStateWhenSongsAdded() = runBlocking<Unit> {
-        given(songsRepository.fetchAllSongs()).willReturn(songsList)
+        given(songsService.fetchAllSongs()).willReturn(songsList)
 
         launchSongsOverview {
             //no operation
