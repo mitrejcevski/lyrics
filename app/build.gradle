@@ -69,6 +69,6 @@ play {
     serviceAccountCredentials = file(System.getenv("HOME") + "/keystores/google_services_api.json")
     defaultToAppBundles = true
     track = "internal" //[internal/alpha/beta/production]
-    releaseStatus = "draft" //[completed/draft/inProgress/halted]
+    releaseStatus = "completed" //[completed/draft/inProgress/halted]
 //    userFraction = 0.2 // [1 = 100%]
 }
