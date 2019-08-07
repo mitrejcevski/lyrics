@@ -1,14 +1,20 @@
 package nl.jovmit.lyrics.main.overview
 
-import androidx.fragment.app.testing.launchFragmentInContainer
+import android.content.Intent
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
+import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.Song
 
 @DslMarker
 annotation class SongsOverviewScreenRobot
 
-fun launchSongsOverview(block: SongsOverviewRobot.() -> Unit): SongsOverviewRobot {
-    launchFragmentInContainer<SongsOverview>(themeResId = R.style.AppTheme)
+fun launchSongsOverview(
+    rule: ActivityTestRule<MainActivity>,
+    block: SongsOverviewRobot.() -> Unit
+): SongsOverviewRobot {
+    rule.launchActivity(Intent())
     return SongsOverviewRobot().apply(block)
 }
 
@@ -18,6 +24,10 @@ class SongsOverviewRobot {
     infix fun verify(function: SongsOverviewVerificationRobot.() -> Unit): SongsOverviewVerificationRobot {
         return SongsOverviewVerificationRobot().apply(function)
     }
+
+    fun clickOnNewSongButton() {
+        R.id.songsOverviewNewSongButton perform click()
+    }
 }
 
 @SongsOverviewScreenRobot
@@ -25,7 +35,7 @@ class SongsOverviewVerificationRobot {
 
     fun songsEmptyStateIsDisplayed() {
         R.id.songsOverviewEmptyStateLabel check isDisplayed
-        R.id.songsOverviewEmptyStateLabel hasText R.string.empty_songs_list
+        R.id.songsOverviewEmptyStateLabel hasText R.string.emptySongsList
     }
 
     fun songsEmptyStateIsGone() {
@@ -39,5 +49,9 @@ class SongsOverviewVerificationRobot {
 
     fun loadingErrorIsDisplayed() {
         text(R.string.errorFetchingSongs) check isDisplayed
+    }
+
+    fun newSongScreenIsDisplayed() {
+        text(R.string.newSong) check isDisplayed
     }
 }

@@ -6,8 +6,7 @@ import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.data.Song
 import nl.jovmit.lyrics.main.data.result.SongsResult
-import nl.jovmit.lyrics.main.overview.SongsService
-import nl.jovmit.lyrics.main.overview.exceptions.SongsServiceException
+import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

@@ -1,3 +1,3 @@
-package nl.jovmit.lyrics.main.overview.exceptions
+package nl.jovmit.lyrics.main.exceptions
 
 class SongsServiceException(message: String = "") : RuntimeException(message)

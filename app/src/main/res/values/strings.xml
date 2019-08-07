@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Lyrics</string>
+    <string name="appName">Lyrics</string>
     <string name="songsOverview">Songs</string>
-    <string name="empty_songs_list">No songs added yet.\nStart by clicking the + button below</string>
+    <string name="emptySongsList">No songs added yet.\nStart by clicking the + button below</string>
     <string name="errorFetchingSongs">Cannot load songs</string>
+    <string name="newSong">New song</string>
+    <string name="songTitle">Song title</string>
+    <string name="singerName">Singer</string>
+    <string name="songLyric">Lyric</string>
 </resources>

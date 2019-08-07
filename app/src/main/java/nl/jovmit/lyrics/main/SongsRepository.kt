@@ -1,8 +1,7 @@
 package nl.jovmit.lyrics.main
 
 import nl.jovmit.lyrics.main.data.result.SongsResult
-import nl.jovmit.lyrics.main.overview.SongsService
-import nl.jovmit.lyrics.main.overview.exceptions.SongsServiceException
+import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 
 class SongsRepository(private val songsService: SongsService) {
 

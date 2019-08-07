@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_songs_overview.*
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.extensions.applyDefaultColors
@@ -29,8 +30,18 @@ class SongsOverview : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         songsOverviewSwipeRefresh.applyDefaultColors()
+        songsOverviewSwipeRefresh.setOnRefreshListener { fetchSongs() }
+        songsOverviewNewSongButton.setOnClickListener { openNewSong() }
         setupRecyclerView()
         observeSongsLiveData()
+        fetchSongs()
+    }
+
+    private fun openNewSong() {
+        findNavController().navigate(R.id.actionOpenNewSong)
+    }
+
+    private fun fetchSongs() {
         songsOverviewViewModel.fetchSongs()
     }
 
