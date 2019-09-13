@@ -4,9 +4,9 @@ buildscript {
     ext.koinVersion = '2.0.0'
     ext.coroutinesVersion = '1.1.1'
     ext.mockitoKotlinVersion = '2.1.0'
-    ext.androidArchNavigationVersion = '2.1.0-alpha06'
-    ext.activityKtxVersion = '1.1.0-alpha01'
-    ext.fragmentKtxVersion = '1.2.0-alpha01'
+    ext.androidArchNavigationVersion = '2.2.0-alpha02'
+    ext.activityKtxVersion = '1.1.0-alpha03'
+    ext.fragmentKtxVersion = '1.2.0-alpha03'
 
     repositories {
         google()
