@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
-    id("com.github.triplet.play") version "2.2.1"
+    id("com.github.triplet.play") version "2.4.1"
 }
 
 apply from: '../release_notes_generator.gradle'
