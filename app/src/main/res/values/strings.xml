@@ -7,4 +7,5 @@
     <string name="songTitle">Song title</string>
     <string name="singerName">Singer</string>
     <string name="songLyric">Lyric</string>
+    <string name="errorEmptySongTitle">Missing song title</string>
 </resources>
