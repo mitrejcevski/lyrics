@@ -9,7 +9,7 @@ import nl.jovmit.lyrics.common.CoroutineViewModel
 import nl.jovmit.lyrics.main.SongsRepository
 import nl.jovmit.lyrics.main.data.result.SongsResult
 
-class SongsOverviewViewModel(
+class SongsViewModel(
     private val songsRepository: SongsRepository,
     private val dispatchers: CoroutineDispatchers
 ) : CoroutineViewModel(dispatchers) {

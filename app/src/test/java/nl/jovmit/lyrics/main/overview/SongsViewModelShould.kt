@@ -12,7 +12,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class SongsOverviewViewModelShould {
+class SongsViewModelShould {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -20,12 +20,12 @@ class SongsOverviewViewModelShould {
     @Mock
     private lateinit var songsRepository: SongsRepository
 
-    private lateinit var songsViewModel: SongsOverviewViewModel
+    private lateinit var songsViewModel: SongsViewModel
 
     @Before
     fun setUp() {
         val testDispatchers = TestCoroutineDispatchers()
-        songsViewModel = SongsOverviewViewModel(songsRepository, testDispatchers)
+        songsViewModel = SongsViewModel(songsRepository, testDispatchers)
     }
 
     @Test

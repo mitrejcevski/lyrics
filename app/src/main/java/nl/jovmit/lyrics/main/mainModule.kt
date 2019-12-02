@@ -2,12 +2,12 @@ package nl.jovmit.lyrics.main
 
 import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.main.overview.SongsOverviewViewModel
+import nl.jovmit.lyrics.main.overview.SongsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val mainModule = module {
     single<CoroutineDispatchers> { AppCoroutineDispatchers() }
     factory { SongsRepository(InMemorySongsService()) }
-    viewModel { SongsOverviewViewModel(get(), get()) }
+    viewModel { SongsViewModel(get(), get()) }
 }

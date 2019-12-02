@@ -18,7 +18,7 @@ import org.koin.android.ext.android.inject
 class SongsOverview : Fragment() {
 
     private val songsAdapter: SongsAdapter by lazy { SongsAdapter() }
-    private val songsOverviewViewModel: SongsOverviewViewModel by inject()
+    private val songsViewModel: SongsViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +42,7 @@ class SongsOverview : Fragment() {
     }
 
     private fun fetchSongs() {
-        songsOverviewViewModel.fetchSongs()
+        songsViewModel.fetchSongs()
     }
 
     private fun setupRecyclerView() {
@@ -51,7 +51,7 @@ class SongsOverview : Fragment() {
     }
 
     private fun observeSongsLiveData() {
-        songsOverviewViewModel.songsLiveData().listen(viewLifecycleOwner) {
+        songsViewModel.songsLiveData().listen(viewLifecycleOwner) {
             when (it) {
                 is SongsResult.Loading -> displayLoading(it.loading)
                 is SongsResult.Fetched -> displaySongs(it.songs)

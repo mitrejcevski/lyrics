@@ -33,21 +33,21 @@ class SongsOverviewFeature {
     private val fetchingError = SongsResult.FetchingError
     private val stopLoading = SongsResult.Loading(false)
 
-    private lateinit var songsOverviewViewModel: SongsOverviewViewModel
+    private lateinit var songsViewModel: SongsViewModel
 
     @Before
     fun setUp() {
         val dispatchers = TestCoroutineDispatchers()
         val songsRepository = SongsRepository(songsService)
-        songsOverviewViewModel = SongsOverviewViewModel(songsRepository, dispatchers)
-        songsOverviewViewModel.songsLiveData().observeForever(songsObserver)
+        songsViewModel = SongsViewModel(songsRepository, dispatchers)
+        songsViewModel.songsLiveData().observeForever(songsObserver)
     }
 
     @Test
     fun shouldDisplayFetchedSongs() = runBlocking {
         given(songsService.fetchAllSongs()).willReturn(emptyList())
 
-        songsOverviewViewModel.fetchSongs()
+        songsViewModel.fetchSongs()
 
         val inOrder = inOrder(songsObserver)
         inOrder.verify(songsObserver).onChanged(startLoading)
@@ -59,7 +59,7 @@ class SongsOverviewFeature {
     fun shouldDisplayErrorWhenFetchingFails() = runBlocking {
         given(songsService.fetchAllSongs()).willThrow(SongsServiceException())
 
-        songsOverviewViewModel.fetchSongs()
+        songsViewModel.fetchSongs()
 
         val inOrder = inOrder(songsObserver)
         inOrder.verify(songsObserver).onChanged(startLoading)

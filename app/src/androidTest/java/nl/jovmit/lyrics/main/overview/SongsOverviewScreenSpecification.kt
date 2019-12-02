@@ -41,7 +41,7 @@ class SongsOverviewScreenSpecification {
     private val songsOverviewModule = module {
         factory { SongsRepository(songsService) }
         single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-        viewModel { SongsOverviewViewModel(get(), get()) }
+        viewModel { SongsViewModel(get(), get()) }
     }
 
     @Before
