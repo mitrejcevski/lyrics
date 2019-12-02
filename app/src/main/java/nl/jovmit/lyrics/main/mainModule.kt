@@ -8,6 +8,6 @@ import org.koin.dsl.module
 
 val mainModule = module {
     single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-    factory { SongsRepository(FirebaseSongsService()) }
+    factory { SongsRepository(InMemorySongsService()) }
     viewModel { SongsOverviewViewModel(get(), get()) }
 }
