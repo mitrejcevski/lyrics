@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_songs_overview.*
 import nl.jovmit.lyrics.R
+import nl.jovmit.lyrics.databinding.FragmentSongsOverviewBinding
 import nl.jovmit.lyrics.extensions.applyDefaultColors
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.extensions.setupWithLinearLayoutManager
@@ -20,18 +20,21 @@ class SongsOverview : Fragment() {
     private val songsAdapter: SongsAdapter by lazy { SongsAdapter() }
     private val songsViewModel: SongsViewModel by inject()
 
+    private lateinit var layout: FragmentSongsOverviewBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_songs_overview, container, false)
+        layout = FragmentSongsOverviewBinding.inflate(inflater)
+        return layout.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        songsOverviewSwipeRefresh.applyDefaultColors()
-        songsOverviewSwipeRefresh.setOnRefreshListener { fetchSongs() }
-        songsOverviewNewSongButton.setOnClickListener { openNewSong() }
+        layout.songsOverviewSwipeRefresh.applyDefaultColors()
+        layout.songsOverviewSwipeRefresh.setOnRefreshListener { fetchSongs() }
+        layout.songsOverviewNewSongButton.setOnClickListener { openNewSong() }
         setupRecyclerView()
         observeSongsLiveData()
         fetchSongs()
@@ -46,8 +49,8 @@ class SongsOverview : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        songsOverviewRecycler.setupWithLinearLayoutManager()
-        songsOverviewRecycler.adapter = songsAdapter
+        layout.songsOverviewRecycler.setupWithLinearLayoutManager()
+        layout.songsOverviewRecycler.adapter = songsAdapter
     }
 
     private fun observeSongsLiveData() {
@@ -61,7 +64,7 @@ class SongsOverview : Fragment() {
     }
 
     private fun displayLoading(loading: Boolean) {
-        songsOverviewSwipeRefresh.isRefreshing = loading
+        layout.songsOverviewSwipeRefresh.isRefreshing = loading
     }
 
     private fun displaySongs(songs: List<Song>) {
@@ -71,10 +74,10 @@ class SongsOverview : Fragment() {
 
     private fun updateEmptyStatePreview(isVisible: Boolean) {
         val emptyStateVisibility = if (isVisible) View.VISIBLE else View.GONE
-        songsOverviewEmptyStateLabel.visibility = emptyStateVisibility
+        layout.songsOverviewEmptyStateLabel.visibility = emptyStateVisibility
     }
 
     private fun displayFetchingError() {
-        songsOverviewInfoView.displayError(R.string.errorFetchingSongs)
+        layout.songsOverviewInfoView.displayError(R.string.errorFetchingSongs)
     }
 }

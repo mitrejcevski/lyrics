@@ -37,6 +37,14 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    viewBinding {
+        enabled = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
