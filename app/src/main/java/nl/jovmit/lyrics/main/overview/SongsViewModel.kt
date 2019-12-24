@@ -6,7 +6,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineViewModel
-import nl.jovmit.lyrics.main.SongsRepository
 import nl.jovmit.lyrics.main.data.result.SongsResult
 
 class SongsViewModel(

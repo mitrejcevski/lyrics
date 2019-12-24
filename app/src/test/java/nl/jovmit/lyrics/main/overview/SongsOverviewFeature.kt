@@ -6,7 +6,6 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.inOrder
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
-import nl.jovmit.lyrics.main.SongsRepository
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException

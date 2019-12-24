@@ -5,8 +5,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.main.SongsRepository
 import nl.jovmit.lyrics.main.SongsService
+import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
 import org.junit.Before
 import org.junit.Test

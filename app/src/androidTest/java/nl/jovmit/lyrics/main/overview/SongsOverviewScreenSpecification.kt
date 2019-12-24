@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.MainActivity
-import nl.jovmit.lyrics.main.SongsRepository
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.Song
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException

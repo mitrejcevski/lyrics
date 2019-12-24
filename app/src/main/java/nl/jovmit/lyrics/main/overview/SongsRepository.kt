@@ -1,5 +1,6 @@
-package nl.jovmit.lyrics.main
+package nl.jovmit.lyrics.main.overview
 
+import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 
