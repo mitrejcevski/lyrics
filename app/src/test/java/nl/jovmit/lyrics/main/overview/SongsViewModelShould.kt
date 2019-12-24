@@ -1,35 +1,30 @@
 package nl.jovmit.lyrics.main.overview
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.verifyBlocking
+import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
-import nl.jovmit.lyrics.main.SongsRepository
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.jupiter.MockitoExtension
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class, InstantTaskExecutorExtension::class)
 class SongsViewModelShould {
-
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
 
     @Mock
     private lateinit var songsRepository: SongsRepository
 
     private lateinit var songsViewModel: SongsViewModel
 
-    @Before
-    fun setUp() {
+    @BeforeEach
+    fun set_up() {
         val testDispatchers = TestCoroutineDispatchers()
         songsViewModel = SongsViewModel(songsRepository, testDispatchers)
     }
 
     @Test
-    fun fetchSongsFromTheSongsRepository() {
+    fun fetch_songs_from_the_songs_repository() {
         songsViewModel.fetchSongs()
 
         verifyBlocking(songsRepository) { fetchAllSongs() }

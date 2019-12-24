@@ -44,14 +44,14 @@ class SongsOverviewScreenSpecification {
     }
 
     @Before
-    fun setUp() {
+    fun set_up() {
         MockitoAnnotations.initMocks(this)
         loadKoinModules(songsOverviewModule)
         runBlocking { whenever(songsService.fetchAllSongs()).thenReturn(songsList) }
     }
 
     @Test
-    fun shouldDisplayEmptyStateWhenNoSongsAdded() = runBlocking<Unit> {
+    fun should_display_empty_state_when_no_songs_added() = runBlocking<Unit> {
         given(songsService.fetchAllSongs()).willReturn(emptySongsList)
 
         launchSongsOverview(rule) { } verify {
@@ -60,21 +60,21 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun shouldNotDisplayEmptyStateWhenSongsAdded() = runBlocking<Unit> {
+    fun should_not_display_empty_state_when_songs_added() = runBlocking<Unit> {
         launchSongsOverview(rule) { } verify {
             songsEmptyStateIsGone()
         }
     }
 
     @Test
-    fun shouldDisplayLoadedSongs() = runBlocking<Unit> {
+    fun should_display_loaded_songs() = runBlocking<Unit> {
         launchSongsOverview(rule) { } verify {
             songTitleAndSingerAreDisplayed(song)
         }
     }
 
     @Test
-    fun shouldDisplayErrorIfLoadingSongsFails() = runBlocking<Unit> {
+    fun should_display_error_if_loading_songs_fails() = runBlocking<Unit> {
         given(songsService.fetchAllSongs()).willThrow(SongsServiceException())
 
         launchSongsOverview(rule) { } verify {
@@ -83,7 +83,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun shouldOpenNewSongScreenUponClickOnNewSongButton() = runBlocking<Unit> {
+    fun should_open_new_song_screen_upon_click_on_new_song_button() = runBlocking<Unit> {
         launchSongsOverview(rule) {
             clickOnNewSongButton()
         } verify {
@@ -92,7 +92,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @After
-    fun tearDown() {
+    fun tear_down() {
         unloadKoinModules(songsOverviewModule)
     }
 }

@@ -1,26 +1,22 @@
 package nl.jovmit.lyrics.main.overview
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.inOrder
 import kotlinx.coroutines.runBlocking
+import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.jupiter.MockitoExtension
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class, InstantTaskExecutorExtension::class)
 class SongsOverviewFeature {
-
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
 
     @Mock
     private lateinit var songsService: SongsService
@@ -34,16 +30,17 @@ class SongsOverviewFeature {
 
     private lateinit var songsViewModel: SongsViewModel
 
-    @Before
-    fun setUp() {
+    @BeforeEach
+    fun set_up() {
         val dispatchers = TestCoroutineDispatchers()
-        val songsRepository = SongsRepository(songsService)
+        val songsRepository =
+            SongsRepository(songsService)
         songsViewModel = SongsViewModel(songsRepository, dispatchers)
         songsViewModel.songsLiveData().observeForever(songsObserver)
     }
 
     @Test
-    fun shouldDisplayFetchedSongs() = runBlocking {
+    fun should_display_fetched_songs() = runBlocking {
         given(songsService.fetchAllSongs()).willReturn(emptyList())
 
         songsViewModel.fetchSongs()
@@ -55,7 +52,7 @@ class SongsOverviewFeature {
     }
 
     @Test
-    fun shouldDisplayErrorWhenFetchingFails() = runBlocking {
+    fun should_display_error_when_fetching_fails() = runBlocking {
         given(songsService.fetchAllSongs()).willThrow(SongsServiceException())
 
         songsViewModel.fetchSongs()

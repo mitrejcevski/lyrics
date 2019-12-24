@@ -67,10 +67,13 @@ dependencies {
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
     debugImplementation "androidx.fragment:fragment-testing:$fragmentKtxVersion"
 
-    testImplementation "junit:junit:4.12"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.5.2"
     testImplementation "org.koin:koin-test:$koinVersion"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
+
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
 }
 
 play {
