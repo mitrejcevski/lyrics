@@ -6,7 +6,6 @@ plugins {
 }
 
 apply from: '../release_notes_generator.gradle'
-apply from: '../ktlint.gradle'
 
 android {
 
@@ -73,8 +72,6 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
 }
-
-check.dependsOn ktlint
 
 play {
     serviceAccountCredentials = file(System.getenv("HOME") + "/keystores/google_services_api.json")
