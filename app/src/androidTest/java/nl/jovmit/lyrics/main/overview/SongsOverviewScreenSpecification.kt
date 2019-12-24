@@ -9,7 +9,10 @@ import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.data.Song
+import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.data.song.SongLyrics
+import nl.jovmit.lyrics.main.data.song.SongPerformer
+import nl.jovmit.lyrics.main.data.song.SongTitle
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.After
 import org.junit.Before
@@ -34,7 +37,11 @@ class SongsOverviewScreenSpecification {
     private lateinit var songsService: SongsService
 
     private val emptySongsList = emptyList<Song>()
-    private val song = Song("Title", "Singer Name", "The lyrics of the song")
+    private val song = Song(
+        SongTitle("Title"),
+        SongPerformer("Singer Name"),
+        SongLyrics("The lyrics of the song")
+    )
     private val songsList = listOf(song)
 
     private val songsOverviewModule = module {

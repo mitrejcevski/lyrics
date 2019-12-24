@@ -11,7 +11,7 @@ import nl.jovmit.lyrics.databinding.FragmentSongsOverviewBinding
 import nl.jovmit.lyrics.extensions.applyDefaultColors
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.extensions.setupWithLinearLayoutManager
-import nl.jovmit.lyrics.main.data.Song
+import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import org.koin.android.ext.android.inject
 

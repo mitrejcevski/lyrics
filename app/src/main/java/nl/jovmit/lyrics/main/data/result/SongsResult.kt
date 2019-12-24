@@ -1,6 +1,6 @@
 package nl.jovmit.lyrics.main.data.result
 
-import nl.jovmit.lyrics.main.data.Song
+import nl.jovmit.lyrics.main.data.song.Song
 
 sealed class SongsResult {
 

@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.extensions.inflate
-import nl.jovmit.lyrics.main.data.Song
+import nl.jovmit.lyrics.main.data.song.Song
 
 class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
 
@@ -35,8 +35,8 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
         private val singer: TextView = itemView.findViewById(R.id.songListItemSinger)
 
         fun bind(song: Song) {
-            title.text = song.title
-            singer.text = song.singer
+            title.text = song.songTitle.value
+            singer.text = song.songPerformer.name
         }
     }
 }

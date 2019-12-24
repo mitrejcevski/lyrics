@@ -3,8 +3,11 @@ package nl.jovmit.lyrics.main.overview
 import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.data.Song
 import nl.jovmit.lyrics.main.data.result.SongsResult
+import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.data.song.SongLyrics
+import nl.jovmit.lyrics.main.data.song.SongPerformer
+import nl.jovmit.lyrics.main.data.song.SongTitle
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -19,7 +22,11 @@ class SongsRepositoryShould {
     @Mock
     private lateinit var songsService: SongsService
 
-    private val song = Song("Title", "Singer Name", "The lyrics of the song")
+    private val song = Song(
+        SongTitle("Title"),
+        SongPerformer("Singer Name"),
+        SongLyrics("The lyrics of the song")
+    )
     private val songs = listOf(song)
     private val songsFetched = SongsResult.Fetched(songs)
     private val fetchingError = SongsResult.FetchingError
