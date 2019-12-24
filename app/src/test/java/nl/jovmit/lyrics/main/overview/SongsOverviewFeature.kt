@@ -33,8 +33,7 @@ class SongsOverviewFeature {
     @BeforeEach
     fun set_up() {
         val dispatchers = TestCoroutineDispatchers()
-        val songsRepository =
-            SongsRepository(songsService)
+        val songsRepository = SongsRepository(songsService)
         songsViewModel = SongsViewModel(songsRepository, dispatchers)
         songsViewModel.songsLiveData().observeForever(songsObserver)
     }

@@ -5,6 +5,10 @@ import nl.jovmit.lyrics.main.data.song.Song
 class FirebaseSongsService : SongsService {
 
     override suspend fun fetchAllSongs(): List<Song> {
-        return emptyList()
+        TODO("not implemented")
+    }
+
+    override suspend fun addNewSong(newSong: Song) {
+        TODO("not implemented")
     }
 }

@@ -9,6 +9,8 @@ import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
+import nl.jovmit.lyrics.main.add.NewSongRepository
+import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
@@ -45,9 +47,11 @@ class SongsOverviewScreenSpecification {
     private val songsList = listOf(song)
 
     private val songsOverviewModule = module {
-        factory { SongsRepository(songsService) }
         single<CoroutineDispatchers> { AppCoroutineDispatchers() }
+        factory { SongsRepository(songsService) }
+        factory { NewSongRepository(songsService) }
         viewModel { SongsViewModel(get(), get()) }
+        viewModel { NewSongViewModel(get(), get()) }
     }
 
     @Before

@@ -13,4 +13,6 @@ sealed class NewSongResult {
     object EmptyLyrics : NewSongResult()
 
     object Valid : NewSongResult()
+
+    object ErrorAddingSong : NewSongResult()
 }
