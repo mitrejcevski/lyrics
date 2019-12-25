@@ -38,12 +38,17 @@ class NewSong : Fragment() {
         newSongViewModel.newSongLiveData().listen(viewLifecycleOwner) {
             when (it) {
                 is NewSongResult.EmptyTitle -> displayEmptyTitleError()
+                is NewSongResult.EmptyPerformer -> displayEmptyPerformerError()
             }
         }
     }
 
     private fun displayEmptyTitleError() {
         layout.newSongTitleInput.setError(R.string.errorEmptySongTitle)
+    }
+
+    private fun displayEmptyPerformerError() {
+        layout.newSongSingerNameInput.setError(R.string.errorEmptySongPerformer)
     }
 
     private fun triggerNewSongSubmission() {

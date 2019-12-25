@@ -1,7 +1,7 @@
 package nl.jovmit.lyrics.main.add
 
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import nl.jovmit.lyrics.*
 
 @DslMarker
@@ -23,6 +23,10 @@ class NewSongRobot {
         R.id.newSongDoneButton perform click()
         return NewSongVerificationRobot().apply(block)
     }
+
+    fun typeSongTitle(title: String) {
+        R.id.newSongTitleEditText.perform(typeText(title), closeSoftKeyboard())
+    }
 }
 
 @NewSongScreenRobot
@@ -30,5 +34,9 @@ class NewSongVerificationRobot {
 
     fun emptySongTitleErrorIsDisplayed() {
         text(R.string.errorEmptySongTitle) check isDisplayed
+    }
+
+    fun emptySongPerformerIsDisplayed() {
+        text(R.string.errorEmptySongPerformer) check isDisplayed
     }
 }

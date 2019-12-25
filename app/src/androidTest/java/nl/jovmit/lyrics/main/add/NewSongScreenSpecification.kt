@@ -35,6 +35,15 @@ class NewSongScreenSpecification {
         }
     }
 
+    @Test
+    fun should_show_empty_song_performer_error() {
+        launchNewSongScreen {
+            typeSongTitle("Song title")
+        } submit {
+            emptySongPerformerIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         unloadKoinModules(newSongModule)
