@@ -39,6 +39,7 @@ class NewSong : Fragment() {
             when (it) {
                 is NewSongResult.EmptyTitle -> displayEmptyTitleError()
                 is NewSongResult.EmptyPerformer -> displayEmptyPerformerError()
+                is NewSongResult.EmptyLyrics -> displayEmptyLyricsError()
             }
         }
     }
@@ -51,10 +52,14 @@ class NewSong : Fragment() {
         layout.newSongSingerNameInput.setError(R.string.errorEmptySongPerformer)
     }
 
+    private fun displayEmptyLyricsError() {
+        layout.newSongLyricInput.setError(R.string.errorEmptySongLyrics)
+    }
+
     private fun triggerNewSongSubmission() {
         val title = layout.newSongTitleEditText.text.toString()
         val performer = layout.newSongSingerNameEditText.text.toString()
-        val lyrics = layout.newSongSingerNameEditText.text.toString()
+        val lyrics = layout.newSongLyricEditText.text.toString()
         newSongViewModel.addNewSong(title, performer, lyrics)
     }
 }

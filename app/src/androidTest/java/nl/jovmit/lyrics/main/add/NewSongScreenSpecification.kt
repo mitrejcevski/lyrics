@@ -44,6 +44,16 @@ class NewSongScreenSpecification {
         }
     }
 
+    @Test
+    fun should_show_empty_song_lyrics_error() {
+        launchNewSongScreen {
+            typeSongTitle("Usher")
+            typeSongPerformer("Yeah")
+        } submit {
+            emptySongLyricsIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         unloadKoinModules(newSongModule)

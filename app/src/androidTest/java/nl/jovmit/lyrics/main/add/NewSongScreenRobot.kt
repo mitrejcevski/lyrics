@@ -27,6 +27,10 @@ class NewSongRobot {
     fun typeSongTitle(title: String) {
         R.id.newSongTitleEditText.perform(typeText(title), closeSoftKeyboard())
     }
+
+    fun typeSongPerformer(performer: String) {
+        R.id.newSongSingerNameEditText.perform(typeText(performer), closeSoftKeyboard())
+    }
 }
 
 @NewSongScreenRobot
@@ -38,5 +42,9 @@ class NewSongVerificationRobot {
 
     fun emptySongPerformerIsDisplayed() {
         text(R.string.errorEmptySongPerformer) check isDisplayed
+    }
+
+    fun emptySongLyricsIsDisplayed() {
+        text(R.string.errorEmptySongLyrics) check isDisplayed
     }
 }
