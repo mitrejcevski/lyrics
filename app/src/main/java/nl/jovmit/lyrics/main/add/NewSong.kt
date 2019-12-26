@@ -61,7 +61,7 @@ class NewSong : Fragment() {
     }
 
     private fun displaySongAddingSuccess() {
-        layout.newSongInfoView.timeout(TimeUnit.SECONDS.toMillis(1))
+        layout.newSongInfoView.timeout(500, TimeUnit.MILLISECONDS)
         layout.newSongInfoView.setOnDismissCallback { findNavController().navigateUp() }
         layout.newSongInfoView.displayInfo(R.string.success)
     }

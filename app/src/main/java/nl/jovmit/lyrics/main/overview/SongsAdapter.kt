@@ -24,9 +24,9 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
     override fun getItemCount(): Int = songs.size
 
     fun addSongs(newSongs: List<Song>) {
-        val startPosition = songs.size
+        songs.clear()
         songs.addAll(newSongs)
-        notifyItemRangeInserted(startPosition, newSongs.size)
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -37,6 +37,7 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
         fun bind(song: Song) {
             title.text = song.songTitle.value
             singer.text = song.songPerformer.name
+            itemView.setOnClickListener { }
         }
     }
 }

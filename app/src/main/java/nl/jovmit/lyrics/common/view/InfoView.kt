@@ -15,6 +15,7 @@ import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import nl.jovmit.lyrics.R
+import java.util.concurrent.TimeUnit
 
 class InfoView @JvmOverloads constructor(
     context: Context,
@@ -25,7 +26,7 @@ class InfoView @JvmOverloads constructor(
 
     private companion object {
 
-        private const val DEFAULT_TIMEOUT = 2000L
+        private const val DEFAULT_TIMEOUT = 1000L
     }
 
     private var timeout: Long = DEFAULT_TIMEOUT
@@ -46,6 +47,10 @@ class InfoView @JvmOverloads constructor(
 
     fun timeout(timeout: Long) {
         this.timeout = timeout
+    }
+
+    fun timeout(duration: Long, unit: TimeUnit) {
+        timeout(unit.toMillis(duration))
     }
 
     fun setOnDismissCallback(onDismissCallback: () -> Unit) {
