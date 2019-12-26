@@ -51,7 +51,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/newSongSingerNameInput"
+                android:id="@+id/newSongPerformerInput"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 app:layout_constraintTop_toBottomOf="@id/newSongTitleInput">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/newSongSingerNameEditText"
+                    android:id="@+id/newSongPerformerEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/singerName"
@@ -79,7 +79,7 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/newSongRightGuideline"
                 app:layout_constraintStart_toStartOf="@+id/newSongLeftGuideline"
-                app:layout_constraintTop_toBottomOf="@id/newSongSingerNameInput">
+                app:layout_constraintTop_toBottomOf="@id/newSongPerformerInput">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/newSongLyricEditText"
@@ -100,5 +100,14 @@
         android:src="@drawable/ic_check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <nl.jovmit.lyrics.common.view.InfoView
+        android:id="@+id/newSongInfoView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Error loading" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

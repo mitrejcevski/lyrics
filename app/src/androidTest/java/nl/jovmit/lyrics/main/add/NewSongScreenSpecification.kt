@@ -18,9 +18,7 @@ class NewSongScreenSpecification {
     private val newSongModule = module {
         val dispatchers = AppCoroutineDispatchers()
         val newSongRepository = NewSongRepository(InMemorySongsService())
-        viewModel {
-            NewSongViewModel(dispatchers, newSongRepository)
-        }
+        viewModel { NewSongViewModel(dispatchers, newSongRepository) }
     }
 
     @Before
@@ -40,7 +38,7 @@ class NewSongScreenSpecification {
         launchNewSongScreen {
             typeSongTitle("Song title")
         } submit {
-            emptySongPerformerIsDisplayed()
+            emptySongPerformerErrorIsDisplayed()
         }
     }
 
@@ -50,7 +48,18 @@ class NewSongScreenSpecification {
             typeSongTitle("Usher")
             typeSongPerformer("Yeah")
         } submit {
-            emptySongLyricsIsDisplayed()
+            emptySongLyricsErrorIsDisplayed()
+        }
+    }
+
+    @Test
+    fun should_store_new_song() {
+        launchNewSongScreen {
+            typeSongTitle("New song title")
+            typeSongPerformer("Song performer")
+            typeSongLyrics("Song lyrics goes here...")
+        } submit {
+            verifySongBeingSaved()
         }
     }
 

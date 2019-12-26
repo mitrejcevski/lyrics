@@ -17,19 +17,23 @@ fun launchNewSongScreen(
 @NewSongScreenRobot
 class NewSongRobot {
 
-    infix fun submit(
-        block: NewSongVerificationRobot.() -> Unit
-    ): NewSongVerificationRobot {
-        R.id.newSongDoneButton perform click()
-        return NewSongVerificationRobot().apply(block)
-    }
-
     fun typeSongTitle(title: String) {
         R.id.newSongTitleEditText.perform(typeText(title), closeSoftKeyboard())
     }
 
     fun typeSongPerformer(performer: String) {
-        R.id.newSongSingerNameEditText.perform(typeText(performer), closeSoftKeyboard())
+        R.id.newSongPerformerEditText.perform(typeText(performer), closeSoftKeyboard())
+    }
+
+    fun typeSongLyrics(lyrics: String) {
+        R.id.newSongLyricEditText.perform(typeText(lyrics), closeSoftKeyboard())
+    }
+
+    infix fun submit(
+        block: NewSongVerificationRobot.() -> Unit
+    ): NewSongVerificationRobot {
+        R.id.newSongDoneButton perform click()
+        return NewSongVerificationRobot().apply(block)
     }
 }
 
@@ -40,11 +44,15 @@ class NewSongVerificationRobot {
         text(R.string.errorEmptySongTitle) check isDisplayed
     }
 
-    fun emptySongPerformerIsDisplayed() {
+    fun emptySongPerformerErrorIsDisplayed() {
         text(R.string.errorEmptySongPerformer) check isDisplayed
     }
 
-    fun emptySongLyricsIsDisplayed() {
+    fun emptySongLyricsErrorIsDisplayed() {
         text(R.string.errorEmptySongLyrics) check isDisplayed
+    }
+
+    fun verifySongBeingSaved() {
+        text(R.string.success) check isDisplayed
     }
 }

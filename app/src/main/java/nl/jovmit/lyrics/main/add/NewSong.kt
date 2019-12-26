@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentNewSongBinding
 import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.extensions.onAnyTextChange
+import nl.jovmit.lyrics.extensions.resetError
 import nl.jovmit.lyrics.extensions.setError
 import nl.jovmit.lyrics.main.data.result.NewSongResult
 import org.koin.android.ext.android.inject
@@ -40,6 +42,7 @@ class NewSong : Fragment() {
                 is NewSongResult.EmptyTitle -> displayEmptyTitleError()
                 is NewSongResult.EmptyPerformer -> displayEmptyPerformerError()
                 is NewSongResult.EmptyLyrics -> displayEmptyLyricsError()
+                is NewSongResult.SongAdded -> displaySongAddingSuccess()
             }
         }
     }
@@ -49,16 +52,20 @@ class NewSong : Fragment() {
     }
 
     private fun displayEmptyPerformerError() {
-        layout.newSongSingerNameInput.setError(R.string.errorEmptySongPerformer)
+        layout.newSongPerformerInput.setError(R.string.errorEmptySongPerformer)
     }
 
     private fun displayEmptyLyricsError() {
         layout.newSongLyricInput.setError(R.string.errorEmptySongLyrics)
     }
 
+    private fun displaySongAddingSuccess() {
+        layout.newSongInfoView.displayInfo(R.string.success)
+    }
+
     private fun triggerNewSongSubmission() {
         val title = layout.newSongTitleEditText.text.toString()
-        val performer = layout.newSongSingerNameEditText.text.toString()
+        val performer = layout.newSongPerformerEditText.text.toString()
         val lyrics = layout.newSongLyricEditText.text.toString()
         newSongViewModel.addNewSong(title, performer, lyrics)
     }
