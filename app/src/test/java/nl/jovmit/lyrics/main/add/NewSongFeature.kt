@@ -34,7 +34,7 @@ class NewSongFeature {
         val dispatchers = TestCoroutineDispatchers()
         val songsService = InMemorySongsService()
         val newSongRepository = NewSongRepository(songsService)
-        newSongViewModel = NewSongViewModel(dispatchers, newSongRepository)
+        newSongViewModel = NewSongViewModel(newSongRepository, dispatchers)
         newSongViewModel.newSongLiveData().observeForever(newSongObserver)
     }
 

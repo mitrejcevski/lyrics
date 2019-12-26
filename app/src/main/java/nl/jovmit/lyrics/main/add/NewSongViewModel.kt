@@ -13,8 +13,8 @@ import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
 
 class NewSongViewModel(
-    private val dispatchers: CoroutineDispatchers,
-    private val newSongRepository: NewSongRepository
+    private val newSongRepository: NewSongRepository,
+    private val dispatchers: CoroutineDispatchers
 ) : CoroutineViewModel(dispatchers) {
 
     private val newSongLiveData = MutableLiveData<NewSongResult>()

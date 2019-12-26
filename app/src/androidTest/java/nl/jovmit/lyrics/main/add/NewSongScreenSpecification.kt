@@ -18,7 +18,7 @@ class NewSongScreenSpecification {
     private val newSongModule = module {
         val dispatchers = AppCoroutineDispatchers()
         val newSongRepository = NewSongRepository(InMemorySongsService())
-        viewModel { NewSongViewModel(dispatchers, newSongRepository) }
+        viewModel { NewSongViewModel(newSongRepository, dispatchers) }
     }
 
     @Before

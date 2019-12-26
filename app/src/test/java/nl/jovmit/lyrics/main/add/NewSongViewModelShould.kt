@@ -35,7 +35,7 @@ class NewSongViewModelShould {
     @BeforeEach
     fun set_up() {
         val dispatchers = TestCoroutineDispatchers()
-        viewModel = NewSongViewModel(dispatchers, newSongRepository)
+        viewModel = NewSongViewModel(newSongRepository, dispatchers)
     }
 
     @Test
