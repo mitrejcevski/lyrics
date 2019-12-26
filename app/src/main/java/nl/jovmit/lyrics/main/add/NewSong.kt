@@ -30,9 +30,10 @@ class NewSong : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        layout.newSongDoneButton.setOnClickListener {
-            triggerNewSongSubmission()
-        }
+        layout.newSongTitleEditText.onAnyTextChange { layout.newSongTitleInput.resetError() }
+        layout.newSongPerformerEditText.onAnyTextChange { layout.newSongPerformerInput.resetError() }
+        layout.newSongLyricEditText.onAnyTextChange { layout.newSongLyricInput.resetError() }
+        layout.newSongDoneButton.setOnClickListener { triggerNewSongSubmission() }
         observeNewSongLiveData()
     }
 
