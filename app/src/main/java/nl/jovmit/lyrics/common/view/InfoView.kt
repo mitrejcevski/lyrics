@@ -23,11 +23,13 @@ class InfoView @JvmOverloads constructor(
 ) :
     AppCompatTextView(context, attrs, defStyleAttr) {
 
-    private var timeout: Long = DEFAULT_TIMEOUT
-
     private companion object {
+
         private const val DEFAULT_TIMEOUT = 2000L
     }
+
+    private var timeout: Long = DEFAULT_TIMEOUT
+    private var onDismissCallback: () -> Unit = {}
 
     override fun onFinishInflate() {
         super.onFinishInflate()
@@ -44,6 +46,10 @@ class InfoView @JvmOverloads constructor(
 
     fun timeout(timeout: Long) {
         this.timeout = timeout
+    }
+
+    fun setOnDismissCallback(onDismissCallback: () -> Unit) {
+        this.onDismissCallback = onDismissCallback
     }
 
     fun displayError(@StringRes stringResource: Int) {
@@ -73,6 +79,7 @@ class InfoView @JvmOverloads constructor(
             text = ""
             TransitionManager.beginDelayedTransition(parent as ViewGroup, transition)
             visibility = View.GONE
+            onDismissCallback.invoke()
         }, timeout)
     }
 

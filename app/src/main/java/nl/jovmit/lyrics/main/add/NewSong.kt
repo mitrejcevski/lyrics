@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentNewSongBinding
-import nl.jovmit.lyrics.extensions.listen
-import nl.jovmit.lyrics.extensions.onAnyTextChange
-import nl.jovmit.lyrics.extensions.resetError
-import nl.jovmit.lyrics.extensions.setError
+import nl.jovmit.lyrics.extensions.*
 import nl.jovmit.lyrics.main.data.result.NewSongResult
 import org.koin.android.ext.android.inject
+import java.util.concurrent.TimeUnit
 
 class NewSong : Fragment() {
 
@@ -61,13 +61,21 @@ class NewSong : Fragment() {
     }
 
     private fun displaySongAddingSuccess() {
+        layout.newSongInfoView.timeout(TimeUnit.SECONDS.toMillis(1))
+        layout.newSongInfoView.setOnDismissCallback { findNavController().navigateUp() }
         layout.newSongInfoView.displayInfo(R.string.success)
     }
 
     private fun triggerNewSongSubmission() {
+        hideKeyboard()
         val title = layout.newSongTitleEditText.text.toString()
         val performer = layout.newSongPerformerEditText.text.toString()
         val lyrics = layout.newSongLyricEditText.text.toString()
         newSongViewModel.addNewSong(title, performer, lyrics)
+    }
+
+    private fun hideKeyboard() {
+        val inputManager = requireContext().getSystemService<InputMethodManager>()
+        inputManager?.hideSoftInputFromWindow(layout.newSongLyricEditText.windowToken, 0)
     }
 }
