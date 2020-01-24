@@ -1,16 +1,20 @@
 package nl.jovmit.lyrics.main.add
 
-import androidx.fragment.app.testing.launchFragmentInContainer
+import android.content.Intent
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
+import nl.jovmit.lyrics.main.MainActivity
 
 @DslMarker
 annotation class NewSongScreenRobot
 
 fun launchNewSongScreen(
+    rule: ActivityTestRule<MainActivity>,
     block: NewSongRobot.() -> Unit
 ): NewSongRobot {
-    launchFragmentInContainer<NewSong>(themeResId = R.style.AppTheme)
+    rule.launchActivity(Intent())
+    R.id.songsOverviewNewSongButton perform click()
     return NewSongRobot().apply(block)
 }
 

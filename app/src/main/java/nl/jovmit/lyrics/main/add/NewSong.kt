@@ -10,13 +10,15 @@ import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentNewSongBinding
 import nl.jovmit.lyrics.extensions.*
+import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.NewSongResult
 import org.koin.android.ext.android.inject
-import java.util.concurrent.TimeUnit
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class NewSong : Fragment() {
 
     private val newSongViewModel by inject<NewSongViewModel>()
+    private val infoViewModel by sharedViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentNewSongBinding
 
@@ -61,9 +63,8 @@ class NewSong : Fragment() {
     }
 
     private fun displaySongAddingSuccess() {
-        layout.newSongInfoView.timeout(500, TimeUnit.MILLISECONDS)
-        layout.newSongInfoView.setOnDismissCallback { findNavController().navigateUp() }
-        layout.newSongInfoView.displayInfo(R.string.success)
+        infoViewModel.showInfo(getString(R.string.success))
+        findNavController().navigateUp()
     }
 
     private fun triggerNewSongSubmission() {

@@ -19,4 +19,13 @@
         app:navGraph="@navigation/main_navigation_graph"
         tools:ignore="UnknownIdInLayout" />
 
+    <nl.jovmit.lyrics.common.view.InfoView
+        android:id="@+id/mainInfoView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Error loading" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

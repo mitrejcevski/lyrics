@@ -16,4 +16,5 @@ val mainModule = module {
     factory { NewSongRepository(get()) }
     viewModel { SongsViewModel(get(), get()) }
     viewModel { NewSongViewModel(get(), get()) }
+    viewModel { InfoViewModel() }
 }
