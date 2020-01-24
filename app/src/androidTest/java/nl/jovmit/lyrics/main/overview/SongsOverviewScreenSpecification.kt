@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
+import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.add.NewSongRepository
@@ -52,6 +53,7 @@ class SongsOverviewScreenSpecification {
         factory { NewSongRepository(songsService) }
         viewModel { SongsViewModel(get(), get()) }
         viewModel { NewSongViewModel(get(), get()) }
+        viewModel { InfoViewModel() }
     }
 
     @Before

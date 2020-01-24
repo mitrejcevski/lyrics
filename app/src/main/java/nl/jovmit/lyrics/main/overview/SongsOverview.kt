@@ -11,14 +11,17 @@ import nl.jovmit.lyrics.databinding.FragmentSongsOverviewBinding
 import nl.jovmit.lyrics.extensions.applyDefaultColors
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.extensions.setupWithLinearLayoutManager
-import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
-import org.koin.android.ext.android.inject
+import nl.jovmit.lyrics.main.data.song.Song
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SongsOverview : Fragment() {
 
     private val songsAdapter: SongsAdapter by lazy { SongsAdapter() }
-    private val songsViewModel: SongsViewModel by inject()
+    private val songsViewModel by viewModel<SongsViewModel>()
+    private val infoViewModel by sharedViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentSongsOverviewBinding
 
@@ -78,6 +81,7 @@ class SongsOverview : Fragment() {
     }
 
     private fun displayFetchingError() {
-        layout.songsOverviewInfoView.displayError(R.string.errorFetchingSongs)
+        val errorMessage = getString(R.string.errorFetchingSongs)
+        infoViewModel.showError(errorMessage)
     }
 }
