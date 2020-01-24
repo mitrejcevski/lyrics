@@ -14,4 +14,8 @@ class InfoViewModel : ViewModel() {
     fun showInfo(infoMessage: String) {
         infoLiveData.value = InfoResult.Success(infoMessage)
     }
+
+    fun showError(errorMessage: String) {
+        infoLiveData.value = InfoResult.Error(errorMessage)
+    }
 }

@@ -33,4 +33,14 @@ class InfoViewModelShould {
 
         verify(infoLiveDataObserver).onChanged(infoResult)
     }
+
+    @Test
+    fun deliver_new_error_message() {
+        val errorMessage = "Error"
+        val infoResult = InfoResult.Error(errorMessage)
+
+        infoViewModel.showError(errorMessage)
+
+        verify(infoLiveDataObserver).onChanged(infoResult)
+    }
 }
