@@ -11,4 +11,5 @@
     <string name="errorEmptySongPerformer">Missing performer name</string>
     <string name="errorEmptySongLyrics">Missing song lyrics</string>
     <string name="success">Success</string>
+    <string name="songDetails">Song details</string>
 </resources>
