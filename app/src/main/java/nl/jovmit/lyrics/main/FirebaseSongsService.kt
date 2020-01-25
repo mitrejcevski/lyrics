@@ -12,4 +12,8 @@ class FirebaseSongsService : SongsService {
     override suspend fun addNewSong(newSongData: SongData) {
         TODO("not implemented")
     }
+
+    override suspend fun findSongById(songId: String): Song {
+        TODO("not implemented")
+    }
 }

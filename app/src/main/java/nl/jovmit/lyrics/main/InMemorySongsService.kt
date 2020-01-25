@@ -3,6 +3,7 @@ package nl.jovmit.lyrics.main
 import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.data.song.SongId
+import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import nl.jovmit.lyrics.utils.IdGenerator
 
 class InMemorySongsService(
@@ -21,5 +22,10 @@ class InMemorySongsService(
             val newSong = Song(songId, songTitle, songPerformer, songLyric)
             songs.add(newSong)
         }
+    }
+
+    override suspend fun findSongById(songId: String): Song {
+        return songs.find { it.songId.value == songId }
+            ?: throw SongsServiceException()
     }
 }

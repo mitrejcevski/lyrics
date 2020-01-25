@@ -8,4 +8,6 @@ interface SongsService {
     suspend fun fetchAllSongs(): List<Song>
 
     suspend fun addNewSong(newSongData: SongData)
+
+    suspend fun findSongById(songId: String): Song
 }

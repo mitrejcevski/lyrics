@@ -78,5 +78,9 @@ class SongDetailsScreenSpecification {
         override suspend fun addNewSong(newSongData: SongData) {
             throw IllegalStateException("Irrelevant for this testcase")
         }
+
+        override suspend fun findSongById(songId: String): Song {
+            TODO("not implemented")
+        }
     }
 }

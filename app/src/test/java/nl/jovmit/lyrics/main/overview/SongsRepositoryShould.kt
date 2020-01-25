@@ -3,6 +3,7 @@ package nl.jovmit.lyrics.main.overview
 import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.SongsService
+import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.SongBuilder.Companion.aSong
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
@@ -51,5 +52,25 @@ class SongsRepositoryShould {
         val result = songsRepository.fetchAllSongs()
 
         assertEquals(fetchingError, result)
+    }
+
+    @Test
+    fun return_song_result_when_lookup_is_successful() = runBlocking {
+        val songId = "songId"
+        given(songsService.findSongById(songId)).willReturn(song)
+
+        val result = songsRepository.findSongById(songId)
+
+        assertEquals(SongResult.Fetched(song), result)
+    }
+
+    @Test
+    fun return_error_result_when_lookup_fails() = runBlocking {
+        val songId = "songId"
+        given(songsService.findSongById(songId)).willThrow(SongsServiceException())
+
+        val result = songsRepository.findSongById(songId)
+
+        assertEquals(SongResult.NotFound, result)
     }
 }
