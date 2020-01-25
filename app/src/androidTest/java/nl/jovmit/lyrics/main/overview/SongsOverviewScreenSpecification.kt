@@ -13,6 +13,7 @@ import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.data.song.*
+import nl.jovmit.lyrics.main.details.SongDetailsViewModel
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.After
 import org.junit.Before
@@ -52,6 +53,7 @@ class SongsOverviewScreenSpecification {
         viewModel { SongsViewModel(get(), get()) }
         viewModel { NewSongViewModel(get(), get()) }
         viewModel { InfoViewModel() }
+        viewModel { SongDetailsViewModel(get(), get()) }
     }
 
     @Before
@@ -103,7 +105,9 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_open_song_details_screen() {
+    fun should_open_song_details_screen() = runBlocking<Unit> {
+        given(songsService.findSongById(song.songId.value)).willReturn(song)
+
         launchSongsOverview(rule) {
             tapOnSongWithTitle(song.songTitle.value)
         } verify {

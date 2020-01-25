@@ -4,6 +4,7 @@ import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
+import nl.jovmit.lyrics.main.details.SongDetailsViewModel
 import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
 import nl.jovmit.lyrics.utils.IdGenerator
@@ -19,4 +20,5 @@ val mainModule = module {
     viewModel { SongsViewModel(get(), get()) }
     viewModel { NewSongViewModel(get(), get()) }
     viewModel { InfoViewModel() }
+    viewModel { SongDetailsViewModel(get(), get()) }
 }

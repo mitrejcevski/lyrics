@@ -44,6 +44,7 @@ class SongDetailsScreenSpecification {
         viewModel { SongsViewModel(get(), get()) }
         viewModel { NewSongViewModel(get(), get()) }
         viewModel { InfoViewModel() }
+        viewModel { SongDetailsViewModel(get(), get()) }
     }
 
     @Before
@@ -80,7 +81,7 @@ class SongDetailsScreenSpecification {
         }
 
         override suspend fun findSongById(songId: String): Song {
-            TODO("not implemented")
+            return songs.first { it.songId.value == songId }
         }
     }
 }

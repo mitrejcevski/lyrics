@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/songDetailsLeftGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/songDetailsRightGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
+        <TextView
+            android:id="@+id/songDetailsTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toStartOf="@+id/songDetailsRightGuideline"
+            app:layout_constraintStart_toStartOf="@+id/songDetailsLeftGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Song Title" />
+
+        <TextView
+            android:id="@+id/songDetailsPerformer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/songDetailsRightGuideline"
+            app:layout_constraintStart_toStartOf="@+id/songDetailsLeftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/songDetailsTitle"
+            tools:text="Performer" />
+
+        <TextView
+            android:id="@+id/songDetailsLyrics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/songDetailsRightGuideline"
+            app:layout_constraintStart_toStartOf="@+id/songDetailsLeftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/songDetailsPerformer"
+            tools:text="Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit,\nsed do eiusmod tempor incididunt utlabore et dolore magna aliqua.\n\nUt enim ad minim veniam, \nquis nostrud exercitation ullamco laboris \nnisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit \nin voluptate velit esse cillum dolore eu \nfugiat nulla pariatur. Excepteur sint occaecat \ncupidatat non proident, sunt in culpa qui\nofficia deserunt mollit anim id est laborum." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
