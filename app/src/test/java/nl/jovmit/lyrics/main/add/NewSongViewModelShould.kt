@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
-import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
@@ -24,7 +24,7 @@ class NewSongViewModelShould {
     private val title = "title"
     private val performer = "performer"
     private val lyrics = "song lyrics"
-    private val newSong = Song(
+    private val newSong = SongData(
         SongTitle(title),
         SongPerformer(performer),
         SongLyrics(lyrics)

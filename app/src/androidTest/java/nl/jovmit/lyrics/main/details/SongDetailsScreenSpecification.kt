@@ -9,7 +9,7 @@ import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
-import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
@@ -26,7 +26,7 @@ import org.koin.dsl.module
 class SongDetailsScreenSpecification {
 
     private val songs = listOf(
-        Song(
+        SongData(
             SongTitle("::irrelevant song title::"),
             SongPerformer("::irrelevant song performer::"),
             SongLyrics("::irrelevant song lyrics::")
@@ -73,13 +73,13 @@ class SongDetailsScreenSpecification {
     }
 
     inner class ReadOnlyServiceContaining(
-        private val songs: List<Song>
+        private val songs: List<SongData>
     ) : SongsService {
-        override suspend fun fetchAllSongs(): List<Song> {
+        override suspend fun fetchAllSongs(): List<SongData> {
             return songs
         }
 
-        override suspend fun addNewSong(newSong: Song) {
+        override suspend fun addNewSong(newSongData: SongData) {
             throw IllegalStateException("Irrelevant for this testcase")
         }
     }

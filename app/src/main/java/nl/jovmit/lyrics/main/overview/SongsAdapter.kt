@@ -6,13 +6,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.extensions.inflate
-import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.data.song.SongData
 
 class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
 
-    var onItemClickListener: (Song) -> Unit = {}
+    var onItemClickListener: (SongData) -> Unit = {}
 
-    private val songs = mutableListOf<Song>()
+    private val songs = mutableListOf<SongData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.song_list_item)
@@ -25,7 +25,7 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = songs.size
 
-    fun addSongs(newSongs: List<Song>) {
+    fun addSongs(newSongs: List<SongData>) {
         songs.clear()
         songs.addAll(newSongs)
         notifyDataSetChanged()
@@ -37,8 +37,8 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
         private val singer: TextView = itemView.findViewById(R.id.songListItemSinger)
 
         fun bind(
-            song: Song,
-            onItemClickListener: (Song) -> Unit
+            song: SongData,
+            onItemClickListener: (SongData) -> Unit
         ) {
             title.text = song.songTitle.value
             singer.text = song.songPerformer.name

@@ -1,7 +1,7 @@
 package nl.jovmit.lyrics.main
 
 import kotlinx.coroutines.runBlocking
-import nl.jovmit.lyrics.main.data.song.SongBuilder.Companion.aSong
+import nl.jovmit.lyrics.main.data.song.SongDataBuilder.Companion.aSong
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 

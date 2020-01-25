@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineViewModel
 import nl.jovmit.lyrics.main.data.result.NewSongResult
-import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
@@ -33,17 +33,17 @@ class NewSongViewModel(
         }
     }
 
-    private suspend fun submitSongToRepository(newSong: Song): NewSongResult {
-        val validationResult = newSong.validate()
+    private suspend fun submitSongToRepository(newSongData: SongData): NewSongResult {
+        val validationResult = newSongData.validate()
         return if (validationResult == NewSongResult.Valid) {
-            newSongRepository.addNewSong(newSong)
+            newSongRepository.addNewSong(newSongData)
         } else {
             validationResult
         }
     }
 
-    private fun createSongFor(title: String, performer: String, lyrics: String): Song {
-        return Song(
+    private fun createSongFor(title: String, performer: String, lyrics: String): SongData {
+        return SongData(
             SongTitle(title),
             SongPerformer(performer),
             SongLyrics(lyrics)

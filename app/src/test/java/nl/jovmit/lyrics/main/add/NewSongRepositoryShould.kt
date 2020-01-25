@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.result.NewSongResult
-import nl.jovmit.lyrics.main.data.song.SongBuilder
+import nl.jovmit.lyrics.main.data.song.SongDataBuilder
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -19,7 +19,7 @@ class NewSongRepositoryShould {
     @Mock
     private lateinit var songsService: SongsService
 
-    private val newSong = SongBuilder.aSong().build()
+    private val newSong = SongDataBuilder.aSong().build()
 
     private lateinit var repository: NewSongRepository
 

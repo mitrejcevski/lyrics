@@ -12,7 +12,7 @@ import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
-import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
@@ -39,8 +39,8 @@ class SongsOverviewScreenSpecification {
     @Mock
     private lateinit var songsService: SongsService
 
-    private val emptySongsList = emptyList<Song>()
-    private val song = Song(
+    private val emptySongsList = emptyList<SongData>()
+    private val song = SongData(
         SongTitle("Title"),
         SongPerformer("Singer Name"),
         SongLyrics("The lyrics of the song")

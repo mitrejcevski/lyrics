@@ -4,7 +4,7 @@ import nl.jovmit.lyrics.main.data.result.NewSongResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class SongShould {
+class SongDataShould {
 
     private val songTitle = SongTitle("::irrelevant song title::")
     private val emptySongTitle = SongTitle("")
@@ -15,28 +15,28 @@ class SongShould {
 
     @Test
     fun report_invalid_song_title() {
-        val song = Song(emptySongTitle, songPerformer, songLyrics)
+        val song = SongData(emptySongTitle, songPerformer, songLyrics)
 
         assertEquals(NewSongResult.EmptyTitle, song.validate())
     }
 
     @Test
     fun report_invalid_song_performer() {
-        val song = Song(songTitle, emptySongPerformer, songLyrics)
+        val song = SongData(songTitle, emptySongPerformer, songLyrics)
 
         assertEquals(NewSongResult.EmptyPerformer, song.validate())
     }
 
     @Test
     fun report_invalid_song_lyrics() {
-        val song = Song(songTitle, songPerformer, emptySongLyrics)
+        val song = SongData(songTitle, songPerformer, emptySongLyrics)
 
         assertEquals(NewSongResult.EmptyLyrics, song.validate())
     }
 
     @Test
     fun report_valid_for_proper_song_arguments() {
-        val song = Song(songTitle, songPerformer, songLyrics)
+        val song = SongData(songTitle, songPerformer, songLyrics)
 
         assertEquals(NewSongResult.Valid, song.validate())
     }

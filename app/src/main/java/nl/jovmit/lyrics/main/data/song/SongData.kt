@@ -2,7 +2,7 @@ package nl.jovmit.lyrics.main.data.song
 
 import nl.jovmit.lyrics.main.data.result.NewSongResult
 
-data class Song(
+data class SongData(
     val songTitle: SongTitle,
     val songPerformer: SongPerformer,
     val songLyric: SongLyrics
