@@ -10,6 +10,7 @@
         android:name="nl.jovmit.lyrics.main.overview.SongsOverview"
         android:label="@string/songsOverview"
         tools:layout="@layout/fragment_songs_overview">
+
         <action
             android:id="@+id/actionOpenNewSong"
             app:destination="@id/newSong"
@@ -18,6 +19,16 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/songsOverview" />
+
+        <action
+            android:id="@+id/actionOpenSongDetails"
+            app:destination="@id/songDetails"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/songsOverview" />
+
     </fragment>
 
     <fragment
@@ -25,4 +36,10 @@
         android:name="nl.jovmit.lyrics.main.add.NewSong"
         android:label="@string/newSong"
         tools:layout="@layout/fragment_new_song" />
+
+    <fragment
+        android:id="@+id/songDetails"
+        android:name="nl.jovmit.lyrics.main.details.SongDetails"
+        android:label="@string/songDetails"
+        tools:layout="@layout/fragment_song_details" />
 </navigation>

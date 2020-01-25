@@ -54,6 +54,11 @@ class SongsOverview : Fragment() {
     private fun setupRecyclerView() {
         layout.songsOverviewRecycler.setupWithLinearLayoutManager()
         layout.songsOverviewRecycler.adapter = songsAdapter
+        songsAdapter.onItemClickListener = { openSongDetails(it) }
+    }
+
+    private fun openSongDetails(song: Song) {
+        findNavController().navigate(R.id.actionOpenSongDetails)
     }
 
     private fun observeSongsLiveData() {

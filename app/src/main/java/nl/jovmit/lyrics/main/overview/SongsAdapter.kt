@@ -10,6 +10,8 @@ import nl.jovmit.lyrics.main.data.song.Song
 
 class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
 
+    var onItemClickListener: (Song) -> Unit = {}
+
     private val songs = mutableListOf<Song>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,7 +20,7 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(songs[position])
+        holder.bind(songs[position], onItemClickListener)
     }
 
     override fun getItemCount(): Int = songs.size
@@ -34,10 +36,13 @@ class SongsAdapter : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
         private val title: TextView = itemView.findViewById(R.id.songListItemTitle)
         private val singer: TextView = itemView.findViewById(R.id.songListItemSinger)
 
-        fun bind(song: Song) {
+        fun bind(
+            song: Song,
+            onItemClickListener: (Song) -> Unit
+        ) {
             title.text = song.songTitle.value
             singer.text = song.songPerformer.name
-            itemView.setOnClickListener { }
+            itemView.setOnClickListener { onItemClickListener.invoke(song) }
         }
     }
 }
