@@ -3,8 +3,12 @@ package nl.jovmit.lyrics.main.details
 import android.content.Intent
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.rule.ActivityTestRule
-import nl.jovmit.lyrics.*
+import nl.jovmit.lyrics.check
+import nl.jovmit.lyrics.isDisplayed
 import nl.jovmit.lyrics.main.MainActivity
+import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.perform
+import nl.jovmit.lyrics.text
 
 @DslMarker
 annotation class SongDetailsScreenRobot
@@ -34,7 +38,15 @@ class SongDetailsRobot {
 @SongDetailsScreenRobot
 class SongDetailsVerificationRobot {
 
-    fun songDetailsScreenIsOpened() {
-        text(R.string.songDetails) check isDisplayed
+    fun songTitleIsDisplayed(song: Song) {
+        text(song.songTitle.value) check isDisplayed
+    }
+
+    fun songPerformerIsDisplayed(song: Song) {
+        text(song.songPerformer.name) check isDisplayed
+    }
+
+    fun songLyricsIsDisplayed(song: Song) {
+        text(song.songLyric.lyrics) check isDisplayed
     }
 }

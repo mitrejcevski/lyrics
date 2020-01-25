@@ -21,12 +21,16 @@ fun launchSongsOverview(
 @SongsOverviewScreenRobot
 class SongsOverviewRobot {
 
-    infix fun verify(function: SongsOverviewVerificationRobot.() -> Unit): SongsOverviewVerificationRobot {
-        return SongsOverviewVerificationRobot().apply(function)
-    }
-
     fun clickOnNewSongButton() {
         R.id.songsOverviewNewSongButton perform click()
+    }
+
+    fun tapOnSongWithTitle(songTitle: String) {
+        text(songTitle) perform click()
+    }
+
+    infix fun verify(function: SongsOverviewVerificationRobot.() -> Unit): SongsOverviewVerificationRobot {
+        return SongsOverviewVerificationRobot().apply(function)
     }
 }
 
@@ -53,5 +57,9 @@ class SongsOverviewVerificationRobot {
 
     fun newSongScreenIsDisplayed() {
         text(R.string.newSong) check isDisplayed
+    }
+
+    fun songDetailsScreenIsOpened() {
+        text(R.string.songDetails) check isDisplayed
     }
 }

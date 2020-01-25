@@ -12,7 +12,10 @@ import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
-import org.junit.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
@@ -22,13 +25,11 @@ import org.koin.dsl.module
 @RunWith(AndroidJUnit4::class)
 class SongDetailsScreenSpecification {
 
-    private val songs = listOf(
-        Song(
-            SongId("::irrelevant song id::"),
-            SongTitle("::irrelevant song title::"),
-            SongPerformer("::irrelevant song performer::"),
-            SongLyrics("::irrelevant song lyrics::")
-        )
+    private val song = Song(
+        SongId("::irrelevant song id::"),
+        SongTitle("::irrelevant song title::"),
+        SongPerformer("::irrelevant song performer::"),
+        SongLyrics("::irrelevant song lyrics::")
     )
 
     @Rule
@@ -37,7 +38,7 @@ class SongDetailsScreenSpecification {
 
     private val songsOverviewModule = module {
         single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-        single<SongsService> { ReadOnlyServiceContaining(songs) }
+        single<SongsService> { ReadOnlyServiceContaining(listOf(song)) }
         factory { SongsRepository(get()) }
         factory { NewSongRepository(get()) }
         viewModel { SongsViewModel(get(), get()) }
@@ -51,18 +52,14 @@ class SongDetailsScreenSpecification {
     }
 
     @Test
-    fun should_open_song_details_screen() {
-        launchSongsOverviewScreen(rule) {
-            tapOnSongWithTitle(songs.first().songTitle.value)
-        } verify {
-            songDetailsScreenIsOpened()
-        }
-    }
-
-    @Test
-    @Ignore("Not there yet")
     fun should_display_all_song_properties() {
-
+        launchSongsOverviewScreen(rule) {
+            tapOnSongWithTitle(song.songTitle.value)
+        } verify {
+            songTitleIsDisplayed(song)
+            songPerformerIsDisplayed(song)
+            songLyricsIsDisplayed(song)
+        }
     }
 
     @After

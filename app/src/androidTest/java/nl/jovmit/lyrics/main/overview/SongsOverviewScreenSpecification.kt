@@ -102,6 +102,15 @@ class SongsOverviewScreenSpecification {
         }
     }
 
+    @Test
+    fun should_open_song_details_screen() {
+        launchSongsOverview(rule) {
+            tapOnSongWithTitle(song.songTitle.value)
+        } verify {
+            songDetailsScreenIsOpened()
+        }
+    }
+
     @After
     fun tear_down() {
         unloadKoinModules(songsOverviewModule)
