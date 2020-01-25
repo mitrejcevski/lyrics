@@ -9,10 +9,7 @@ import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
-import nl.jovmit.lyrics.main.data.song.SongData
-import nl.jovmit.lyrics.main.data.song.SongLyrics
-import nl.jovmit.lyrics.main.data.song.SongPerformer
-import nl.jovmit.lyrics.main.data.song.SongTitle
+import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
 import org.junit.*
@@ -26,7 +23,8 @@ import org.koin.dsl.module
 class SongDetailsScreenSpecification {
 
     private val songs = listOf(
-        SongData(
+        Song(
+            SongId("::irrelevant song id::"),
             SongTitle("::irrelevant song title::"),
             SongPerformer("::irrelevant song performer::"),
             SongLyrics("::irrelevant song lyrics::")
@@ -73,9 +71,10 @@ class SongDetailsScreenSpecification {
     }
 
     inner class ReadOnlyServiceContaining(
-        private val songs: List<SongData>
+        private val songs: List<Song>
     ) : SongsService {
-        override suspend fun fetchAllSongs(): List<SongData> {
+
+        override suspend fun fetchAllSongs(): List<Song> {
             return songs
         }
 

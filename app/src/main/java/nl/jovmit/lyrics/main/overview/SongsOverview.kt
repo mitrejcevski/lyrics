@@ -13,7 +13,7 @@ import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.extensions.setupWithLinearLayoutManager
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
-import nl.jovmit.lyrics.main.data.song.SongData
+import nl.jovmit.lyrics.main.data.song.Song
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -57,7 +57,7 @@ class SongsOverview : Fragment() {
         songsAdapter.onItemClickListener = { openSongDetails(it) }
     }
 
-    private fun openSongDetails(song: SongData) {
+    private fun openSongDetails(song: Song) {
         findNavController().navigate(R.id.actionOpenSongDetails)
     }
 
@@ -75,7 +75,7 @@ class SongsOverview : Fragment() {
         layout.songsOverviewSwipeRefresh.isRefreshing = loading
     }
 
-    private fun displaySongs(songs: List<SongData>) {
+    private fun displaySongs(songs: List<Song>) {
         updateEmptyStatePreview(songs.isEmpty())
         songsAdapter.addSongs(songs)
     }

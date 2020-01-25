@@ -5,7 +5,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
-import nl.jovmit.lyrics.main.data.song.SongData
+import nl.jovmit.lyrics.main.data.song.Song
 
 @DslMarker
 annotation class SongsOverviewScreenRobot
@@ -42,7 +42,7 @@ class SongsOverviewVerificationRobot {
         R.id.songsOverviewEmptyStateLabel check isNotDisplayed
     }
 
-    fun songTitleAndSingerAreDisplayed(song: SongData) {
+    fun songTitleAndSingerAreDisplayed(song: Song) {
         text(song.songTitle.value) check isDisplayed
         text(song.songPerformer.name) check isDisplayed
     }

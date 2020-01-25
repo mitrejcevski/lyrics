@@ -1,12 +1,14 @@
 package nl.jovmit.lyrics.main.add
 
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.verify
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.data.result.NewSongResult
+import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -18,6 +20,8 @@ class NewSongFeature {
 
     @Mock
     private lateinit var newSongObserver: Observer<NewSongResult>
+    @Mock
+    private lateinit var idGenerator: IdGenerator
 
     private val title = "song title"
     private val emptySongTitle = ""
@@ -32,7 +36,7 @@ class NewSongFeature {
     @BeforeEach
     fun set_up() {
         val dispatchers = TestCoroutineDispatchers()
-        val songsService = InMemorySongsService()
+        val songsService = InMemorySongsService(idGenerator)
         val newSongRepository = NewSongRepository(songsService)
         newSongViewModel = NewSongViewModel(newSongRepository, dispatchers)
         newSongViewModel.newSongLiveData().observeForever(newSongObserver)
@@ -47,6 +51,8 @@ class NewSongFeature {
 
     @Test
     fun should_deliver_successfully_added_song() {
+        given(idGenerator.next()).willReturn("::irrelevant song id::")
+
         newSongViewModel.addNewSong(title, performer, lyrics)
 
         val inOrder = inOrder(newSongObserver)

@@ -19,7 +19,7 @@ class NewSongRepositoryShould {
     @Mock
     private lateinit var songsService: SongsService
 
-    private val newSong = SongDataBuilder.aSong().build()
+    private val newSong = SongDataBuilder.aSongData().build()
 
     private lateinit var repository: NewSongRepository
 

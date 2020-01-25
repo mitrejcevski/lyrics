@@ -10,6 +10,7 @@ import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
+import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -29,7 +30,8 @@ class NewSongScreenSpecification {
 
     private val newSongModule = module {
         single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-        single<SongsService> { InMemorySongsService() }
+        single { IdGenerator() }
+        single<SongsService> { InMemorySongsService(get()) }
         factory { NewSongRepository(get()) }
         factory { SongsRepository(get()) }
         viewModel { NewSongViewModel(get(), get()) }
