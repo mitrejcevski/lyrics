@@ -5,27 +5,21 @@ import androidx.test.rule.ActivityTestRule
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
-import nl.jovmit.lyrics.common.AppCoroutineDispatchers
-import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.add.NewSongRepository
-import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.data.song.*
-import nl.jovmit.lyrics.main.details.SongDetailsViewModel
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
+import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
-import org.koin.dsl.module
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import kotlin.LazyThreadSafetyMode.NONE
 
 @RunWith(AndroidJUnit4::class)
 class SongsOverviewScreenSpecification {
@@ -37,23 +31,17 @@ class SongsOverviewScreenSpecification {
     @Mock
     private lateinit var songsService: SongsService
 
-    private val emptySongsList = emptyList<Song>()
     private val song = Song(
         SongId("SongId"),
         SongTitle("Title"),
         SongPerformer("Singer Name"),
         SongLyrics("The lyrics of the song")
     )
+    private val emptySongsList = emptyList<Song>()
     private val songsList = listOf(song)
 
-    private val songsOverviewModule = module {
-        single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-        factory { SongsRepository(songsService) }
-        factory { NewSongRepository(songsService) }
-        viewModel { SongsViewModel(get(), get()) }
-        viewModel { NewSongViewModel(get(), get()) }
-        viewModel { InfoViewModel() }
-        viewModel { SongDetailsViewModel(get(), get()) }
+    private val songsOverviewModule by lazy(NONE) {
+        testModuleWithCustomSongsService(songsService)
     }
 
     @Before

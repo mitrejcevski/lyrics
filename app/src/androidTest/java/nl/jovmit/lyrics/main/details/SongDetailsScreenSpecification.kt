@@ -2,25 +2,17 @@ package nl.jovmit.lyrics.main.details
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import nl.jovmit.lyrics.common.AppCoroutineDispatchers
-import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.add.NewSongRepository
-import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.data.song.*
-import nl.jovmit.lyrics.main.overview.SongsRepository
-import nl.jovmit.lyrics.main.overview.SongsViewModel
+import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
-import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class SongDetailsScreenSpecification {
@@ -36,16 +28,10 @@ class SongDetailsScreenSpecification {
     @JvmField
     val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
-    private val songsOverviewModule = module {
-        single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-        single<SongsService> { ReadOnlyServiceContaining(listOf(song)) }
-        factory { SongsRepository(get()) }
-        factory { NewSongRepository(get()) }
-        viewModel { SongsViewModel(get(), get()) }
-        viewModel { NewSongViewModel(get(), get()) }
-        viewModel { InfoViewModel() }
-        viewModel { SongDetailsViewModel(get(), get()) }
-    }
+    private val songsOverviewModule =
+        testModuleWithCustomSongsService(
+            ReadOnlyServiceContaining(listOf(song))
+        )
 
     @Before
     fun setUp() {

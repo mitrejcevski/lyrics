@@ -2,24 +2,15 @@ package nl.jovmit.lyrics.main.add
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import nl.jovmit.lyrics.common.AppCoroutineDispatchers
-import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.main.InMemorySongsService
-import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.MainActivity
-import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.overview.SongsRepository
-import nl.jovmit.lyrics.main.overview.SongsViewModel
-import nl.jovmit.lyrics.utils.IdGenerator
+import nl.jovmit.lyrics.main.inMemoryTestModule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
-import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class NewSongScreenSpecification {
@@ -28,20 +19,9 @@ class NewSongScreenSpecification {
     @JvmField
     val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
-    private val newSongModule = module {
-        single<CoroutineDispatchers> { AppCoroutineDispatchers() }
-        single { IdGenerator() }
-        single<SongsService> { InMemorySongsService(get()) }
-        factory { NewSongRepository(get()) }
-        factory { SongsRepository(get()) }
-        viewModel { NewSongViewModel(get(), get()) }
-        viewModel { InfoViewModel() }
-        viewModel { SongsViewModel(get(), get()) }
-    }
-
     @Before
     fun setUp() {
-        loadKoinModules(newSongModule)
+        loadKoinModules(inMemoryTestModule)
     }
 
     @Test
@@ -83,6 +63,6 @@ class NewSongScreenSpecification {
 
     @After
     fun tearDown() {
-        unloadKoinModules(newSongModule)
+        unloadKoinModules(inMemoryTestModule)
     }
 }
