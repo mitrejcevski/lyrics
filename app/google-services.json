@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1019021877716",
+    "firebase_url": "https://lyrics-jovmit.firebaseio.com",
+    "project_id": "lyrics-jovmit",
+    "storage_bucket": "lyrics-jovmit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019021877716:android:db1429f9c85cce42f17641",
+        "android_client_info": {
+          "package_name": "nl.jovmit.lyrics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019021877716-dpkh1tlkbovk0qopkmoc1cqgl7oms44q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.jovmit.lyrics",
+            "certificate_hash": "d60fb8be7df92c364f68c92d8b0c6a6c93214c81"
+          }
+        },
+        {
+          "client_id": "1019021877716-8a2lulccvt5e79qg9gad4e0c5vejq6kd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwhIsQlmhPZx5mf1PNXhYnRs44gb5CctY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019021877716-8a2lulccvt5e79qg9gad4e0c5vejq6kd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 package nl.jovmit.lyrics.main
 
+import com.google.firebase.firestore.FirebaseFirestore
 import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.add.NewSongRepository
@@ -12,6 +13,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val mainModule = module {
+    single { FirebaseFirestore.getInstance() }
     single<CoroutineDispatchers> { AppCoroutineDispatchers() }
     single { IdGenerator() }
     single<SongsService> { InMemorySongsService(get()) }

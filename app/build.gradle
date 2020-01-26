@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("com.github.triplet.play") version "2.6.1"
+    id("com.google.gms.google-services")
 }
 
 apply from: '../release_notes_generator.gradle'
@@ -59,6 +60,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$androidArchNavigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$androidArchNavigationVersion"
+    implementation 'com.google.firebase:firebase-firestore:21.3.1'
 
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
