@@ -16,7 +16,7 @@ val mainModule = module {
     single { FirebaseFirestore.getInstance() }
     single<CoroutineDispatchers> { AppCoroutineDispatchers() }
     single { IdGenerator() }
-    single<SongsService> { InMemorySongsService(get()) }
+    single<SongsService> { FirebaseSongsService(get()) }
     factory { SongsRepository(get()) }
     factory { NewSongRepository(get()) }
     viewModel { SongsViewModel(get(), get()) }
