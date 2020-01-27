@@ -42,6 +42,7 @@ class NewSong : Fragment() {
     private fun observeNewSongLiveData() {
         newSongViewModel.newSongLiveData().listen(viewLifecycleOwner) {
             when (it) {
+                is NewSongResult.Loading -> displayLoading(it.value)
                 is NewSongResult.EmptyTitle -> displayEmptyTitleError()
                 is NewSongResult.EmptyPerformer -> displayEmptyPerformerError()
                 is NewSongResult.EmptyLyrics -> displayEmptyLyricsError()
@@ -49,6 +50,11 @@ class NewSong : Fragment() {
                 is NewSongResult.ErrorAddingSong -> displayErrorSavingSong()
             }
         }
+    }
+
+    private fun displayLoading(loading: Boolean) {
+        val visibility = if (loading) View.VISIBLE else View.GONE
+        layout.newSongLoading.visibility = visibility
     }
 
     private fun displayEmptyTitleError() {
