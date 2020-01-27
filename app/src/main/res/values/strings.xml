@@ -12,4 +12,5 @@
     <string name="errorEmptySongLyrics">Missing song lyrics</string>
     <string name="success">Success</string>
     <string name="songDetails">Song details</string>
+    <string name="errorSavingSong">Error saving song</string>
 </resources>

@@ -46,6 +46,7 @@ class NewSong : Fragment() {
                 is NewSongResult.EmptyPerformer -> displayEmptyPerformerError()
                 is NewSongResult.EmptyLyrics -> displayEmptyLyricsError()
                 is NewSongResult.SongAdded -> displaySongAddingSuccess()
+                is NewSongResult.ErrorAddingSong -> displayErrorSavingSong()
             }
         }
     }
@@ -65,6 +66,10 @@ class NewSong : Fragment() {
     private fun displaySongAddingSuccess() {
         infoViewModel.showInfo(getString(R.string.success))
         findNavController().navigateUp()
+    }
+
+    private fun displayErrorSavingSong() {
+        infoViewModel.showError(getString(R.string.errorSavingSong))
     }
 
     private fun triggerNewSongSubmission() {

@@ -2,8 +2,14 @@ package nl.jovmit.lyrics.main.add
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.MainActivity
-import nl.jovmit.lyrics.main.inMemoryTestModule
+import nl.jovmit.lyrics.main.SongsService
+import nl.jovmit.lyrics.main.exceptions.SongsServiceException
+import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -11,6 +17,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import kotlin.LazyThreadSafetyMode.NONE
 
 @RunWith(AndroidJUnit4::class)
 class NewSongScreenSpecification {
@@ -19,9 +28,18 @@ class NewSongScreenSpecification {
     @JvmField
     val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
+    @Mock
+    private lateinit var songsService: SongsService
+
+    private val module by lazy(NONE) {
+        testModuleWithCustomSongsService(songsService)
+    }
+
     @Before
     fun setUp() {
-        loadKoinModules(inMemoryTestModule)
+        MockitoAnnotations.initMocks(this)
+        loadKoinModules(module)
+        runBlocking { whenever(songsService.fetchAllSongs()).thenReturn(emptyList()) }
     }
 
     @Test
@@ -61,8 +79,20 @@ class NewSongScreenSpecification {
         }
     }
 
+    @Test
+    fun should_show_error_saving_song() = runBlocking<Unit> {
+        given(songsService.addNewSong(any())).willThrow(SongsServiceException())
+        launchNewSongScreen(rule) {
+            typeSongTitle("Song title")
+            typeSongPerformer("Song performer")
+            typeSongLyrics("Song lyrics")
+        } submit {
+            verifyErrorSavingSong()
+        }
+    }
+
     @After
     fun tearDown() {
-        unloadKoinModules(inMemoryTestModule)
+        unloadKoinModules(module)
     }
 }

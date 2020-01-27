@@ -59,4 +59,8 @@ class NewSongVerificationRobot {
     fun verifySongBeingSaved() {
         text(R.string.success) check isDisplayed
     }
+
+    fun verifyErrorSavingSong() {
+        text(R.string.errorSavingSong) check isDisplayed
+    }
 }
