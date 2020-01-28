@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentSongsOverviewBinding
-import nl.jovmit.lyrics.extensions.applyDefaultColors
-import nl.jovmit.lyrics.extensions.listen
-import nl.jovmit.lyrics.extensions.setupWithLinearLayoutManager
+import nl.jovmit.lyrics.extensions.*
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.Song
@@ -53,30 +51,8 @@ class SongsOverview : Fragment() {
         inflater.inflate(R.menu.songs_overview_menu, menu)
         val searchMenuItem = menu.findItem(R.id.actionSearch)
         val searchView = searchMenuItem.actionView as SearchView
-        searchView.setOnQueryTextListener(onSearchQueryListener)
-        searchMenuItem.setOnActionExpandListener(onCollapsedListener)
-    }
-
-    private val onCollapsedListener = object : MenuItem.OnActionExpandListener {
-        override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-            return true
-        }
-
-        override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-            songsViewModel.fetchSongs()
-            return true
-        }
-    }
-
-    private val onSearchQueryListener = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            query?.let { songsViewModel.search(it) }
-            return true
-        }
-
-        override fun onQueryTextChange(newText: String?): Boolean {
-            return false
-        }
+        searchView.onQuerySubmit { songsViewModel.search(it) }
+        searchMenuItem.onCollapse { songsViewModel.fetchSongs() }
     }
 
     private fun openNewSong() {
