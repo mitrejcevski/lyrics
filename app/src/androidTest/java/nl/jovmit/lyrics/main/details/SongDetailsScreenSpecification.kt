@@ -2,10 +2,11 @@ package nl.jovmit.lyrics.main.details
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.MainActivity
-import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
+import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -30,7 +31,7 @@ class SongDetailsScreenSpecification {
 
     private val songsOverviewModule =
         testModuleWithCustomSongsService(
-            ReadOnlyServiceContaining(listOf(song))
+            InMemorySongsService(IdGenerator(), listOf(song))
         )
 
     @Before
@@ -52,22 +53,5 @@ class SongDetailsScreenSpecification {
     @After
     fun tearDown() {
         unloadKoinModules(songsOverviewModule)
-    }
-
-    inner class ReadOnlyServiceContaining(
-        private val songs: List<Song>
-    ) : SongsService {
-
-        override suspend fun fetchAllSongs(): List<Song> {
-            return songs
-        }
-
-        override suspend fun addNewSong(newSongData: SongData) {
-            throw IllegalStateException("Irrelevant for this testcase")
-        }
-
-        override suspend fun findSongById(songId: String): Song {
-            return songs.first { it.songId.value == songId }
-        }
     }
 }
