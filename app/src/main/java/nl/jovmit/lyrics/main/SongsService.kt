@@ -10,4 +10,6 @@ interface SongsService {
     suspend fun addNewSong(newSongData: SongData)
 
     suspend fun findSongById(songId: String): Song
+
+    suspend fun search(query: String): List<Song>
 }

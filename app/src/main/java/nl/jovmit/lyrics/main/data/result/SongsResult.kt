@@ -9,4 +9,6 @@ sealed class SongsResult {
     data class Fetched(val songs: List<Song>) : SongsResult()
 
     object FetchingError : SongsResult()
+
+    object SearchError : SongsResult()
 }

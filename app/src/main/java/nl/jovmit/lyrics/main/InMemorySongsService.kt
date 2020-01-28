@@ -7,10 +7,15 @@ import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import nl.jovmit.lyrics.utils.IdGenerator
 
 class InMemorySongsService(
-    private val idGenerator: IdGenerator
+    private val idGenerator: IdGenerator,
+    songsList: List<Song> = emptyList()
 ) : SongsService {
 
     private val songs = mutableListOf<Song>()
+
+    init {
+        this.songs.addAll(songsList)
+    }
 
     override suspend fun fetchAllSongs(): List<Song> {
         return songs
@@ -27,5 +32,13 @@ class InMemorySongsService(
     override suspend fun findSongById(songId: String): Song {
         return songs.find { it.songId.value == songId }
             ?: throw SongsServiceException()
+    }
+
+    override suspend fun search(query: String): List<Song> {
+        return songs.filter {
+            it.songTitle.value.contains(query) ||
+                    it.songPerformer.name.contains(query) ||
+                    it.songLyric.lyrics.contains(query)
+        }
     }
 }

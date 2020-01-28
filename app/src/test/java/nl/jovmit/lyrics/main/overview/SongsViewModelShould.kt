@@ -29,4 +29,13 @@ class SongsViewModelShould {
 
         verifyBlocking(songsRepository) { fetchAllSongs() }
     }
+
+    @Test
+    fun search_songs_using_the_songs_repository() {
+        val query = "song"
+
+        songsViewModel.search(query)
+
+        verifyBlocking(songsRepository) { searchSongs(query) }
+    }
 }

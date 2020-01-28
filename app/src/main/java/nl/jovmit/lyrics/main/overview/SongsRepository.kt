@@ -24,4 +24,13 @@ class SongsRepository(private val songsService: SongsService) {
             SongResult.NotFound
         }
     }
+
+    suspend fun searchSongs(query: String): SongsResult {
+        return try {
+            val songs = songsService.search(query)
+            return SongsResult.Fetched(songs)
+        } catch (serviceException: SongsServiceException) {
+            SongsResult.SearchError
+        }
+    }
 }

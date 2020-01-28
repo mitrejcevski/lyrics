@@ -50,6 +50,10 @@ class FirebaseSongsService(
             }
     }
 
+    override suspend fun search(query: String): List<Song> {
+        TODO("not implemented")
+    }
+
     private fun firebaseSongDataFrom(newSongData: SongData): HashMap<String, String> {
         return hashMapOf(
             SONG_TITLE to newSongData.songTitle.value,

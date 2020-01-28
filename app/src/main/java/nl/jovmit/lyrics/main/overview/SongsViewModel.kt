@@ -29,6 +29,13 @@ class SongsViewModel(
     }
 
     fun search(query: String) {
-
+        songsLiveData.value = SongsResult.Loading(true)
+        launch {
+            val result = withContext(dispatchers.background) {
+                songsRepository.searchSongs(query)
+            }
+            songsLiveData.value = result
+            songsLiveData.value = SongsResult.Loading(false)
+        }
     }
 }

@@ -73,4 +73,24 @@ class SongsRepositoryShould {
 
         assertEquals(SongResult.NotFound, result)
     }
+
+    @Test
+    fun return_songs_result_when_songs_search_is_successful() = runBlocking {
+        val query = "song"
+        given(songsService.search(query)).willReturn(songs)
+
+        val result = songsRepository.searchSongs(query)
+
+        assertEquals(songsFetched, result)
+    }
+
+    @Test
+    fun return_error_result_when_songs_search_fails() = runBlocking {
+        val query = "query"
+        given(songsService.search(query)).willThrow(SongsServiceException())
+
+        val result = songsRepository.searchSongs(query)
+
+        assertEquals(SongsResult.SearchError, result)
+    }
 }
