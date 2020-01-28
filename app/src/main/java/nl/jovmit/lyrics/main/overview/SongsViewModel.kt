@@ -27,4 +27,8 @@ class SongsViewModel(
             songsLiveData.value = SongsResult.Loading(false)
         }
     }
+
+    fun search(query: String) {
+
+    }
 }

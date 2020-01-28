@@ -8,6 +8,8 @@ import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.result.SongsResult
+import nl.jovmit.lyrics.main.data.song.SongBuilder
+import nl.jovmit.lyrics.main.data.song.SongBuilder.Companion.aSong
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -59,6 +61,20 @@ class SongsOverviewFeature {
         val inOrder = inOrder(songsObserver)
         inOrder.verify(songsObserver).onChanged(startLoading)
         inOrder.verify(songsObserver).onChanged(fetchingError)
+        inOrder.verify(songsObserver).onChanged(stopLoading)
+    }
+
+    @Test
+    fun should_display_songs_found() {
+        val query = "song"
+        val titleContainingQuery = "::irrelevant song title::"
+        val filteredSongs = listOf(aSong().withTitle(titleContainingQuery).build())
+
+        songsViewModel.search(query)
+
+        val inOrder = inOrder(songsObserver)
+        inOrder.verify(songsObserver).onChanged(startLoading)
+        inOrder.verify(songsObserver).onChanged(SongsResult.Fetched(filteredSongs))
         inOrder.verify(songsObserver).onChanged(stopLoading)
     }
 }
