@@ -1,7 +1,10 @@
 package nl.jovmit.lyrics.main.overview
 
 import android.content.Intent
+import androidx.appcompat.widget.SearchView
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
@@ -29,6 +32,11 @@ class SongsOverviewRobot {
         text(songTitle) perform click()
     }
 
+    fun typeSearchQuery(query: String) {
+        R.id.actionSearch perform click()
+        onView(isAssignableFrom(SearchView::class.java)).perform(submitText(query))
+    }
+
     infix fun verify(function: SongsOverviewVerificationRobot.() -> Unit): SongsOverviewVerificationRobot {
         return SongsOverviewVerificationRobot().apply(function)
     }
@@ -49,6 +57,11 @@ class SongsOverviewVerificationRobot {
     fun songTitleAndSingerAreDisplayed(song: Song) {
         text(song.songTitle.value) check isDisplayed
         text(song.songPerformer.name) check isDisplayed
+    }
+
+    fun songTitleAndSingerNotDisplayed(song: Song) {
+        text(song.songTitle.value) check doesNotExist
+        text(song.songPerformer.name) check doesNotExist
     }
 
     fun loadingErrorIsDisplayed() {

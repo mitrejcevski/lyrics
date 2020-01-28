@@ -2,7 +2,6 @@ package nl.jovmit.lyrics.main.overview
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -58,7 +57,7 @@ class SongsOverview : Fragment() {
 
     private val onSearchQueryListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
-            Toast.makeText(requireContext(), query, Toast.LENGTH_SHORT).show()
+            query?.let { songsViewModel.search(it) }
             return true
         }
 
