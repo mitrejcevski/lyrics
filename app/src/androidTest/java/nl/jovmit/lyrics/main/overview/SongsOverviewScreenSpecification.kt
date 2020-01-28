@@ -125,6 +125,18 @@ class SongsOverviewScreenSpecification {
         }
     }
 
+    @Test
+    fun display_all_songs_once_search_is_closed() {
+        val queryMatchingFirstSong = "lyrics"
+        launchSongsOverview(rule) {
+            typeSearchQuery(queryMatchingFirstSong)
+            closeSearch()
+        } verify {
+            songTitleAndSingerAreDisplayed(song)
+            songTitleAndSingerAreDisplayed(anotherSong)
+        }
+    }
+
     private fun setupModule(songsService: SongsService) {
         unloadKoinModules(songsOverviewModule)
         module = testModuleWithCustomSongsService(songsService)

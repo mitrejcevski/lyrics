@@ -51,8 +51,21 @@ class SongsOverview : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.songs_overview_menu, menu)
-        val searchView = menu.findItem(R.id.actionSearch).actionView as SearchView
+        val searchMenuItem = menu.findItem(R.id.actionSearch)
+        val searchView = searchMenuItem.actionView as SearchView
         searchView.setOnQueryTextListener(onSearchQueryListener)
+        searchMenuItem.setOnActionExpandListener(onCollapsedListener)
+    }
+
+    private val onCollapsedListener = object : MenuItem.OnActionExpandListener {
+        override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+            return true
+        }
+
+        override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+            songsViewModel.fetchSongs()
+            return true
+        }
     }
 
     private val onSearchQueryListener = object : SearchView.OnQueryTextListener {
