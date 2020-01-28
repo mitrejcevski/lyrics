@@ -83,4 +83,8 @@ class SongsOverviewVerificationRobot {
     fun songDetailsScreenIsOpened() {
         text(R.string.songDetails) check isDisplayed
     }
+
+    fun searchErrorIsDisplayed() {
+        text(R.string.errorSearchingSong)
+    }
 }

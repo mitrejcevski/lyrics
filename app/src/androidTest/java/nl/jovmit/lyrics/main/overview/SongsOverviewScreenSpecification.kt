@@ -137,6 +137,22 @@ class SongsOverviewScreenSpecification {
         }
     }
 
+    @Test
+    fun display_search_error() = runBlocking {
+        val query = "query"
+        given(songsService.fetchAllSongs()).willReturn(songsList)
+        given(songsService.search(query)).willThrow(SongsServiceException())
+        setupModule(songsService)
+
+        launchSongsOverview(rule) {
+            typeSearchQuery(query)
+        } verify {
+            searchErrorIsDisplayed()
+        }
+
+        unloadModule()
+    }
+
     private fun setupModule(songsService: SongsService) {
         unloadKoinModules(songsOverviewModule)
         module = testModuleWithCustomSongsService(songsService)

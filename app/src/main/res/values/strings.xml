@@ -14,4 +14,5 @@
     <string name="songDetails">Song details</string>
     <string name="errorSavingSong">Error saving song</string>
     <string name="search">Search</string>
+    <string name="errorSearchingSong">Error searching</string>
 </resources>

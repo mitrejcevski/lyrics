@@ -104,6 +104,7 @@ class SongsOverview : Fragment() {
                 is SongsResult.Loading -> displayLoading(it.loading)
                 is SongsResult.Fetched -> displaySongs(it.songs)
                 is SongsResult.FetchingError -> displayFetchingError()
+                is SongsResult.SearchError -> displaySearchingError()
             }
         }
     }
@@ -124,6 +125,11 @@ class SongsOverview : Fragment() {
 
     private fun displayFetchingError() {
         val errorMessage = getString(R.string.errorFetchingSongs)
+        infoViewModel.showError(errorMessage)
+    }
+
+    private fun displaySearchingError() {
+        val errorMessage = getString(R.string.errorSearchingSong)
         infoViewModel.showError(errorMessage)
     }
 }
