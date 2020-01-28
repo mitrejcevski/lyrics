@@ -1,9 +1,9 @@
 package nl.jovmit.lyrics.main.overview
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -27,6 +27,11 @@ class SongsOverview : Fragment() {
 
     private lateinit var layout: FragmentSongsOverviewBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,6 +48,23 @@ class SongsOverview : Fragment() {
         setupRecyclerView()
         observeSongsLiveData()
         fetchSongs()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.songs_overview_menu, menu)
+        val searchView = menu.findItem(R.id.actionSearch).actionView as SearchView
+        searchView.setOnQueryTextListener(onSearchQueryListener)
+    }
+
+    private val onSearchQueryListener = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            Toast.makeText(requireContext(), query, Toast.LENGTH_SHORT).show()
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            return false
+        }
     }
 
     private fun openNewSong() {
