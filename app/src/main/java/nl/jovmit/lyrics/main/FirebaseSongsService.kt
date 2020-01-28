@@ -1,5 +1,6 @@
 package nl.jovmit.lyrics.main
 
+import android.annotation.SuppressLint
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import nl.jovmit.lyrics.main.data.song.*
@@ -19,15 +20,23 @@ class FirebaseSongsService(
         private const val SONG_LYRIC = "songLyric"
     }
 
+    private var songsCache = mutableListOf<Song>()
+
     override suspend fun fetchAllSongs(): List<Song> = suspendCoroutine { continuation ->
         database.collection(SONGS_COLLECTION).get()
             .addOnSuccessListener { result ->
                 val songs = result.documents.map { createSongFor(it) }
+                updateCache(songs)
                 continuation.resume(songs)
             }
             .addOnFailureListener {
                 continuation.resumeWithException(SongsServiceException())
             }
+    }
+
+    private fun updateCache(songs: List<Song>) {
+        songsCache.clear()
+        songsCache.addAll(songs)
     }
 
     override suspend fun addNewSong(
@@ -50,8 +59,13 @@ class FirebaseSongsService(
             }
     }
 
+    @SuppressLint("DefaultLocale")
     override suspend fun search(query: String): List<Song> {
-        TODO("not implemented")
+        return songsCache.filter {
+            it.songTitle.value.toLowerCase().contains(query.toLowerCase()) ||
+                    it.songPerformer.name.toLowerCase().contains(query.toLowerCase()) ||
+                    it.songLyric.lyrics.toLowerCase().contains(query.toLowerCase())
+        }
     }
 
     private fun firebaseSongDataFrom(newSongData: SongData): HashMap<String, String> {
