@@ -1,6 +1,5 @@
 package nl.jovmit.lyrics.main
 
-import android.annotation.SuppressLint
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import nl.jovmit.lyrics.main.data.song.*
@@ -59,12 +58,11 @@ class FirebaseSongsService(
             }
     }
 
-    @SuppressLint("DefaultLocale")
     override suspend fun search(query: String): List<Song> {
         return songsCache.filter {
-            it.songTitle.value.toLowerCase().contains(query.toLowerCase()) ||
-                    it.songPerformer.name.toLowerCase().contains(query.toLowerCase()) ||
-                    it.songLyric.lyrics.toLowerCase().contains(query.toLowerCase())
+            it.songTitle.value.contains(query, ignoreCase = true) ||
+                    it.songPerformer.name.contains(query, ignoreCase = true) ||
+                    it.songLyric.lyrics.contains(query, ignoreCase = true)
         }
     }
 
