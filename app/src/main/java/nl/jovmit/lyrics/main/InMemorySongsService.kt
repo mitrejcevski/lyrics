@@ -36,9 +36,9 @@ class InMemorySongsService(
 
     override suspend fun search(query: String): List<Song> {
         return songs.filter {
-            it.songTitle.value.contains(query) ||
-                    it.songPerformer.name.contains(query) ||
-                    it.songLyric.lyrics.contains(query)
+            it.songTitle.value.contains(query, ignoreCase = true) ||
+                    it.songPerformer.name.contains(query, ignoreCase = true) ||
+                    it.songLyric.lyrics.contains(query, ignoreCase = true)
         }
     }
 }
