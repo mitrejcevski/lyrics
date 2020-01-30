@@ -66,8 +66,12 @@ class FirebaseSongsService(
         }
     }
 
-    override suspend fun deleteSongById(songId: String) {
-        TODO("not implemented")
+    override suspend fun deleteSongById(
+        songId: String
+    ) = suspendCoroutine<Unit> { continuation ->
+        database.collection(SONGS_COLLECTION).document(songId).delete()
+            .addOnSuccessListener { continuation.resume(Unit) }
+            .addOnFailureListener { continuation.resumeWithException(SongsServiceException()) }
     }
 
     private fun firebaseSongDataFrom(newSongData: SongData): HashMap<String, String> {
