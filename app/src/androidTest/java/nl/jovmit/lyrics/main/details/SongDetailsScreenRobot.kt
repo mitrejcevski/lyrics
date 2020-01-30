@@ -1,14 +1,13 @@
 package nl.jovmit.lyrics.main.details
 
+import android.content.Context
 import android.content.Intent
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.rule.ActivityTestRule
-import nl.jovmit.lyrics.check
-import nl.jovmit.lyrics.isDisplayed
+import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.Song
-import nl.jovmit.lyrics.perform
-import nl.jovmit.lyrics.text
 
 @DslMarker
 annotation class SongDetailsScreenRobot
@@ -18,14 +17,19 @@ fun launchSongsOverviewScreen(
     block: SongDetailsRobot.() -> Unit
 ): SongDetailsRobot {
     rule.launchActivity(Intent())
-    return SongDetailsRobot().apply(block)
+    return SongDetailsRobot(rule.activity).apply(block)
 }
 
 @SongDetailsScreenRobot
-class SongDetailsRobot {
+class SongDetailsRobot(private val context: Context) {
 
     fun tapOnSongWithTitle(songTitle: String) {
         text(songTitle) perform click()
+    }
+
+    fun tapOnDeleteAction() {
+        openActionBarOverflowOrOptionsMenu(context)
+        text(R.string.delete) perform click()
     }
 
     infix fun verify(
@@ -48,5 +52,9 @@ class SongDetailsVerificationRobot {
 
     fun songLyricsIsDisplayed(song: Song) {
         text(song.songLyric.lyrics) check isDisplayed
+    }
+
+    fun deleteSongConfirmationIsShown() {
+        text(R.string.deleteSongPrompt) check isDisplayed
     }
 }

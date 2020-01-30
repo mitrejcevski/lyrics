@@ -18,16 +18,16 @@ import org.koin.core.context.unloadKoinModules
 @RunWith(AndroidJUnit4::class)
 class SongDetailsScreenSpecification {
 
+    @Rule
+    @JvmField
+    val rule = ActivityTestRule(MainActivity::class.java, true, false)
+
     private val song = Song(
         SongId("::irrelevant song id::"),
         SongTitle("::irrelevant song title::"),
         SongPerformer("::irrelevant song performer::"),
         SongLyrics("::irrelevant song lyrics::")
     )
-
-    @Rule
-    @JvmField
-    val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
     private val songsOverviewModule =
         testModuleWithCustomSongsService(
@@ -47,6 +47,16 @@ class SongDetailsScreenSpecification {
             songTitleIsDisplayed(song)
             songPerformerIsDisplayed(song)
             songLyricsIsDisplayed(song)
+        }
+    }
+
+    @Test
+    fun should_prompt_before_deleting_song() {
+        launchSongsOverviewScreen(rule) {
+            tapOnSongWithTitle(song.songTitle.value)
+            tapOnDeleteAction()
+        } verify {
+            deleteSongConfirmationIsShown()
         }
     }
 

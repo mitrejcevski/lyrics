@@ -2,8 +2,8 @@ package nl.jovmit.lyrics.main.details
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentSongDetailsBinding
 import nl.jovmit.lyrics.extensions.listen
@@ -54,7 +54,9 @@ class SongDetails : Fragment() {
     }
 
     private fun deleteSong() {
-        Toast.makeText(requireContext(), "Delete called", Toast.LENGTH_SHORT).show()
+        Snackbar.make(layout.root, R.string.deleteSongPrompt, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.delete) { }
+            .show()
     }
 
     private fun observeSongDetailsLiveData() {
