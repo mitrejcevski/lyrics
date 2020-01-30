@@ -1,10 +1,10 @@
 package nl.jovmit.lyrics.main.details
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentSongDetailsBinding
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.main.data.result.SongResult
@@ -23,6 +23,11 @@ class SongDetails : Fragment() {
 
     private lateinit var layout: FragmentSongDetailsBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,6 +40,21 @@ class SongDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observeSongDetailsLiveData()
         songDetailsViewModel.fetchSongById(songId)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.song_details_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.actionDelete) {
+            deleteSong()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteSong() {
+        Toast.makeText(requireContext(), "Delete called", Toast.LENGTH_SHORT).show()
     }
 
     private fun observeSongDetailsLiveData() {
