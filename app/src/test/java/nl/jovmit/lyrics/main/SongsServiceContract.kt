@@ -54,5 +54,16 @@ abstract class SongsServiceContract {
         assertEquals(listOf(songOne, songTwo, songThree), service.search(query))
     }
 
+    @Test
+    fun delete_song_for_given_id() = runBlocking {
+        val songOne = aSong().withId("song1").build()
+        val songTwo = aSong().withId("song2").build()
+        val service = songsServiceWith(listOf(songOne, songTwo))
+
+        service.deleteSongById(songTwo.songId.value)
+
+        assertEquals(listOf(songOne), service.fetchAllSongs())
+    }
+
     abstract fun songsServiceWith(songsList: List<Song>): SongsService
 }

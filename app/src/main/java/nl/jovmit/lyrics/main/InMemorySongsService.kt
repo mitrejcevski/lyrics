@@ -43,6 +43,6 @@ class InMemorySongsService(
     }
 
     override suspend fun deleteSongById(songId: String) {
-        TODO("not implemented")
+        songs.removeAll { it.songId.value == songId }
     }
 }

@@ -19,8 +19,8 @@ class SongDetailsViewModel(
     fun songDetailsLiveData(): LiveData<SongResult> = songDetailsLiveData
 
     fun fetchSongById(songId: String) {
+        songDetailsLiveData.value = SongResult.Loading(true)
         launch {
-            songDetailsLiveData.value = SongResult.Loading(true)
             val result = withContext(dispatchers.background) {
                 songsRepository.findSongById(songId)
             }
@@ -30,8 +30,13 @@ class SongDetailsViewModel(
     }
 
     fun deleteSongById(songId: String) {
+        songDetailsLiveData.value = SongResult.Loading(true)
         launch {
-            songsRepository.deleteSongById(songId)
+            val result = withContext(dispatchers.background) {
+                songsRepository.deleteSongById(songId)
+            }
+            songDetailsLiveData.value = result
+            songDetailsLiveData.value = SongResult.Loading(false)
         }
     }
 }

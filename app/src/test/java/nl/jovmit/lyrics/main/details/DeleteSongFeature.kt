@@ -38,6 +38,7 @@ class DeleteSongFeature {
         val songsRepository = SongsRepository(songsService)
         val dispatchers = TestCoroutineDispatchers()
         songDetailsViewModel = SongDetailsViewModel(songsRepository, dispatchers)
+        songDetailsViewModel.songDetailsLiveData().observeForever(songDetailsLiveDataObserver)
     }
 
     @Test
