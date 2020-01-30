@@ -9,4 +9,6 @@ sealed class SongResult {
     data class Fetched(val song: Song) : SongResult()
 
     object NotFound : SongResult()
+
+    object SongDeleted : SongResult()
 }

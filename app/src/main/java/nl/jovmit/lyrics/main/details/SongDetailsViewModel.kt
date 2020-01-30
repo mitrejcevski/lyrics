@@ -28,4 +28,8 @@ class SongDetailsViewModel(
             songDetailsLiveData.value = SongResult.Loading(false)
         }
     }
+
+    fun deleteSongById(songId: String) {
+
+    }
 }
