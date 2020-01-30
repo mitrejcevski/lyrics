@@ -15,4 +15,5 @@
     <string name="errorSavingSong">Error saving song</string>
     <string name="search">Search</string>
     <string name="errorSearchingSong">Error searching</string>
+    <string name="delete">Delete</string>
 </resources>
