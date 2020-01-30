@@ -30,6 +30,8 @@ class SongDetailsViewModel(
     }
 
     fun deleteSongById(songId: String) {
-
+        launch {
+            songsRepository.deleteSongById(songId)
+        }
     }
 }

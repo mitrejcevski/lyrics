@@ -1,6 +1,7 @@
 package nl.jovmit.lyrics.main.details
 
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyBlocking
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
@@ -32,5 +33,14 @@ class SongDetailsViewModelShould {
         songDetailsViewModel.fetchSongById(songId)
 
         verify(songsRepository).findSongById(songId)
+    }
+
+    @Test
+    fun delete_song_by_id_in_songs_repository() {
+        val songId = "::songId::"
+
+        songDetailsViewModel.deleteSongById(songId)
+
+        verifyBlocking(songsRepository) { deleteSongById(songId) }
     }
 }
