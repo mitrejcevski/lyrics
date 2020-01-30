@@ -27,7 +27,7 @@ class DeleteSongFeature {
     private val songs = listOf(aSong().withId(songId).build())
 
     private val startLoading = SongResult.Loading(true)
-    private val songDeleted = SongResult.SongDeleted
+    private val songDeleted = SongResult.Deleted
     private val stopLoading = SongResult.Loading(false)
 
     private lateinit var songDetailsViewModel: SongDetailsViewModel

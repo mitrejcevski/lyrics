@@ -10,5 +10,7 @@ sealed class SongResult {
 
     object NotFound : SongResult()
 
-    object SongDeleted : SongResult()
+    object Deleted : SongResult()
+
+    object ErrorDeleting : SongResult()
 }

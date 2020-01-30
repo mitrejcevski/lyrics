@@ -34,7 +34,12 @@ class SongsRepository(private val songsService: SongsService) {
         }
     }
 
-    suspend fun deleteSongById(songId: String) {
-        TODO("not implemented")
+    suspend fun deleteSongById(songId: String): SongResult {
+        return try {
+            songsService.deleteSongById(songId)
+            SongResult.Deleted
+        } catch (serviceException: SongsServiceException) {
+            SongResult.ErrorDeleting
+        }
     }
 }

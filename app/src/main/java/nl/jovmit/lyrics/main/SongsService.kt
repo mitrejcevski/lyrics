@@ -12,4 +12,6 @@ interface SongsService {
     suspend fun findSongById(songId: String): Song
 
     suspend fun search(query: String): List<Song>
+
+    suspend fun deleteSongById(songId: String)
 }

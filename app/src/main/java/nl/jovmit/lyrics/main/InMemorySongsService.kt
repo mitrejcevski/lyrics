@@ -41,4 +41,8 @@ class InMemorySongsService(
                     it.songLyric.lyrics.contains(query, ignoreCase = true)
         }
     }
+
+    override suspend fun deleteSongById(songId: String) {
+        TODO("not implemented")
+    }
 }

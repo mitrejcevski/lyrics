@@ -93,4 +93,23 @@ class SongsRepositoryShould {
 
         assertEquals(SongsResult.SearchError, result)
     }
+
+    @Test
+    fun return_success_deleting_song() = runBlocking {
+        val songId = "::song id::"
+
+        val result = songsRepository.deleteSongById(songId)
+
+        assertEquals(SongResult.Deleted, result)
+    }
+
+    @Test
+    fun return_failure_when_song_deletion_fails() = runBlocking {
+        val songId = "::song id::"
+        given(songsService.deleteSongById(songId)).willThrow(SongsServiceException())
+
+        val result = songsRepository.deleteSongById(songId)
+
+        assertEquals(SongResult.ErrorDeleting, result)
+    }
 }
