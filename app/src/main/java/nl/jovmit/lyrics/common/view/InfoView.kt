@@ -21,8 +21,7 @@ class InfoView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) :
-    AppCompatTextView(context, attrs, defStyleAttr) {
+) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     private companion object {
 
@@ -62,7 +61,8 @@ class InfoView @JvmOverloads constructor(
     }
 
     fun displayError(error: String) {
-        setBackgroundResource(R.color.bloodyRed)
+        setBackgroundResource(R.color.errorColor)
+        setTextColor(ContextCompat.getColor(context, R.color.infoMessageTextColor))
         showUp(error)
     }
 
@@ -71,7 +71,8 @@ class InfoView @JvmOverloads constructor(
     }
 
     fun displayInfo(info: String) {
-        setBackgroundResource(R.color.colorAccent)
+        setBackgroundResource(R.color.successColor)
+        setTextColor(ContextCompat.getColor(context, R.color.infoMessageTextColor))
         showUp(info)
     }
 

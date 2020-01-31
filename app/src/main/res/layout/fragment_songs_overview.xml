@@ -43,6 +43,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_plus"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/fabTint" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

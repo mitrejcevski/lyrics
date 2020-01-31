@@ -7,7 +7,7 @@ buildscript {
     ext.androidArchNavigationVersion = '2.2.0'
     ext.activityKtxVersion = '1.1.0'
     ext.fragmentKtxVersion = '1.2.0'
-    ext.materialVersion = '1.2.0-alpha04'
+    ext.materialVersion = '1.1.0-rc02'
     ext.swipeRefreshLayoutVersion = '1.0.0'
 
     repositories {
