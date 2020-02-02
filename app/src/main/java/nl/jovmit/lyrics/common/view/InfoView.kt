@@ -41,7 +41,6 @@ class InfoView @JvmOverloads constructor(
         gravity = Gravity.CENTER
         setPadding(0, 16, 0, 16)
         setTextSize(Dimension.SP, 18f)
-        setTextColor(ContextCompat.getColor(context, R.color.white))
     }
 
     fun timeout(timeout: Long) {
