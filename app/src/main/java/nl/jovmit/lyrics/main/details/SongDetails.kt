@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentSongDetailsBinding
@@ -13,15 +14,10 @@ import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.song.Song
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.LazyThreadSafetyMode.NONE
 
 class SongDetails : Fragment() {
 
-    companion object {
-        const val SONG_ID_EXTRA = "songIdExtra"
-    }
-
-    private val songId by lazy(NONE) { requireArguments().getString(SONG_ID_EXTRA, "") }
+    private val navArguments by navArgs<SongDetailsArgs>()
     private val songDetailsViewModel by viewModel<SongDetailsViewModel>()
     private val infoViewModel by sharedViewModel<InfoViewModel>()
 
@@ -43,7 +39,7 @@ class SongDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observeSongDetailsLiveData()
-        songDetailsViewModel.fetchSongById(songId)
+        songDetailsViewModel.fetchSongById(navArguments.songId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -51,15 +47,21 @@ class SongDetails : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.actionDelete) {
-            deleteSong()
+        when (item.itemId) {
+            R.id.actionDelete -> deleteSong()
+            R.id.actionEdit -> editSong()
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun editSong() {
+        val direction = SongDetailsDirections.editSong(navArguments.songId)
+        findNavController().navigate(direction)
+    }
+
     private fun deleteSong() {
         Snackbar.make(layout.root, R.string.deleteSongPrompt, Snackbar.LENGTH_SHORT)
-            .setAction(R.string.delete) { songDetailsViewModel.deleteSongById(songId) }
+            .setAction(R.string.delete) { songDetailsViewModel.deleteSongById(navArguments.songId) }
             .show()
     }
 

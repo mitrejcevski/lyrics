@@ -3,7 +3,6 @@ package nl.jovmit.lyrics.main.overview
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
@@ -12,7 +11,6 @@ import nl.jovmit.lyrics.extensions.*
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.Song
-import nl.jovmit.lyrics.main.details.SongDetails
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -70,8 +68,8 @@ class SongsOverview : Fragment() {
     }
 
     private fun openSongDetails(song: Song) {
-        val arguments = bundleOf(SongDetails.SONG_ID_EXTRA to song.songId.value)
-        findNavController().navigate(R.id.openSongDetails, arguments)
+        val direction = SongsOverviewDirections.openSongDetails(song.songId.value)
+        findNavController().navigate(direction)
     }
 
     private fun observeSongsLiveData() {
