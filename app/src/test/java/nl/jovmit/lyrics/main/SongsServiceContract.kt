@@ -3,6 +3,7 @@ package nl.jovmit.lyrics.main
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.data.song.SongBuilder.Companion.aSong
+import nl.jovmit.lyrics.main.data.song.SongDataBuilder.Companion.aSongData
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -63,6 +64,39 @@ abstract class SongsServiceContract {
         service.deleteSongById(songTwo.songId.value)
 
         assertEquals(listOf(songOne), service.fetchAllSongs())
+    }
+
+    @Test
+    fun update_song_for_given_id() = runBlocking {
+        val songId = "::songId::"
+        val updatedTitle = "New Title"
+        val updatedPerformer = "New Performer"
+        val updatedLyrics = "New Lyrics"
+        val song = aSong().withId(songId).build()
+        val updatedSong = aSong()
+            .withId(songId)
+            .withTitle(updatedTitle)
+            .withPerformer(updatedPerformer)
+            .withLyrics(updatedLyrics)
+            .build()
+        val service = songsServiceWith(listOf(song))
+        val songData = aSongData()
+            .withTitle(updatedTitle)
+            .withPerformer(updatedPerformer)
+            .withLyrics(updatedLyrics).build()
+
+        service.updateSong(songId, songData)
+
+        assertEquals(updatedSong, service.findSongById(songId))
+    }
+
+    @Test
+    fun throw_exception_when_updating_non_existing_song() {
+        val service = songsServiceWith(emptyList())
+
+        assertThrows<SongsServiceException> {
+            runBlocking { service.updateSong("songId", aSongData().build()) }
+        }
     }
 
     abstract fun songsServiceWith(songsList: List<Song>): SongsService

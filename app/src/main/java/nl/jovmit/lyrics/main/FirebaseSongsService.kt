@@ -74,6 +74,10 @@ class FirebaseSongsService(
             .addOnFailureListener { continuation.resumeWithException(SongsServiceException()) }
     }
 
+    override suspend fun updateSong(songId: String, songData: SongData) {
+        TODO("not implemented")
+    }
+
     private fun firebaseSongDataFrom(newSongData: SongData): HashMap<String, String> {
         return hashMapOf(
             SONG_TITLE to newSongData.songTitle.value,

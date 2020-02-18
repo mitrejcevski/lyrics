@@ -6,6 +6,7 @@ import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.SongBuilder.Companion.aSong
+import nl.jovmit.lyrics.main.data.song.SongDataBuilder.Companion.aSongData
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -111,5 +112,26 @@ class SongsRepositoryShould {
         val result = songsRepository.deleteSongById(songId)
 
         assertEquals(SongResult.ErrorDeleting, result)
+    }
+
+    @Test
+    fun return_success_when_song_updated_successfully() = runBlocking {
+        val songId = "::songId::"
+        val songData = aSongData().build()
+
+        val result = songsRepository.updateSong(songId, songData)
+
+        assertEquals(SongResult.Updated, result)
+    }
+
+    @Test
+    fun return_failure_when_song_update_fails() = runBlocking {
+        val songId = "::songId::"
+        val songData = aSongData().build()
+        given(songsService.updateSong(songId, songData)).willThrow(SongsServiceException())
+
+        val result = songsRepository.updateSong(songId, songData)
+
+        assertEquals(SongResult.ErrorUpdating, result)
     }
 }

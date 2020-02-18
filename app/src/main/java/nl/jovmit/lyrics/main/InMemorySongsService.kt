@@ -45,4 +45,13 @@ class InMemorySongsService(
     override suspend fun deleteSongById(songId: String) {
         songs.removeAll { it.songId.value == songId }
     }
+
+    override suspend fun updateSong(songId: String, songData: SongData) {
+        val song = findSongById(songId)
+        val songPosition = songs.indexOf(song)
+        val updatedSong = with(songData) {
+            Song(SongId(songId), songTitle, songPerformer, songLyric)
+        }
+        songs[songPosition] = updatedSong
+    }
 }
