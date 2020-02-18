@@ -5,6 +5,7 @@ import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.details.SongDetailsViewModel
+import nl.jovmit.lyrics.main.edit.UpdateSongViewModel
 import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,5 +22,6 @@ fun testModuleWithCustomSongsService(songsService: SongsService): Module {
         viewModel { InfoViewModel() }
         viewModel { SongsViewModel(get(), get()) }
         viewModel { SongDetailsViewModel(get(), get()) }
+        viewModel { UpdateSongViewModel(get(), get()) }
     }
 }
