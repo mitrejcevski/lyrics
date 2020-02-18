@@ -4,6 +4,7 @@ plugins {
     id("kotlin-android-extensions")
     id("com.github.triplet.play") version "2.6.1"
     id("com.google.gms.google-services")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 apply from: '../release_notes_generator.gradle'
