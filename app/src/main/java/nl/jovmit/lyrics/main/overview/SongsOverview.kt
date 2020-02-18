@@ -56,7 +56,7 @@ class SongsOverview : Fragment() {
     }
 
     private fun openNewSong() {
-        findNavController().navigate(R.id.actionOpenNewSong)
+        findNavController().navigate(R.id.openNewSong)
     }
 
     private fun fetchSongs() {
@@ -71,7 +71,7 @@ class SongsOverview : Fragment() {
 
     private fun openSongDetails(song: Song) {
         val arguments = bundleOf(SongDetails.SONG_ID_EXTRA to song.songId.value)
-        findNavController().navigate(R.id.actionOpenSongDetails, arguments)
+        findNavController().navigate(R.id.openSongDetails, arguments)
     }
 
     private fun observeSongsLiveData() {

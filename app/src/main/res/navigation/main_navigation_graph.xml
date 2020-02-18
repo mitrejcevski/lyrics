@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_songs_overview">
 
         <action
-            android:id="@+id/actionOpenNewSong"
+            android:id="@+id/openNewSong"
             app:destination="@id/newSong"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -21,7 +21,7 @@
             app:popUpTo="@+id/songsOverview" />
 
         <action
-            android:id="@+id/actionOpenSongDetails"
+            android:id="@+id/openSongDetails"
             app:destination="@id/songDetails"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -46,7 +46,7 @@
             android:name="songId"
             app:argType="string" />
         <action
-            android:id="@+id/actionEditSong"
+            android:id="@+id/editSong"
             app:destination="@id/editSong"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
