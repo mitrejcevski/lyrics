@@ -83,6 +83,7 @@ class EditSong : Fragment() {
         updateSongViewModel.updateSongLiveData().listen(viewLifecycleOwner) {
             when (it) {
                 is SongResult.Updated -> handleSuccessfulSongUpdate()
+                is SongResult.ErrorUpdating -> handleFailedSongUpdate()
             }
         }
     }
@@ -90,5 +91,9 @@ class EditSong : Fragment() {
     private fun handleSuccessfulSongUpdate() {
         infoViewModel.showInfo(getString(R.string.success))
         findNavController().navigateUp()
+    }
+
+    private fun handleFailedSongUpdate() {
+        infoViewModel.showError(getString(R.string.errorUnableToEditSong))
     }
 }

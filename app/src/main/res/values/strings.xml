@@ -20,4 +20,5 @@
     <string name="errorDeletingSong">Error deleting song</string>
     <string name="edit">Edit</string>
     <string name="done">Done</string>
+    <string name="errorUnableToEditSong">Song editing unavailable</string>
 </resources>
