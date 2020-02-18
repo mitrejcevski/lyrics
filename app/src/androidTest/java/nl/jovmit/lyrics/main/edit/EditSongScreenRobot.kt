@@ -65,4 +65,8 @@ class EditSongVerificationRobot {
     fun successUpdatingSongMessageShown() {
         text(R.string.success) check isDisplayed
     }
+
+    fun unableSongEditingErrorShown() {
+        text(R.string.errorUnableToEditSong) check isDisplayed
+    }
 }

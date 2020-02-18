@@ -2,8 +2,8 @@ package nl.jovmit.lyrics.main.edit
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.MainActivity
@@ -19,6 +19,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 
 @RunWith(AndroidJUnit4::class)
 class EditSongScreenSpecification {
@@ -26,6 +28,9 @@ class EditSongScreenSpecification {
     @Rule
     @JvmField
     val rule = ActivityTestRule(MainActivity::class.java, true, false)
+
+    @Mock
+    private lateinit var mockSongsService: SongsService
 
     private val song = Song(
         SongId("SongId"),
@@ -47,6 +52,7 @@ class EditSongScreenSpecification {
 
     @Before
     fun setUp() {
+        MockitoAnnotations.initMocks(this)
         loadKoinModules(songsOverviewModule)
     }
 
@@ -86,6 +92,25 @@ class EditSongScreenSpecification {
             tapOnDoneMenuItem()
         } verify {
             successUpdatingSongMessageShown()
+        }
+    }
+
+    @Test
+    fun show_error_when_song_updating_fails() = runBlocking<Unit> {
+        unloadKoinModules(songsOverviewModule)
+        given(mockSongsService.fetchAllSongs()).willReturn(songsList)
+        given(mockSongsService.findSongById(song.songId.value)).willReturn(song)
+        given(mockSongsService.updateSong(any(), any())).willThrow(SongsServiceException())
+        songsOverviewModule.factory(override = true) { mockSongsService }
+        loadKoinModules(songsOverviewModule)
+
+        launchMainScreenScreen(rule) {
+            tapOnSong(song.songTitle.value)
+            tapOnEditSongMenuItem()
+            replaceSongTitleWith("::title::")
+            tapOnDoneMenuItem()
+        } verify {
+            unableSongEditingErrorShown()
         }
     }
 
