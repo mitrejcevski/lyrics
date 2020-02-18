@@ -61,4 +61,8 @@ class EditSongVerificationRobot {
         text(updatedSong.songPerformer.name) check isDisplayed
         text(updatedSong.songLyric.lyrics) check isDisplayed
     }
+
+    fun successUpdatingSongMessageShown() {
+        text(R.string.success) check isDisplayed
+    }
 }
