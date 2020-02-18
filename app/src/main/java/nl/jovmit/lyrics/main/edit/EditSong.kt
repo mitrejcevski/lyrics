@@ -8,12 +8,14 @@ import androidx.navigation.fragment.navArgs
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentEditSongBinding
 import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
 import nl.jovmit.lyrics.main.details.SongDetailsViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditSong : Fragment() {
@@ -21,6 +23,7 @@ class EditSong : Fragment() {
     private val navArguments by navArgs<EditSongArgs>()
     private val updateSongViewModel by viewModel<UpdateSongViewModel>()
     private val songDetailViewModel by viewModel<SongDetailsViewModel>()
+    private val infoViewModel by sharedViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentEditSongBinding
 
@@ -85,6 +88,7 @@ class EditSong : Fragment() {
     }
 
     private fun handleSuccessfulSongUpdate() {
+        infoViewModel.showInfo(getString(R.string.success))
         findNavController().navigateUp()
     }
 }
