@@ -3,6 +3,7 @@ package nl.jovmit.lyrics.main.overview
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.result.SongsResult
+import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 
 class SongsRepository(private val songsService: SongsService) {
@@ -40,6 +41,18 @@ class SongsRepository(private val songsService: SongsService) {
             SongResult.Deleted
         } catch (serviceException: SongsServiceException) {
             SongResult.ErrorDeleting
+        }
+    }
+
+    suspend fun updateSong(
+        songId: String,
+        songData: SongData
+    ): SongResult {
+        return try {
+            songsService.updateSong(songId, songData)
+            SongResult.Updated
+        } catch (serviceException: SongsServiceException) {
+            SongResult.ErrorUpdating
         }
     }
 }

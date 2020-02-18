@@ -13,4 +13,8 @@ sealed class SongResult {
     object Deleted : SongResult()
 
     object ErrorDeleting : SongResult()
+
+    object Updated : SongResult()
+
+    object ErrorUpdating : SongResult()
 }
