@@ -1,7 +1,7 @@
 package nl.jovmit.lyrics.main.edit
 
 import android.content.Intent
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
@@ -29,6 +29,15 @@ class EditSongRobot {
         R.id.actionEdit perform click()
     }
 
+    fun replaceSongTitleWith(updatedSongTitle: String) {
+        R.id.editSongTitleEditText perform clearText()
+        R.id.editSongTitleEditText perform typeText(updatedSongTitle)
+    }
+
+    fun tapOnDoneMenuItem() {
+        R.id.actionDone perform click()
+    }
+
     infix fun verify(
         block: EditSongVerificationRobot.() -> Unit
     ): EditSongVerificationRobot {
@@ -44,5 +53,12 @@ class EditSongVerificationRobot {
         text(song.songTitle.value) check isDisplayed
         text(song.songPerformer.name) check isDisplayed
         text(song.songLyric.lyrics) check isDisplayed
+    }
+
+    fun songDetailArePresentFor(updatedSong: Song) {
+        text(R.string.songDetails) check isDisplayed
+        text(updatedSong.songTitle.value) check isDisplayed
+        text(updatedSong.songPerformer.name) check isDisplayed
+        text(updatedSong.songLyric.lyrics) check isDisplayed
     }
 }

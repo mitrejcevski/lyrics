@@ -52,4 +52,19 @@ class EditSongScreenSpecification {
             editScreenIsGettingLaunchedFor(song)
         }
     }
+
+    @Test
+    fun should_update_song_title() {
+        val updatedSongTitle = "New Song Title"
+
+        launchMainScreenScreen(rule) {
+            tapOnSong(song.songTitle.value)
+            tapOnEditSongMenuItem()
+            replaceSongTitleWith(updatedSongTitle)
+            tapOnDoneMenuItem()
+        } verify {
+            val updatedSong = song.copy(songTitle = SongTitle(updatedSongTitle))
+            songDetailArePresentFor(updatedSong)
+        }
+    }
 }
