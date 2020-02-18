@@ -41,5 +41,26 @@
         android:id="@+id/songDetails"
         android:name="nl.jovmit.lyrics.main.details.SongDetails"
         android:label="@string/songDetails"
-        tools:layout="@layout/fragment_song_details" />
+        tools:layout="@layout/fragment_song_details">
+        <argument
+            android:name="songId"
+            app:argType="string" />
+        <action
+            android:id="@+id/actionEditSong"
+            app:destination="@id/editSong"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editSong"
+        android:name="nl.jovmit.lyrics.main.edit.EditSong"
+        android:label="@string/edit"
+        tools:layout="@layout/fragment_edit_song">
+        <argument
+            android:name="songId"
+            app:argType="string" />
+    </fragment>
 </navigation>
