@@ -36,7 +36,7 @@ class NewSongRobot {
     infix fun submit(
         block: NewSongVerificationRobot.() -> Unit
     ): NewSongVerificationRobot {
-        R.id.newSongDoneButton perform click()
+        R.id.actionDone perform click()
         return NewSongVerificationRobot().apply(block)
     }
 }

@@ -1,9 +1,7 @@
 package nl.jovmit.lyrics.main.add
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -22,6 +20,11 @@ class NewSong : Fragment() {
 
     private lateinit var layout: FragmentNewSongBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,8 +38,18 @@ class NewSong : Fragment() {
         layout.newSongTitleEditText.onAnyTextChange { layout.newSongTitleInput.resetError() }
         layout.newSongPerformerEditText.onAnyTextChange { layout.newSongPerformerInput.resetError() }
         layout.newSongLyricEditText.onAnyTextChange { layout.newSongLyricInput.resetError() }
-        layout.newSongDoneButton.setOnClickListener { triggerNewSongSubmission() }
         observeNewSongLiveData()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.song_editor_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.actionDone) {
+            triggerNewSongSubmission()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun observeNewSongLiveData() {
