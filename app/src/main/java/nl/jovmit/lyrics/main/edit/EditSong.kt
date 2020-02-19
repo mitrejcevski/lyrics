@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionManager
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentEditSongBinding
 import nl.jovmit.lyrics.extensions.listen
@@ -50,9 +51,16 @@ class EditSong : Fragment() {
     private fun observeSongDetail() {
         songDetailViewModel.songDetailsLiveData().listen(viewLifecycleOwner) {
             when (it) {
+                is SongResult.Loading -> displayLoading(it.loading)
                 is SongResult.Fetched -> applySongValues(it.song)
             }
         }
+    }
+
+    private fun displayLoading(loading: Boolean) {
+        val visibility = if (loading) View.VISIBLE else View.GONE
+        TransitionManager.beginDelayedTransition(layout.root)
+        layout.editSongLoading.visibility = visibility
     }
 
     private fun applySongValues(song: Song) {
@@ -82,6 +90,7 @@ class EditSong : Fragment() {
     private fun observeSongUpdate() {
         updateSongViewModel.updateSongLiveData().listen(viewLifecycleOwner) {
             when (it) {
+                is SongResult.Loading -> displayLoading(it.loading)
                 is SongResult.Updated -> handleSuccessfulSongUpdate()
                 is SongResult.ErrorUpdating -> handleFailedSongUpdate()
             }
