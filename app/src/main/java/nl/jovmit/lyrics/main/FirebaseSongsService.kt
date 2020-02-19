@@ -74,11 +74,17 @@ class FirebaseSongsService(
             .addOnFailureListener { continuation.resumeWithException(SongsServiceException()) }
     }
 
-    override suspend fun updateSong(songId: String, songData: SongData) {
-        TODO("not implemented")
+    override suspend fun updateSong(
+        songId: String,
+        songData: SongData
+    ) = suspendCoroutine<Unit> { continuation ->
+        val updateData = firebaseSongDataFrom(songData)
+        database.collection(SONGS_COLLECTION).document(songId).update(updateData)
+            .addOnSuccessListener { continuation.resume(Unit) }
+            .addOnFailureListener { continuation.resumeWithException(SongsServiceException()) }
     }
 
-    private fun firebaseSongDataFrom(newSongData: SongData): HashMap<String, String> {
+    private fun firebaseSongDataFrom(newSongData: SongData): Map<String, String> {
         return hashMapOf(
             SONG_TITLE to newSongData.songTitle.value,
             SONG_PERFORMER to newSongData.songPerformer.name,
