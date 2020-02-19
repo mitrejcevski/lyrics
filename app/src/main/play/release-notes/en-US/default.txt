@@ -1,1 +1,6 @@
-- Initial App Release
+Basic app functionality delivered
+ - Create
+ - Preview
+ - Update
+ - Delete
+ - Search
