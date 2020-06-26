@@ -21,4 +21,10 @@
     <string name="edit">Edit</string>
     <string name="done">Done</string>
     <string name="errorUnableToEditSong">Song editing unavailable</string>
+    <string name="createUser">Create new user</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="about">About me</string>
+    <string name="alreadyRegistered">Already have an account?</string>
 </resources>
