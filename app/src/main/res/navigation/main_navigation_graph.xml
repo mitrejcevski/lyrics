@@ -3,7 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation_graph"
-    app:startDestination="@id/songsOverview">
+    app:startDestination="@id/register">
+
+    <fragment
+        android:id="@+id/register"
+        android:name="nl.jovmit.lyrics.main.register.Register"
+        android:label="@string/createUser"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/openSongsOverview"
+            app:destination="@id/songsOverview"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/openLogin"
+            app:destination="@id/login"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/register" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/login"
+        android:name="nl.jovmit.lyrics.main.login.Login"
+        android:label="@string/login"
+        tools:layout="@layout/fragment_login" />
 
     <fragment
         android:id="@+id/songsOverview"
