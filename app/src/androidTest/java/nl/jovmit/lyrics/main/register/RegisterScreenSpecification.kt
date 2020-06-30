@@ -21,6 +21,9 @@ class RegisterScreenSpecification {
     @JvmField
     val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
+    private val username = "validUsername"
+    private val password = "validPassword"
+
     private val registrationModule = module {
         viewModel { InfoViewModel() }
     }
@@ -36,6 +39,17 @@ class RegisterScreenSpecification {
             tapOnAlreadyHaveAnAccount()
         } verify {
             loginScreenIsDisplayed()
+        }
+    }
+
+    @Test
+    fun should_perform_registration() {
+        launchRegistration(rule) {
+            typeUsername(username)
+            typePassword(password)
+            tapOnCreateAccount()
+        } verify {
+            songsOverviewScreenIsDisplayed()
         }
     }
 
