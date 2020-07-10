@@ -7,4 +7,8 @@ sealed class RegisterResult {
     data class Loading(val loading: Boolean) : RegisterResult()
 
     data class Registered(val user: User) : RegisterResult()
+
+    object UsernameTakenError : RegisterResult()
+
+    object OfflineError : RegisterResult()
 }

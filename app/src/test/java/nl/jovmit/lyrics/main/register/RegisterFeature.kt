@@ -6,6 +6,7 @@ import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
 import nl.jovmit.lyrics.main.auth.AuthenticationRepository
 import nl.jovmit.lyrics.main.auth.CredentialsValidator
+import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +36,8 @@ class RegisterFeature {
     @BeforeEach
     fun setUp() {
         val credentialsValidator = CredentialsValidator()
-        val authRepository = AuthenticationRepository()
+        val authService = InMemoryAuthService()
+        val authRepository = AuthenticationRepository(authService)
         val dispatchers = TestCoroutineDispatchers()
         registerViewModel = RegisterViewModel(credentialsValidator, authRepository, dispatchers)
         registerViewModel.registrationLiveData().observeForever(registrationObserver)

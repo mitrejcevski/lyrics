@@ -2,6 +2,7 @@ package nl.jovmit.lyrics.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import nl.jovmit.lyrics.R
@@ -23,8 +24,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         layout = ActivityMainBinding.inflate(layoutInflater)
         setContentView(layout.root)
-        setupActionBarWithNavController(navigationController)
+        setupToolbar()
         observeInfoViewModel()
+        performLoggedInUserCheck()
+    }
+
+    private fun setupToolbar() {
+        setupActionBarWithNavController(navigationController)
+        navigationController.addOnDestinationChangedListener { _, destination, _ ->
+            setupToolbarBackButtonBasedOn(destination)
+        }
+    }
+
+    private fun setupToolbarBackButtonBasedOn(destination: NavDestination) {
+        val showToolbarBackButton = when {
+            destination.isRegistration() -> false
+            destination.isSongsOverview() -> false
+            else -> true
+        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(showToolbarBackButton)
     }
 
     private fun observeInfoViewModel() {
@@ -36,5 +54,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun performLoggedInUserCheck() {
+//        navigationController.navigate(R.id.songsOverview)
+    }
+
     override fun onSupportNavigateUp(): Boolean = navigationController.navigateUp()
+
+    override fun onBackPressed() {
+        if (navigationController.currentDestination?.isSongsOverview() == true) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun NavDestination.isRegistration() = id == R.id.register
+
+    private fun NavDestination.isSongsOverview() = id == R.id.songsOverview
 }
