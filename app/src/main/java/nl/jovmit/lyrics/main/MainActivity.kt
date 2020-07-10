@@ -9,12 +9,14 @@ import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.ActivityMainBinding
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.main.data.result.InfoResult
+import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.LazyThreadSafetyMode.NONE
 
 class MainActivity : AppCompatActivity() {
 
     private val infoViewModel by viewModel<InfoViewModel>()
+    private val userPreferencesViewModel by viewModel<UserPreferencesViewModel>()
     private val navigationController by lazy(NONE) {
         findNavController(R.id.mainNavigationController)
     }
@@ -55,7 +57,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun performLoggedInUserCheck() {
-//        navigationController.navigate(R.id.songsOverview)
+        userPreferencesViewModel.getLoggedInUser()?.let {
+            navigationController.navigate(R.id.songsOverview)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean = navigationController.navigateUp()

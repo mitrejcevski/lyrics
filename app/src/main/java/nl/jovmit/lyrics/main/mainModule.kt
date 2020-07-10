@@ -1,20 +1,33 @@
 package nl.jovmit.lyrics.main
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.firebase.firestore.FirebaseFirestore
 import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
+import nl.jovmit.lyrics.main.auth.AuthenticationRepository
+import nl.jovmit.lyrics.main.auth.AuthenticationService
+import nl.jovmit.lyrics.main.auth.CredentialsValidator
+import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.details.SongDetailsViewModel
 import nl.jovmit.lyrics.main.edit.UpdateSongViewModel
 import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
+import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
+import nl.jovmit.lyrics.main.preferences.PreferencesManager
+import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
+import nl.jovmit.lyrics.main.register.RegisterViewModel
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val mainModule = module {
+    single<SharedPreferences> {
+        get<Context>().getSharedPreferences("lyrics", Context.MODE_PRIVATE)
+    }
     single { FirebaseFirestore.getInstance() }
     single<CoroutineDispatchers> { AppCoroutineDispatchers() }
     single { IdGenerator() }
@@ -22,11 +35,19 @@ val mainModule = module {
     single<SongsService> { InMemorySongsService(IdGenerator(), generateSongs()) }
     factory { SongsRepository(get()) }
     factory { NewSongRepository(get()) }
+    factory { CredentialsValidator() }
+    single<AuthenticationService> { InMemoryAuthService(get()) }
+    factory { AuthenticationRepository(get()) }
+    single<PreferencesManager> { InMemoryPreferencesManager() }
+//    single<PreferencesManager> { SharedPreferencesManager(get()) }
+
     viewModel { SongsViewModel(get(), get()) }
     viewModel { NewSongViewModel(get(), get()) }
     viewModel { InfoViewModel() }
     viewModel { SongDetailsViewModel(get(), get()) }
     viewModel { UpdateSongViewModel(get(), get()) }
+    viewModel { RegisterViewModel(get(), get(), get()) }
+    viewModel { UserPreferencesViewModel(get()) }
 }
 
 fun generateSongs(): List<Song> {
