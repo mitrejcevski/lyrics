@@ -2,6 +2,7 @@ package nl.jovmit.lyrics.main.register
 
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.inOrder
+import com.nhaarman.mockitokotlin2.whenever
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
 import nl.jovmit.lyrics.main.auth.AuthenticationRepository
@@ -9,6 +10,7 @@ import nl.jovmit.lyrics.main.auth.CredentialsValidator
 import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
+import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,6 +23,9 @@ class RegisterFeature {
 
     @Mock
     private lateinit var registrationObserver: Observer<RegisterResult>
+
+    @Mock
+    private lateinit var idGenerator: IdGenerator
 
     private val userId = UUID.randomUUID().toString()
     private val username = "username"
@@ -36,11 +41,12 @@ class RegisterFeature {
     @BeforeEach
     fun setUp() {
         val credentialsValidator = CredentialsValidator()
-        val authService = InMemoryAuthService()
+        val authService = InMemoryAuthService(idGenerator)
         val authRepository = AuthenticationRepository(authService)
         val dispatchers = TestCoroutineDispatchers()
         registerViewModel = RegisterViewModel(credentialsValidator, authRepository, dispatchers)
         registerViewModel.registrationLiveData().observeForever(registrationObserver)
+        whenever(idGenerator.next()).thenReturn(userId)
     }
 
     @Test
