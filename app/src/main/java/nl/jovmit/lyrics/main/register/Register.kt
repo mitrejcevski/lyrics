@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.databinding.FragmentRegisterBinding
+import nl.jovmit.lyrics.extensions.hideKeyboard
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
@@ -65,6 +66,7 @@ class Register : Fragment() {
 
     private fun onRegistrationSuccess(user: User) {
         userPreferencesViewModel.setLoggedInUser(user)
+        layout.registrationUsernameEditText.hideKeyboard()
         val destination = RegisterDirections.openSongsOverview()
         findNavController().navigate(destination)
     }
