@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="Theme.MaterialComponents">
-        <item name="background">@color/colorBackground</item>
-        <item name="colorSurface">@color/colorSurface</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorOnBackground">@color/colorOnBackground</item>
-        <item name="colorOnSurface">@color/colorOnSurface</item>
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="background">@color/colorBackgroundDark</item>
+        <item name="colorSurface">@color/colorSurfaceDark</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondaryDark</item>
+        <item name="colorOnBackground">@color/colorOnBackgroundDark</item>
+        <item name="colorOnSurface">@color/colorOnSurfaceDark</item>
+        <item name="colorOnPrimary">@color/colorOnPrimaryDark</item>
+        <item name="colorOnSecondary">@color/colorOnSecondaryDark</item>
+
+        <!-- System bar colors -->
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:navigationBarColor">?attr/background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">?attr/background</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 
 </resources>

@@ -4,15 +4,24 @@
     <color name="whiteTransparent">#66ffffff</color>
     <color name="errorColor">#E91E63</color>
     <color name="infoMessageTextColor">#FFFFFF</color>
+    <color name="infoMessageTextColorDark">#000000</color>
     <color name="successColor">#009688</color>
 
     <color name="colorBackground">#ffffff</color>
+    <color name="colorBackgroundDark">#000000</color>
     <color name="colorSurface">#03A9F4</color>
+    <color name="colorSurfaceDark">#3c3c3c</color>
     <color name="colorPrimary">#03A9F4</color>
-    <color name="colorSecondary">#009688</color>
+    <color name="colorPrimaryDark">#009688</color>
+    <color name="colorSecondary">#03A9F4</color>
+    <color name="colorSecondaryDark">#009688</color>
     <color name="colorOnBackground">#000000</color>
+    <color name="colorOnBackgroundDark">#ffffffff</color>
     <color name="colorOnSurface">#000000</color>
+    <color name="colorOnSurfaceDark">#ffffffff</color>
     <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorOnPrimaryDark">#000000</color>
     <color name="colorOnSecondary">#ffffff</color>
+    <color name="colorOnSecondaryDark">#FFFFFF</color>
 
 </resources>
