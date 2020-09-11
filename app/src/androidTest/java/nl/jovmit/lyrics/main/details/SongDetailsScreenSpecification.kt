@@ -3,14 +3,13 @@ package nl.jovmit.lyrics.main.details
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.data.song.*
-import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
-import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class SongDetailsScreenSpecification {
@@ -22,10 +21,9 @@ class SongDetailsScreenSpecification {
         SongLyrics("::irrelevant song lyrics::")
     )
 
-    private val songsOverviewModule =
-        testModuleWithCustomSongsService(
-            InMemorySongsService(IdGenerator(), listOf(song))
-        )
+    private val songsOverviewModule = module {
+        factory<SongsService>(override = true) { InMemorySongsService(get(), listOf(song)) }
+    }
 
     @Before
     fun setUp() {
@@ -56,5 +54,9 @@ class SongDetailsScreenSpecification {
     @After
     fun tearDown() {
         unloadKoinModules(songsOverviewModule)
+        val resetModule = module {
+            factory<SongsService>(override = true) { InMemorySongsService(get()) }
+        }
+        loadKoinModules(resetModule)
     }
 }

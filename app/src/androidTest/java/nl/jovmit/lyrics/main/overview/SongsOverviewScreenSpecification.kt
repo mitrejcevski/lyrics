@@ -35,9 +35,9 @@ class SongsOverviewScreenSpecification {
     )
     private val emptySongsList = emptyList<Song>()
     private val songsList = listOf(song, anotherSong)
-    private val songsOverviewModule by lazy {
+    private val songsOverviewModule = module {
         val service = InMemorySongsService(IdGenerator(), songsList)
-        testModuleWithCustomSongsService(service)
+        factory<SongsService>(override = true) { service }
     }
 
     @Before
@@ -47,13 +47,13 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun should_display_empty_state_when_no_songs_added() = runBlocking {
-        setupModule(InMemorySongsService(IdGenerator(), emptySongsList))
+        val replaceModule = setupModule(InMemorySongsService(IdGenerator(), emptySongsList))
 
         launchSongsOverview { } verify {
             songsEmptyStateIsDisplayed()
         }
 
-        unloadModule()
+        unloadKoinModules(replaceModule)
     }
 
     @Test
@@ -79,7 +79,7 @@ class SongsOverviewScreenSpecification {
             loadingErrorIsDisplayed()
         }
 
-        unloadModule()
+        unloadKoinModules(replaceModule)
     }
 
     @Test
@@ -134,21 +134,24 @@ class SongsOverviewScreenSpecification {
             searchErrorIsDisplayed()
         }
 
-        unloadModule()
+        unloadKoinModules(replaceModule)
     }
 
-    private fun setupModule(songsService: SongsService) {
+    private fun setupModule(songsService: SongsService): Module {
         unloadKoinModules(songsOverviewModule)
-        module = testModuleWithCustomSongsService(songsService)
+        val module = module {
+            factory(override = true) { songsService }
+        }
         loadKoinModules(module)
-    }
-
-    private fun unloadModule() {
-        unloadKoinModules(module)
+        return module
     }
 
     @After
     fun tear_down() {
         unloadKoinModules(songsOverviewModule)
+        val resetModule = module {
+            factory<SongsService>(override = true) { InMemorySongsService(get()) }
+        }
+        loadKoinModules(resetModule)
     }
 }

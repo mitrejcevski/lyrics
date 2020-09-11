@@ -31,9 +31,9 @@ class EditSongScreenSpecification {
         SongLyrics("The text of the song")
     )
     private val songsList = listOf(song, anotherSong)
-    private val songsOverviewModule by lazy {
+    private val songsOverviewModule = module {
         val service = InMemorySongsService(IdGenerator(), songsList)
-        testModuleWithCustomSongsService(service)
+        factory<SongsService>(override = true) { service }
     }
 
     @Before
@@ -100,5 +100,9 @@ class EditSongScreenSpecification {
     @After
     fun tear_down() {
         unloadKoinModules(songsOverviewModule)
+        val resetModule = module {
+            factory<SongsService> { InMemorySongsService(get()) }
+        }
+        loadKoinModules(resetModule)
     }
 }

@@ -84,5 +84,9 @@ class NewSongScreenSpecification {
     @After
     fun tearDown() {
         unloadKoinModules(module)
+        val resetModule = module {
+            factory<SongsService>(override = true) { InMemorySongsService(get()) }
+        }
+        loadKoinModules(resetModule)
     }
 }
