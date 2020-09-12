@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentRegisterBinding
-import nl.jovmit.lyrics.extensions.hideKeyboard
-import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.extensions.*
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
@@ -33,6 +33,9 @@ class Register : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         layout.registrationAlreadyRegisteredLabel.setOnClickListener { openLogin() }
         layout.registrationRegisterButton.setOnClickListener { triggerRegistration() }
+        layout.registrationUsernameEditText.onAnyTextChange {
+            layout.registrationUsernameTextInput.resetError()
+        }
         observeRegistrationLiveData()
     }
 
@@ -72,7 +75,7 @@ class Register : Fragment() {
     }
 
     private fun showUsernameTakenError() {
-        TODO("not implemented")
+        layout.registrationUsernameTextInput.setError(R.string.errorUsernameTaken)
     }
 
     private fun showOfflineError() {

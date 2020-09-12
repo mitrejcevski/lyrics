@@ -2,10 +2,15 @@ package nl.jovmit.lyrics.main.register
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.MainActivity
+import nl.jovmit.lyrics.main.auth.AuthenticationService
+import nl.jovmit.lyrics.main.auth.InMemoryAuthService
+import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.main.preferences.PreferencesManager
+import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,10 +33,12 @@ class RegisterScreenSpecification {
     private val password = "validPassword"
     private val about = "about"
     private val preferencesManager = InMemoryPreferencesManager()
+    private val authService = InMemoryAuthService(IdGenerator())
     private val loggedInUser = User(userId, username, about)
 
     private val registrationModule = module {
         factory<PreferencesManager>(override = true) { preferencesManager }
+        factory<AuthenticationService>(override = true) { authService }
     }
 
     @Before
@@ -69,11 +76,24 @@ class RegisterScreenSpecification {
         }
     }
 
+    @Test
+    fun should_display_username_taken_error() = runBlocking<Unit> {
+        authService.createUser(RegistrationData(username, password, about))
+        launchRegistration(rule) {
+            typeUsername(username)
+            typePassword(password)
+            tapOnCreateAccount()
+        } verify {
+            usernameTakenErrorIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         unloadKoinModules(registrationModule)
         val resetModule = module {
             factory<PreferencesManager>(override = true) { InMemoryPreferencesManager() }
+            factory<AuthenticationService>(override = true) { InMemoryAuthService(get()) }
         }
         loadKoinModules(resetModule)
     }
