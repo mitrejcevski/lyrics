@@ -9,15 +9,18 @@ import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentRegisterBinding
 import nl.jovmit.lyrics.extensions.*
+import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class Register : Fragment() {
 
     private val registerViewModel by viewModel<RegisterViewModel>()
     private val userPreferencesViewModel by viewModel<UserPreferencesViewModel>()
+    private val infoViewModel by sharedViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentRegisterBinding
 
@@ -79,6 +82,7 @@ class Register : Fragment() {
     }
 
     private fun showOfflineError() {
-        TODO("not implemented")
+        infoViewModel.showError(getString(R.string.errorNoNetworkConnection))
     }
+
 }

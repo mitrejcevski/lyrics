@@ -2,12 +2,15 @@ package nl.jovmit.lyrics.main.register
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.auth.AuthenticationService
 import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.data.user.User
+import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.main.preferences.PreferencesManager
 import nl.jovmit.lyrics.utils.IdGenerator
@@ -18,6 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import java.util.*
 
@@ -88,6 +92,22 @@ class RegisterScreenSpecification {
         }
     }
 
+    @Test
+    fun should_display_offline_error() = runBlocking {
+        val replaceModule = moduleWithOfflineAuthService()
+        loadKoinModules(replaceModule)
+
+        launchRegistration(rule) {
+            typeUsername(username)
+            typePassword(password)
+            tapOnCreateAccount()
+        } verify {
+            offlineErrorIsDisplayed()
+        }
+
+        unloadKoinModules(replaceModule)
+    }
+
     @After
     fun tearDown() {
         unloadKoinModules(registrationModule)
@@ -96,5 +116,12 @@ class RegisterScreenSpecification {
             factory<AuthenticationService>(override = true) { InMemoryAuthService(get()) }
         }
         loadKoinModules(resetModule)
+    }
+
+    private suspend fun moduleWithOfflineAuthService(): Module {
+        val offlineService = mock<AuthenticationService>()
+        given(offlineService.createUser(RegistrationData(username, password, "")))
+            .willThrow(NetworkUnavailableException())
+        return module { factory(override = true) { offlineService } }
     }
 }

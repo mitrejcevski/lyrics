@@ -56,5 +56,9 @@ class RegisterVerificationRobot {
     fun usernameTakenErrorIsDisplayed() {
         text(R.string.errorUsernameTaken) check isDisplayed
     }
+
+    fun offlineErrorIsDisplayed() {
+        text(R.string.errorNoNetworkConnection) check isDisplayed
+    }
 }
 

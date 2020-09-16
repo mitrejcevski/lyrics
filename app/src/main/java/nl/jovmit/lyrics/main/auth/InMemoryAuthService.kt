@@ -2,6 +2,7 @@ package nl.jovmit.lyrics.main.auth
 
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.data.user.User
+import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
 import nl.jovmit.lyrics.utils.IdGenerator
 
@@ -20,8 +21,15 @@ class InMemoryAuthService(
     }
 
     private fun validate(registrationData: RegistrationData) {
+        if (registrationData.isEmpty()) {
+            throw NetworkUnavailableException()
+        }
         if (users.any { it.username == registrationData.username }) {
             throw UsernameTakenException()
         }
+    }
+
+    private fun RegistrationData.isEmpty(): Boolean {
+        return username.isBlank() && password.isBlank() && about.isBlank()
     }
 }
