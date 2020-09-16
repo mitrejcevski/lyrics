@@ -29,4 +29,6 @@
     <string name="alreadyRegistered">Already have an account?</string>
     <string name="errorUsernameTaken">Username taken</string>
     <string name="errorNoNetworkConnection">You are offline</string>
+    <string name="errorEmptyUsername">Username required</string>
+    <string name="errorEmptyPassword">Password required</string>
 </resources>

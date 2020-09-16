@@ -60,6 +60,25 @@ class RegisterScreenSpecification {
     }
 
     @Test
+    fun should_show_empty_username_error() {
+        launchRegistration(rule) {
+            tapOnCreateAccount()
+        } verify {
+            emptyUsernameErrorIsDisplayed()
+        }
+    }
+
+    @Test
+    fun should_show_empty_password_error() {
+        launchRegistration(rule) {
+            typeUsername(username)
+            tapOnCreateAccount()
+        } verify {
+            emptyPasswordErrorIsDisplayed()
+        }
+    }
+
+    @Test
     fun should_perform_registration() {
         launchRegistration(rule) {
             typeUsername(username)

@@ -10,6 +10,7 @@ import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentRegisterBinding
 import nl.jovmit.lyrics.extensions.*
 import nl.jovmit.lyrics.main.InfoViewModel
+import nl.jovmit.lyrics.main.data.result.CredentialsValidationResult
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
@@ -39,7 +40,11 @@ class Register : Fragment() {
         layout.registrationUsernameEditText.onAnyTextChange {
             layout.registrationUsernameTextInput.resetError()
         }
+        layout.registrationPasswordEditText.onAnyTextChange {
+            layout.registrationPasswordTextInput.resetError()
+        }
         observeRegistrationLiveData()
+        observeCredentialsValidationLiveData()
     }
 
     private fun openLogin() {
@@ -85,4 +90,20 @@ class Register : Fragment() {
         infoViewModel.showError(getString(R.string.errorNoNetworkConnection))
     }
 
+    private fun observeCredentialsValidationLiveData() {
+        registerViewModel.credentialsValidationLiveData().listen(viewLifecycleOwner) {
+            when (it) {
+                is CredentialsValidationResult.EmptyUsername -> showEmptyUsernameError()
+                is CredentialsValidationResult.EmptyPassword -> showEmptyPasswordError()
+            }
+        }
+    }
+
+    private fun showEmptyUsernameError() {
+        layout.registrationUsernameTextInput.setError(R.string.errorEmptyUsername)
+    }
+
+    private fun showEmptyPasswordError() {
+        layout.registrationPasswordTextInput.setError(R.string.errorEmptyPassword)
+    }
 }

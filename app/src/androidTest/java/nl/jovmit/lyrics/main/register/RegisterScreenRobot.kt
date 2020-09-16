@@ -49,6 +49,14 @@ class RegisterVerificationRobot {
         R.id.loginPasswordEditText check isDisplayed
     }
 
+    fun emptyUsernameErrorIsDisplayed() {
+        text(R.string.errorEmptyUsername) check isDisplayed
+    }
+
+    fun emptyPasswordErrorIsDisplayed() {
+        text(R.string.errorEmptyPassword) check isDisplayed
+    }
+
     fun songsOverviewScreenIsDisplayed() {
         R.id.songsOverviewRecycler check isDisplayed
     }
