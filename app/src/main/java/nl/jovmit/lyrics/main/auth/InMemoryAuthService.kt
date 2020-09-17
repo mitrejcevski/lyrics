@@ -23,6 +23,7 @@ class InMemoryAuthService(
     }
 
     override suspend fun login(loginData: LoginData): User {
+        validate(loginData)
         val result = users.find { it.username == loginData.username }
         return if (result?.password == loginData.password) {
             result
@@ -40,7 +41,17 @@ class InMemoryAuthService(
         }
     }
 
+    private fun validate(loginData: LoginData) {
+        if (loginData.isEmpty()) {
+            throw NetworkUnavailableException()
+        }
+    }
+
     private fun RegistrationData.isEmpty(): Boolean {
         return username.isBlank() && password.isBlank() && about.isBlank()
+    }
+
+    private fun LoginData.isEmpty(): Boolean {
+        return username.isEmpty() && password.isEmpty()
     }
 }

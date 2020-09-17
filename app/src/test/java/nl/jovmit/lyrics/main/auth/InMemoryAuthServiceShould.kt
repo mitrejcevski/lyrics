@@ -42,6 +42,18 @@ class InMemoryAuthServiceShould : AuthServiceContract() {
         }
     }
 
+    override suspend fun authServiceWithout(
+        loginData: LoginData
+    ): AuthenticationService {
+        val registrationData = aRegistrationData()
+            .withUsername(loginData.username.reversed())
+            .withPassword(loginData.password.reversed())
+            .build()
+        return InMemoryAuthService(idGenerator).also {
+            it.createUser(registrationData)
+        }
+    }
+
     override suspend fun authServiceWithoutUsernameLike(
         loginData: LoginData
     ): AuthenticationService {

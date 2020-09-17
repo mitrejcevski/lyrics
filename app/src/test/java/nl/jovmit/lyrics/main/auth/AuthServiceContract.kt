@@ -81,11 +81,23 @@ abstract class AuthServiceContract {
         }
     }
 
+    @Test
+    fun throw_offline_exception_when_logging_in() = runBlocking<Unit> {
+        val emptyLoginData = LoginData("", "")
+        val service = authServiceWithout(loginData)
+
+        assertThrows<NetworkUnavailableException> {
+            runBlocking { service.login(emptyLoginData) }
+        }
+    }
+
     abstract suspend fun authServiceWith(registrationData: RegistrationData): AuthenticationService
 
     abstract suspend fun authServiceWithout(registrationData: RegistrationData): AuthenticationService
 
     abstract suspend fun authServiceWith(loginData: LoginData): AuthenticationService
+
+    abstract suspend fun authServiceWithout(loginData: LoginData): AuthenticationService
 
     abstract suspend fun authServiceWithoutUsernameLike(loginData: LoginData): AuthenticationService
 
