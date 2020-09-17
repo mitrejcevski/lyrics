@@ -72,11 +72,22 @@ abstract class AuthServiceContract {
         }
     }
 
-    abstract suspend fun authServiceWithoutUsernameLike(loginData: LoginData): AuthenticationService
+    @Test
+    fun throw_user_not_found_for_incorrect_password_while_logging_in() = runBlocking<Unit> {
+        val service = authServiceWithoutPasswordLike(loginData)
+
+        assertThrows<UserNotFoundException> {
+            runBlocking { service.login(loginData) }
+        }
+    }
 
     abstract suspend fun authServiceWith(registrationData: RegistrationData): AuthenticationService
 
     abstract suspend fun authServiceWithout(registrationData: RegistrationData): AuthenticationService
 
     abstract suspend fun authServiceWith(loginData: LoginData): AuthenticationService
+
+    abstract suspend fun authServiceWithoutUsernameLike(loginData: LoginData): AuthenticationService
+
+    abstract suspend fun authServiceWithoutPasswordLike(loginData: LoginData): AuthenticationService
 }
