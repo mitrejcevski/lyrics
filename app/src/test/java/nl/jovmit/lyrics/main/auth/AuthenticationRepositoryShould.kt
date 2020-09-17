@@ -2,8 +2,11 @@ package nl.jovmit.lyrics.main.auth
 
 import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
+import nl.jovmit.lyrics.main.data.result.LoginResult
 import nl.jovmit.lyrics.main.data.result.RegisterResult
+import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
+import nl.jovmit.lyrics.main.exceptions.UserNotFoundException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
 import nl.jovmit.lyrics.utils.RegistrationDataBuilder.Companion.aRegistrationData
 import nl.jovmit.lyrics.utils.UserBuilder.Companion.aUser
@@ -22,6 +25,7 @@ class AuthenticationRepositoryShould {
 
     private val user = aUser().build()
     private val registrationData = aRegistrationData().build()
+    private val loginData = LoginData(registrationData.username, registrationData.password)
 
     private lateinit var authRepository: AuthenticationRepository
 
@@ -49,11 +53,38 @@ class AuthenticationRepositoryShould {
     }
 
     @Test
-    fun return_offline_error() = runBlocking {
+    fun return_offline_error_while_registering() = runBlocking {
         given(authService.createUser(registrationData)).willThrow(NetworkUnavailableException::class.java)
 
         val result = authRepository.registerUser(registrationData)
 
         assertEquals(RegisterResult.OfflineError, result)
+    }
+
+    @Test
+    fun login_a_user() = runBlocking {
+        given(authService.login(loginData)).willReturn(user)
+
+        val result = authRepository.login(loginData)
+
+        assertEquals(LoginResult.LoggedIn(user), result)
+    }
+
+    @Test
+    fun return_error_for_non_existent_user() = runBlocking {
+        given(authService.login(loginData)).willThrow(UserNotFoundException::class.java)
+
+        val result = authRepository.login(loginData)
+
+        assertEquals(LoginResult.UserNotFoundError, result)
+    }
+
+    @Test
+    fun return_offline_error_while_logging_in() = runBlocking {
+        given(authService.login(loginData)).willThrow(NetworkUnavailableException::class.java)
+
+        val result = authRepository.login(loginData)
+
+        assertEquals(LoginResult.Offline, result)
     }
 }

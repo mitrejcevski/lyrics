@@ -1,5 +1,6 @@
 package nl.jovmit.lyrics.main.auth
 
+import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
@@ -18,6 +19,10 @@ class InMemoryAuthService(
         val user = User(userId, registrationData.username, registrationData.about)
         users.add(user)
         return user
+    }
+
+    override suspend fun login(loginData: LoginData): User {
+        TODO("not implemented")
     }
 
     private fun validate(registrationData: RegistrationData) {

@@ -5,6 +5,7 @@ import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
+import nl.jovmit.lyrics.main.exceptions.UserNotFoundException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
 
 class AuthenticationRepository(
@@ -23,6 +24,13 @@ class AuthenticationRepository(
     }
 
     suspend fun login(loginData: LoginData): LoginResult {
-        TODO("not implemented")
+        return try {
+            val user = authService.login(loginData)
+            LoginResult.LoggedIn(user)
+        } catch (userNotFoundException: UserNotFoundException) {
+            LoginResult.UserNotFoundError
+        } catch (offlineException: NetworkUnavailableException) {
+            LoginResult.Offline
+        }
     }
 }
