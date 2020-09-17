@@ -2,12 +2,16 @@ package nl.jovmit.lyrics.main.login
 
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.inOrder
+import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
 import nl.jovmit.lyrics.main.auth.AuthenticationRepository
+import nl.jovmit.lyrics.main.auth.AuthenticationService
 import nl.jovmit.lyrics.main.auth.CredentialsValidator
 import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.result.LoginResult
+import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.utils.IdGenerator
 import nl.jovmit.lyrics.utils.UserBuilder.Companion.aUser
 import org.junit.jupiter.api.BeforeEach
@@ -22,30 +26,33 @@ class LoginFeature {
     @Mock
     private lateinit var loginObserver: Observer<LoginResult>
 
-    private val username = "username"
-    private val password = "asd123jh12j3h"
-    private val user = aUser().withUsername(username).build()
+    @Mock
+    private lateinit var idGenerator: IdGenerator
+
+    private val user = aUser().build()
     private val startLoading = LoginResult.Loading(true)
     private val loggedIn = LoginResult.LoggedIn(user)
     private val stopLoading = LoginResult.Loading(false)
 
+    private lateinit var authService: AuthenticationService
     private lateinit var loginViewModel: LoginViewModel
 
     @BeforeEach
     fun setUp() {
         val credentialsValidator = CredentialsValidator()
-        val idGenerator = IdGenerator()
-        val authService = InMemoryAuthService(idGenerator)
+        authService = InMemoryAuthService(idGenerator)
         val authRepository = AuthenticationRepository(authService)
         val dispatchers = TestCoroutineDispatchers()
         loginViewModel = LoginViewModel(credentialsValidator, authRepository, dispatchers)
         loginViewModel.loginLiveData().observeForever(loginObserver)
+        whenever(idGenerator.next()).thenReturn(user.userId)
     }
 
     @Test
-    fun should_perform_login() {
+    fun should_perform_login() = runBlocking {
+        authService.createUser(RegistrationData(user.username, user.password, user.about))
 
-        loginViewModel.login(username, password)
+        loginViewModel.login(user.username, user.password)
 
         val inOrder = inOrder(loginObserver)
         inOrder.verify(loginObserver).onChanged(startLoading)
