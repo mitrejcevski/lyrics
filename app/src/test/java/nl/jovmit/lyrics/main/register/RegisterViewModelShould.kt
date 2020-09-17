@@ -44,7 +44,7 @@ class RegisterViewModelShould {
     private val password = "password"
     private val about = "about"
     private val registrationData = RegistrationData(username, password, about)
-    private val user = User(userId, username, about)
+    private val user = User(userId, username, password, about)
     private val registered = Registered(user)
 
     private lateinit var viewModel: RegisterViewModel

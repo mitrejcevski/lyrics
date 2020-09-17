@@ -18,6 +18,7 @@ class SharedPreferencesManagerShould : PreferencesManagerContract() {
         user?.let {
             doReturn(it.userId).whenever(sharedPreferences).getString("userId", "")
             doReturn(it.username).whenever(sharedPreferences).getString("username", "")
+            doReturn(it.password).whenever(sharedPreferences).getString("password", "")
             doReturn(it.about).whenever(sharedPreferences).getString("about", "")
         }
         return SharedPreferencesManager(sharedPreferences)

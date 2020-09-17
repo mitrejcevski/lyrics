@@ -31,7 +31,7 @@ class RegisterFeature {
     private val username = "username"
     private val password = "asd123jh12j3h"
     private val about = "about"
-    private val user = User(userId, username, about)
+    private val user = User(userId, username, password, about)
     private val startLoading = RegisterResult.Loading(true)
     private val stopLoading = RegisterResult.Loading(false)
     private val registered = RegisterResult.Registered(user)

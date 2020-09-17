@@ -11,9 +11,10 @@ class SharedPreferencesManager(
     override fun loggedInUser(): User? {
         val userId = sharedPreferences.getString("userId", "") ?: ""
         val username = sharedPreferences.getString("username", "") ?: ""
+        val password = sharedPreferences.getString("password", "") ?: ""
         val about = sharedPreferences.getString("about", "") ?: ""
         return if (userId.isNotBlank() && username.isNotBlank()) {
-            User(userId, username, about)
+            User(userId, username, password, about)
         } else null
     }
 

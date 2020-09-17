@@ -12,26 +12,23 @@ class InMemoryAuthService(
     private val idGenerator: IdGenerator
 ) : AuthenticationService {
 
-    private val credentialsMap = mutableMapOf<String, String>()
     private val users = mutableListOf<User>()
 
     override suspend fun createUser(registrationData: RegistrationData): User {
         validate(registrationData)
         val userId = idGenerator.next()
-        val user = User(userId, registrationData.username, registrationData.about)
+        val user = with(registrationData) { User(userId, username, password, about) }
         users.add(user)
-        credentialsMap[registrationData.username] = registrationData.password
         return user
     }
 
     override suspend fun login(loginData: LoginData): User {
         val result = users.find { it.username == loginData.username }
-        result?.let {
-            if (credentialsMap[it.username] == loginData.password) {
-                return it
-            }
+        return if (result?.password == loginData.password) {
+            result
+        } else {
+            throw UserNotFoundException()
         }
-        throw UserNotFoundException()
     }
 
     private fun validate(registrationData: RegistrationData) {
