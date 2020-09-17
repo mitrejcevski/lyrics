@@ -3,7 +3,12 @@ package nl.jovmit.lyrics.main.login
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.inOrder
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
+import nl.jovmit.lyrics.common.TestCoroutineDispatchers
+import nl.jovmit.lyrics.main.auth.AuthenticationRepository
+import nl.jovmit.lyrics.main.auth.CredentialsValidator
+import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.result.LoginResult
+import nl.jovmit.lyrics.utils.IdGenerator
 import nl.jovmit.lyrics.utils.UserBuilder.Companion.aUser
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -28,7 +33,12 @@ class LoginFeature {
 
     @BeforeEach
     fun setUp() {
-        loginViewModel = LoginViewModel()
+        val credentialsValidator = CredentialsValidator()
+        val idGenerator = IdGenerator()
+        val authService = InMemoryAuthService(idGenerator)
+        val authRepository = AuthenticationRepository(authService)
+        val dispatchers = TestCoroutineDispatchers()
+        loginViewModel = LoginViewModel(credentialsValidator, authRepository, dispatchers)
         loginViewModel.loginLiveData().observeForever(loginObserver)
     }
 

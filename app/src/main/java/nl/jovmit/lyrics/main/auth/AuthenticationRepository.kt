@@ -1,6 +1,8 @@
 package nl.jovmit.lyrics.main.auth
 
+import nl.jovmit.lyrics.main.data.result.LoginResult
 import nl.jovmit.lyrics.main.data.result.RegisterResult
+import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
@@ -18,5 +20,9 @@ class AuthenticationRepository(
         } catch (networkUnavailableException: NetworkUnavailableException) {
             RegisterResult.OfflineError
         }
+    }
+
+    suspend fun login(loginData: LoginData): LoginResult {
+        TODO("not implemented")
     }
 }
