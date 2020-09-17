@@ -4,9 +4,9 @@ import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
+import nl.jovmit.lyrics.main.exceptions.UserNotFoundException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
 import nl.jovmit.lyrics.utils.IdGenerator
-import java.lang.RuntimeException
 
 class InMemoryAuthService(
     private val idGenerator: IdGenerator
@@ -24,7 +24,7 @@ class InMemoryAuthService(
 
     override suspend fun login(loginData: LoginData): User {
         val result = users.find { it.username == loginData.username }
-        return result ?: throw RuntimeException()
+        return result ?: throw UserNotFoundException()
     }
 
     private fun validate(registrationData: RegistrationData) {

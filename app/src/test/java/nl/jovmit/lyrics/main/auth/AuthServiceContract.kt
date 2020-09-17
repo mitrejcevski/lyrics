@@ -6,6 +6,7 @@ import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
+import nl.jovmit.lyrics.main.exceptions.UserNotFoundException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
 import nl.jovmit.lyrics.utils.RegistrationDataBuilder.Companion.aRegistrationData
 import org.junit.jupiter.api.Test
@@ -61,6 +62,17 @@ abstract class AuthServiceContract {
         assertTrue(uuidPattern.matcher(result.userId).matches())
         assertEquals(loginData.username, result.username)
     }
+
+    @Test
+    fun throw_user_not_found_for_incorrect_username_while_logging_in() = runBlocking<Unit> {
+        val service = authServiceWithoutUsernameLike(loginData)
+
+        assertThrows<UserNotFoundException> {
+            runBlocking { service.login(loginData) }
+        }
+    }
+
+    abstract suspend fun authServiceWithoutUsernameLike(loginData: LoginData): AuthenticationService
 
     abstract suspend fun authServiceWith(registrationData: RegistrationData): AuthenticationService
 
