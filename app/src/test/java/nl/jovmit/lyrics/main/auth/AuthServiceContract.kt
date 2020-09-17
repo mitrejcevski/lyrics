@@ -3,6 +3,7 @@ package nl.jovmit.lyrics.main.auth
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking
+import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
@@ -13,8 +14,10 @@ import java.util.regex.Pattern
 
 abstract class AuthServiceContract {
 
-    private val uuidPattern = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+    private val uuidPattern =
+        Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
     private val registrationData = aRegistrationData().build()
+    private val loginData = LoginData(registrationData.username, registrationData.password)
 
     @Test
     fun create_a_user() = runBlocking {
@@ -37,7 +40,7 @@ abstract class AuthServiceContract {
     }
 
     @Test
-    fun throw_offline_exception() = runBlocking<Unit> {
+    fun throw_offline_exception_when_registration() = runBlocking<Unit> {
         val emptyRegistrationData = aRegistrationData()
             .withUsername("")
             .withPassword("")
@@ -49,11 +52,19 @@ abstract class AuthServiceContract {
         }
     }
 
-    abstract suspend fun authServiceWith(
-        registrationData: RegistrationData
-    ): AuthenticationService
+    @Test
+    fun login_a_user() = runBlocking {
+        val service = authServiceWith(loginData)
 
-    abstract suspend fun authServiceWithout(
-        registrationData: RegistrationData
-    ): AuthenticationService
+        val result = service.login(loginData)
+
+        assertTrue(uuidPattern.matcher(result.userId).matches())
+        assertEquals(loginData.username, result.username)
+    }
+
+    abstract suspend fun authServiceWith(registrationData: RegistrationData): AuthenticationService
+
+    abstract suspend fun authServiceWithout(registrationData: RegistrationData): AuthenticationService
+
+    abstract suspend fun authServiceWith(loginData: LoginData): AuthenticationService
 }

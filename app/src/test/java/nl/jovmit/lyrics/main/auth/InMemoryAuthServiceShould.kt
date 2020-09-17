@@ -1,5 +1,6 @@
 package nl.jovmit.lyrics.main.auth
 
+import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.utils.IdGenerator
 import nl.jovmit.lyrics.utils.RegistrationDataBuilder.Companion.aRegistrationData
@@ -24,6 +25,18 @@ class InMemoryAuthServiceShould : AuthServiceContract() {
     override suspend fun authServiceWith(
         registrationData: RegistrationData
     ): AuthenticationService {
+        return InMemoryAuthService(idGenerator).also {
+            it.createUser(registrationData)
+        }
+    }
+
+    override suspend fun authServiceWith(
+        loginData: LoginData
+    ): AuthenticationService {
+        val registrationData = aRegistrationData()
+            .withUsername(loginData.username)
+            .withPassword(loginData.password)
+            .build()
         return InMemoryAuthService(idGenerator).also {
             it.createUser(registrationData)
         }
