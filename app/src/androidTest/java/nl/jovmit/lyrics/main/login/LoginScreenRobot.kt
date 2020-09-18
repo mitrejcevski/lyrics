@@ -3,11 +3,8 @@ package nl.jovmit.lyrics.main.login
 import android.content.Intent
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.rule.ActivityTestRule
-import nl.jovmit.lyrics.R
-import nl.jovmit.lyrics.check
-import nl.jovmit.lyrics.isDisplayed
+import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
-import nl.jovmit.lyrics.perform
 
 @DslMarker
 annotation class LoginRobot
@@ -48,5 +45,21 @@ class LoginVerificationRobot {
 
     fun songsOverviewScreenIsDisplayed() {
         R.id.songsOverviewRecycler check isDisplayed
+    }
+
+    fun emptyUsernameErrorIsDisplayed() {
+        text(R.string.errorEmptyUsername) check isDisplayed
+    }
+
+    fun emptyPasswordErrorIsDisplayed() {
+        text(R.string.errorEmptyPassword) check isDisplayed
+    }
+
+    fun wrongCredentialsErrorIsDisplayed() {
+        text(R.string.errorIncorrectCredentials) check isDisplayed
+    }
+
+    fun offlineErrorIsDisplayed() {
+        text(R.string.errorNoNetworkConnection) check isDisplayed
     }
 }

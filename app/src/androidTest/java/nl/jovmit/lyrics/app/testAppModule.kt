@@ -14,6 +14,7 @@ import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.details.SongDetailsViewModel
 import nl.jovmit.lyrics.main.edit.UpdateSongViewModel
+import nl.jovmit.lyrics.main.login.LoginViewModel
 import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
@@ -48,4 +49,5 @@ val testAppModule = module {
     viewModel { UpdateSongViewModel(get(), get()) }
     viewModel { RegisterViewModel(get(), get(), get()) }
     viewModel { UserPreferencesViewModel(get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
 }

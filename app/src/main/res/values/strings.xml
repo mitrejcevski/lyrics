@@ -31,4 +31,5 @@
     <string name="errorNoNetworkConnection">You are offline</string>
     <string name="errorEmptyUsername">Username required</string>
     <string name="errorEmptyPassword">Password required</string>
+    <string name="errorIncorrectCredentials">Incorrect login credentials</string>
 </resources>
