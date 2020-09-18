@@ -25,4 +25,12 @@ class SharedPreferencesManager(
             putString("about", user.about)
         }
     }
+
+    override fun clearLoggedInUser() {
+        sharedPreferences.edit {
+            putString("userId", "")
+            putString("username", "")
+            putString("about", "")
+        }
+    }
 }

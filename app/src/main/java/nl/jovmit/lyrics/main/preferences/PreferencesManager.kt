@@ -7,4 +7,6 @@ interface PreferencesManager {
     fun loggedInUser(): User?
 
     fun loggedInUser(user: User)
+
+    fun clearLoggedInUser()
 }

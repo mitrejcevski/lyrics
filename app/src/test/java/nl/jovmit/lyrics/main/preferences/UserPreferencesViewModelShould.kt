@@ -36,4 +36,11 @@ class UserPreferencesViewModelShould {
 
         verify(preferencesManager).loggedInUser(user)
     }
+
+    @Test
+    fun clear_logged_in_user_from_preference_manager() {
+        userPreferencesViewModel.clearLoggedInUser()
+
+        verify(preferencesManager).clearLoggedInUser()
+    }
 }

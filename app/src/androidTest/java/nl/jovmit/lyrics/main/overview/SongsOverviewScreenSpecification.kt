@@ -121,7 +121,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun display_all_songs_once_search_is_closed() {
+    fun should_display_all_songs_once_search_is_closed() {
         val queryMatchingFirstSong = "lyrics"
         launchSongsOverview {
             typeSearchQuery(queryMatchingFirstSong)
@@ -133,7 +133,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun display_search_error() = runBlocking {
+    fun should_display_search_error() = runBlocking {
         val query = "query"
         setupModule(UnavailableSongService(null))
 
@@ -144,6 +144,15 @@ class SongsOverviewScreenSpecification {
         }
 
         unloadKoinModules(replaceModule)
+    }
+
+    @Test
+    fun should_log_out_user() {
+        launchSongsOverview(rule) {
+            tapOnLogout()
+        } verify {
+            registrationScreenIsDisplayed()
+        }
     }
 
     private fun setupModule(songsService: SongsService): Module {

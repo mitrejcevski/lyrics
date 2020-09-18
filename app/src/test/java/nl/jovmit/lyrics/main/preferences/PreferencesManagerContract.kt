@@ -28,5 +28,14 @@ abstract class PreferencesManagerContract {
         assertEquals(loggedInUser, result)
     }
 
+    @Test
+    fun clear_logged_in_user() {
+        val preferencesManager = preferencesManagerWith(loggedInUser)
+
+        preferencesManager.clearLoggedInUser()
+
+        assertEquals(noUser, preferencesManager.loggedInUser())
+    }
+
     abstract fun preferencesManagerWith(user: User?): PreferencesManager
 }

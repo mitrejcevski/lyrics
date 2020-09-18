@@ -14,4 +14,8 @@ class UserPreferencesViewModel(
     fun setLoggedInUser(user: User) {
         preferencesManager.loggedInUser(user)
     }
+
+    fun clearLoggedInUser() {
+        preferencesManager.clearLoggedInUser()
+    }
 }

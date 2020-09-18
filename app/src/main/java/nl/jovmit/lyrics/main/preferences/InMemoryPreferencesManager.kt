@@ -13,4 +13,8 @@ class InMemoryPreferencesManager : PreferencesManager {
     override fun loggedInUser(user: User) {
         this.loggedInUser = user
     }
+
+    override fun clearLoggedInUser() {
+        loggedInUser = null
+    }
 }

@@ -41,6 +41,11 @@ class SongsOverviewRobot {
         pressBackUnconditionally()
     }
 
+    fun tapOnLogout() {
+        openContextualActionModeOverflowMenu()
+        text(R.string.logout) perform click()
+    }
+
     infix fun verify(
         function: SongsOverviewVerificationRobot.() -> Unit
     ): SongsOverviewVerificationRobot {
@@ -84,5 +89,9 @@ class SongsOverviewVerificationRobot {
 
     fun searchErrorIsDisplayed() {
         text(R.string.errorSearchingSong)
+    }
+
+    fun registrationScreenIsDisplayed() {
+        R.id.registrationUsernameEditText check isDisplayed
     }
 }

@@ -11,6 +11,7 @@ import nl.jovmit.lyrics.extensions.*
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,6 +20,7 @@ class SongsOverview : Fragment() {
     private val songsAdapter: SongsAdapter by lazy { SongsAdapter() }
     private val songsViewModel by viewModel<SongsViewModel>()
     private val infoViewModel by sharedViewModel<InfoViewModel>()
+    private val userPreferencesViewModel by viewModel<UserPreferencesViewModel>()
 
     private lateinit var layout: FragmentSongsOverviewBinding
 
@@ -51,6 +53,19 @@ class SongsOverview : Fragment() {
         val searchView = searchMenuItem.actionView as SearchView
         searchView.onQuerySubmit { songsViewModel.search(it) }
         searchMenuItem.onCollapse { songsViewModel.fetchSongs() }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.actionLogout) {
+            performLogout()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun performLogout() {
+        userPreferencesViewModel.clearLoggedInUser()
+        val destination = SongsOverviewDirections.openRegistration()
+        findNavController().navigate(destination)
     }
 
     private fun openNewSong() {
