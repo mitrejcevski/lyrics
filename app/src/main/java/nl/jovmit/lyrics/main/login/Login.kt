@@ -54,7 +54,7 @@ class Login : Fragment() {
         loginViewModel.loginLiveData().listen(viewLifecycleOwner) {
             when (it) {
                 is LoginResult.Loading -> toggleLoading(it.loading)
-                is LoginResult.LoggedIn -> onLoggedIn(it.user)
+                is LoginResult.LoggedIn -> onLoggedIn()
                 is LoginResult.UserNotFoundError -> displayLoginError()
                 is LoginResult.Offline -> displayOfflineError()
             }
@@ -66,7 +66,7 @@ class Login : Fragment() {
         layout.loginLoading.visibility = visibility
     }
 
-    private fun onLoggedIn(user: User) {
+    private fun onLoggedIn() {
         layout.loginUsernameEditText.hideKeyboard()
         val destination = LoginDirections.openSongsOverview()
         findNavController().navigate(destination)

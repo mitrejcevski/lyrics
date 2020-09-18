@@ -14,6 +14,7 @@ import nl.jovmit.lyrics.main.data.result.CredentialsValidationResult
 import nl.jovmit.lyrics.main.data.result.CredentialsValidationResult.*
 import nl.jovmit.lyrics.main.data.result.LoginResult
 import nl.jovmit.lyrics.main.data.user.LoginData
+import nl.jovmit.lyrics.main.preferences.PreferencesManager
 import nl.jovmit.lyrics.utils.UserBuilder.Companion.aUser
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -36,6 +37,9 @@ class LoginViewModelShould {
     @Mock
     private lateinit var loginObserver: Observer<LoginResult>
 
+    @Mock
+    private lateinit var preferencesManager: PreferencesManager
+
     private val username = "::username::"
     private val password = "::password::"
     private val user = aUser().build()
@@ -47,7 +51,7 @@ class LoginViewModelShould {
     @BeforeEach
     fun setUp() {
         val dispatchers = TestCoroutineDispatchers()
-        viewModel = LoginViewModel(credentialsValidator, authRepository, dispatchers)
+        viewModel = LoginViewModel(credentialsValidator, authRepository, preferencesManager, dispatchers)
         viewModel.credentialsValidationLiveData().observeForever(credentialsValidationObserver)
         viewModel.loginLiveData().observeForever(loginObserver)
     }
@@ -96,5 +100,15 @@ class LoginViewModelShould {
         viewModel.login(username, password)
 
         verify(loginObserver).onChanged(loggedIn)
+    }
+
+    @Test
+    fun persist_logged_in_user() = runBlocking<Unit> {
+        given(credentialsValidator.validate(username, password)).willReturn(Valid)
+        given(authRepository.login(LoginData(username, password))).willReturn(loggedIn)
+
+        viewModel.login(username, password)
+
+        verify(preferencesManager).loggedInUser(user)
     }
 }

@@ -12,6 +12,7 @@ import nl.jovmit.lyrics.main.auth.CredentialsValidator
 import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.result.LoginResult
 import nl.jovmit.lyrics.main.data.user.RegistrationData
+import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.utils.IdGenerator
 import nl.jovmit.lyrics.utils.UserBuilder.Companion.aUser
 import org.junit.jupiter.api.BeforeEach
@@ -42,8 +43,14 @@ class LoginFeature {
         val credentialsValidator = CredentialsValidator()
         authService = InMemoryAuthService(idGenerator)
         val authRepository = AuthenticationRepository(authService)
+        val preferencesManager = InMemoryPreferencesManager()
         val dispatchers = TestCoroutineDispatchers()
-        loginViewModel = LoginViewModel(credentialsValidator, authRepository, dispatchers)
+        loginViewModel = LoginViewModel(
+            credentialsValidator,
+            authRepository,
+            preferencesManager,
+            dispatchers
+        )
         loginViewModel.loginLiveData().observeForever(loginObserver)
         whenever(idGenerator.next()).thenReturn(user.userId)
     }

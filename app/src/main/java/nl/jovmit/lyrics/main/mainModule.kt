@@ -49,7 +49,7 @@ val mainModule = module {
     viewModel { UpdateSongViewModel(get(), get()) }
     viewModel { RegisterViewModel(get(), get(), get()) }
     viewModel { UserPreferencesViewModel(get()) }
-    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get()) }
 }
 
 fun generateSongs(): List<Song> {
