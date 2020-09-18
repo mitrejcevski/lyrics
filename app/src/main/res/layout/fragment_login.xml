@@ -49,13 +49,15 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/loginRightGuideline"
                 app:layout_constraintStart_toStartOf="@+id/loginLeftGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/loginUsernameTextInput">
+                app:layout_constraintTop_toBottomOf="@+id/loginUsernameTextInput"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginPasswordEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password" />
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
