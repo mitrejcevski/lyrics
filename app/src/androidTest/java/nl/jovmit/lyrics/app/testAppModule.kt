@@ -31,7 +31,7 @@ val testAppModule = module {
     factory<AuthenticationService> { InMemoryAuthService(get()) }
     factory<PreferencesManager> {
         InMemoryPreferencesManager().also {
-            val loggedInUser = User("userId", "username", "about")
+            val loggedInUser = User("userId", "username", "password", "about")
             it.loggedInUser(loggedInUser)
         }
     }

@@ -38,7 +38,7 @@ class RegisterScreenSpecification {
     private val about = "about"
     private val preferencesManager = InMemoryPreferencesManager()
     private val authService = InMemoryAuthService(IdGenerator())
-    private val loggedInUser = User(userId, username, about)
+    private val loggedInUser = User(userId, username, password, about)
 
     private val registrationModule = module {
         factory<PreferencesManager>(override = true) { preferencesManager }
