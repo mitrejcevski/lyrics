@@ -6,7 +6,10 @@ import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.UnavailableSongService
 import nl.jovmit.lyrics.main.data.song.*
-import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
+import nl.jovmit.lyrics.main.data.user.User
+import nl.jovmit.lyrics.main.exceptions.SongsServiceException
+import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
+import nl.jovmit.lyrics.main.preferences.PreferencesManager
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
@@ -38,6 +41,12 @@ class SongsOverviewScreenSpecification {
     private val songsOverviewModule = module {
         val service = InMemorySongsService(IdGenerator(), songsList)
         factory<SongsService>(override = true) { service }
+        factory<PreferencesManager>(override = true) {
+            InMemoryPreferencesManager().also {
+                val loggedInUser = User("userId", "username", "password", "about")
+                it.loggedInUser(loggedInUser)
+            }
+        }
     }
 
     @Before
@@ -138,7 +147,6 @@ class SongsOverviewScreenSpecification {
     }
 
     private fun setupModule(songsService: SongsService): Module {
-        unloadKoinModules(songsOverviewModule)
         val module = module {
             factory(override = true) { songsService }
         }
@@ -151,6 +159,7 @@ class SongsOverviewScreenSpecification {
         unloadKoinModules(songsOverviewModule)
         val resetModule = module {
             factory<SongsService>(override = true) { InMemorySongsService(get()) }
+            factory<PreferencesManager>(override = true) { InMemoryPreferencesManager() }
         }
         loadKoinModules(resetModule)
     }
