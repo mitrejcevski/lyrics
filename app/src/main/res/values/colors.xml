@@ -6,6 +6,7 @@
     <color name="infoMessageTextColor">#FFFFFF</color>
     <color name="infoMessageTextColorDark">#000000</color>
     <color name="successColor">#009688</color>
+    <color name="textColorBody1">#919599</color>
 
     <color name="colorBackground">#ffffff</color>
     <color name="colorBackgroundDark">#000000</color>

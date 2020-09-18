@@ -8,8 +8,11 @@
         <item name="colorSecondary">@color/colorSecondaryDark</item>
         <item name="colorOnBackground">@color/colorOnBackgroundDark</item>
         <item name="colorOnSurface">@color/colorOnSurfaceDark</item>
-        <item name="colorOnPrimary">@color/colorOnPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorOnSecondary">@color/colorOnSecondaryDark</item>
+        <item name="textInputStyle">@style/TextInputStyle</item>
+        <item name="materialButtonStyle">@style/MaterialButtonStyle</item>
+        <item name="textAppearanceBody1">@style/TextViewBody1</item>
 
         <!-- System bar colors -->
         <item name="android:statusBarColor">?attr/colorSurface</item>
