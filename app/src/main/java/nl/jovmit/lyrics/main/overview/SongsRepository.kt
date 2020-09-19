@@ -1,6 +1,7 @@
 package nl.jovmit.lyrics.main.overview
 
 import nl.jovmit.lyrics.main.SongsService
+import nl.jovmit.lyrics.main.data.result.NewSongResult
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.SongData
@@ -35,12 +36,12 @@ class SongsRepository(private val songsService: SongsService) {
         }
     }
 
-    suspend fun deleteSongById(songId: String): SongResult {
+    suspend fun addNewSong(newSongData: SongData): NewSongResult {
         return try {
-            songsService.deleteSongById(songId)
-            SongResult.Deleted
+            songsService.addNewSong(newSongData)
+            NewSongResult.SongAdded
         } catch (serviceException: SongsServiceException) {
-            SongResult.ErrorDeleting
+            NewSongResult.ErrorAddingSong
         }
     }
 
@@ -53,6 +54,15 @@ class SongsRepository(private val songsService: SongsService) {
             SongResult.Updated
         } catch (serviceException: SongsServiceException) {
             SongResult.ErrorUpdating
+        }
+    }
+
+    suspend fun deleteSongById(songId: String): SongResult {
+        return try {
+            songsService.deleteSongById(songId)
+            SongResult.Deleted
+        } catch (serviceException: SongsServiceException) {
+            SongResult.ErrorDeleting
         }
     }
 }

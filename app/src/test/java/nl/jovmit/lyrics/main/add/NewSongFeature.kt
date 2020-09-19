@@ -8,6 +8,7 @@ import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.data.result.NewSongResult
+import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,6 +21,7 @@ class NewSongFeature {
 
     @Mock
     private lateinit var newSongObserver: Observer<NewSongResult>
+
     @Mock
     private lateinit var idGenerator: IdGenerator
 
@@ -37,8 +39,8 @@ class NewSongFeature {
     fun set_up() {
         val dispatchers = TestCoroutineDispatchers()
         val songsService = InMemorySongsService(idGenerator)
-        val newSongRepository = NewSongRepository(songsService)
-        newSongViewModel = NewSongViewModel(newSongRepository, dispatchers)
+        val songsRepository = SongsRepository(songsService)
+        newSongViewModel = NewSongViewModel(songsRepository, dispatchers)
         newSongViewModel.newSongLiveData().observeForever(newSongObserver)
     }
 

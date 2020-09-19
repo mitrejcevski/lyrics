@@ -5,7 +5,6 @@ import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.auth.AuthenticationRepository
 import nl.jovmit.lyrics.main.auth.AuthenticationService
@@ -37,7 +36,6 @@ val testAppModule = module {
         }
     }
     factory { IdGenerator() }
-    factory { NewSongRepository(get()) }
     factory { SongsRepository(get()) }
     factory { AuthenticationRepository(get()) }
     factory { CredentialsValidator() }

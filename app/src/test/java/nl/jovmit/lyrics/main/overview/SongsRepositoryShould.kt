@@ -3,6 +3,7 @@ package nl.jovmit.lyrics.main.overview
 import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.SongsService
+import nl.jovmit.lyrics.main.data.result.NewSongResult
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.SongBuilder.Companion.aSong
@@ -29,6 +30,7 @@ class SongsRepositoryShould {
     private val songs = listOf(song)
     private val songsFetched = SongsResult.Fetched(songs)
     private val fetchingError = SongsResult.FetchingError
+    private val newSongData = aSongData().build()
 
     private lateinit var songsRepository: SongsRepository
 
@@ -96,22 +98,19 @@ class SongsRepositoryShould {
     }
 
     @Test
-    fun return_success_deleting_song() = runBlocking {
-        val songId = "::song id::"
+    fun return_successfully_added_new_song() = runBlocking {
+        val result = songsRepository.addNewSong(newSongData)
 
-        val result = songsRepository.deleteSongById(songId)
-
-        assertEquals(SongResult.Deleted, result)
+        assertEquals(NewSongResult.SongAdded, result)
     }
 
     @Test
-    fun return_failure_when_song_deletion_fails() = runBlocking {
-        val songId = "::song id::"
-        given(songsService.deleteSongById(songId)).willThrow(SongsServiceException())
+    fun return_failure_adding_new_song() = runBlocking {
+        given(songsService.addNewSong(newSongData)).willThrow(SongsServiceException())
 
-        val result = songsRepository.deleteSongById(songId)
+        val result = songsRepository.addNewSong(newSongData)
 
-        assertEquals(SongResult.ErrorDeleting, result)
+        assertEquals(NewSongResult.ErrorAddingSong, result)
     }
 
     @Test
@@ -133,5 +132,24 @@ class SongsRepositoryShould {
         val result = songsRepository.updateSong(songId, songData)
 
         assertEquals(SongResult.ErrorUpdating, result)
+    }
+
+    @Test
+    fun return_success_deleting_song() = runBlocking {
+        val songId = "::song id::"
+
+        val result = songsRepository.deleteSongById(songId)
+
+        assertEquals(SongResult.Deleted, result)
+    }
+
+    @Test
+    fun return_failure_when_song_deletion_fails() = runBlocking {
+        val songId = "::song id::"
+        given(songsService.deleteSongById(songId)).willThrow(SongsServiceException())
+
+        val result = songsRepository.deleteSongById(songId)
+
+        assertEquals(SongResult.ErrorDeleting, result)
     }
 }

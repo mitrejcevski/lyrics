@@ -11,9 +11,10 @@ import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
+import nl.jovmit.lyrics.main.overview.SongsRepository
 
 class NewSongViewModel(
-    private val newSongRepository: NewSongRepository,
+    private val songsRepository: SongsRepository,
     private val dispatchers: CoroutineDispatchers
 ) : CoroutineViewModel(dispatchers) {
 
@@ -36,7 +37,7 @@ class NewSongViewModel(
     private suspend fun submitSongToRepository(newSongData: SongData): NewSongResult {
         val validationResult = newSongData.validate()
         return if (validationResult == NewSongResult.Valid) {
-            newSongRepository.addNewSong(newSongData)
+            songsRepository.addNewSong(newSongData)
         } else {
             validationResult
         }

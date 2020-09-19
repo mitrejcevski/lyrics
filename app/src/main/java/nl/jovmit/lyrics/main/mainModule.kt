@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import com.google.firebase.firestore.FirebaseFirestore
 import nl.jovmit.lyrics.common.AppCoroutineDispatchers
 import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.main.add.NewSongRepository
 import nl.jovmit.lyrics.main.add.NewSongViewModel
 import nl.jovmit.lyrics.main.auth.AuthenticationRepository
 import nl.jovmit.lyrics.main.auth.AuthenticationService
@@ -35,7 +34,6 @@ val mainModule = module {
 //    single<SongsService> { FirebaseSongsService(get()) }
     single<SongsService> { InMemorySongsService(IdGenerator(), generateSongs()) }
     factory { SongsRepository(get()) }
-    factory { NewSongRepository(get()) }
     factory { CredentialsValidator() }
     single<AuthenticationService> { InMemoryAuthService(get()) }
     factory { AuthenticationRepository(get()) }

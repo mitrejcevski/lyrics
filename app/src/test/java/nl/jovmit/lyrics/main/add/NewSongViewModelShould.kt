@@ -9,6 +9,7 @@ import nl.jovmit.lyrics.main.data.song.SongData
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
+import nl.jovmit.lyrics.main.overview.SongsRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 class NewSongViewModelShould {
 
     @Mock
-    private lateinit var newSongRepository: NewSongRepository
+    private lateinit var songsRepository: SongsRepository
 
     private val title = "title"
     private val performer = "performer"
@@ -35,14 +36,14 @@ class NewSongViewModelShould {
     @BeforeEach
     fun set_up() {
         val dispatchers = TestCoroutineDispatchers()
-        viewModel = NewSongViewModel(newSongRepository, dispatchers)
+        viewModel = NewSongViewModel(songsRepository, dispatchers)
     }
 
     @Test
     fun add_new_song_to_song_repository() = runBlocking<Unit> {
         viewModel.addNewSong(title, performer, lyrics)
 
-        verify(newSongRepository).addNewSong(newSong)
+        verify(songsRepository).addNewSong(newSong)
     }
 
     @Test
@@ -51,6 +52,6 @@ class NewSongViewModelShould {
         viewModel.addNewSong(title, "", lyrics)
         viewModel.addNewSong(title, performer, "")
 
-        verifyZeroInteractions(newSongRepository)
+        verifyZeroInteractions(songsRepository)
     }
 }
