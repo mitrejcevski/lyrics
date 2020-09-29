@@ -6,7 +6,7 @@ import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.UnavailableSongService
 import nl.jovmit.lyrics.main.data.song.*
-import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
+import nl.jovmit.lyrics.main.stubs.SongsServiceUnableToUpdateSong
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
@@ -82,10 +82,11 @@ class EditSongScreenSpecification {
 
     @Test
     fun show_error_when_song_updating_fails() = runBlocking<Unit> {
-        unloadKoinModules(songsOverviewModule)
-        val songService = UnavailableSongService(songsList)
-        songsOverviewModule.factory<SongsService>(override = true) { songService }
-        loadKoinModules(songsOverviewModule)
+        val replaceModule = module {
+            val songsService = SongsServiceUnableToUpdateSong(songsList)
+            factory<SongsService>(override = true) { songsService }
+        }
+        loadKoinModules(replaceModule)
 
         launchMainScreenScreen {
             tapOnSong(song.songTitle.value)

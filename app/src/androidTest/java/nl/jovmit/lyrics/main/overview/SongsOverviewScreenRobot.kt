@@ -2,8 +2,7 @@ package nl.jovmit.lyrics.main.overview
 
 import androidx.appcompat.widget.SearchView
 import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBackUnconditionally
+import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import nl.jovmit.lyrics.*

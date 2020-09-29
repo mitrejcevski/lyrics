@@ -1,8 +1,7 @@
 package nl.jovmit.lyrics.main.register
 
-import android.content.Intent
+import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
 
@@ -10,10 +9,9 @@ import nl.jovmit.lyrics.main.MainActivity
 annotation class RegistrationScreenRobot
 
 fun launchRegistration(
-    rule: ActivityTestRule<MainActivity>,
     block: RegisterScreenRobot.() -> Unit
 ): RegisterScreenRobot {
-    rule.launchActivity(Intent())
+    launch(MainActivity::class.java)
     return RegisterScreenRobot().apply(block)
 }
 

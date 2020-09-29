@@ -1,35 +1,24 @@
 package nl.jovmit.lyrics.main.login
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.runBlocking
-import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.auth.AuthenticationService
 import nl.jovmit.lyrics.main.auth.InMemoryAuthService
-import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
-import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.main.preferences.PreferencesManager
+import nl.jovmit.lyrics.main.stubs.OfflineAuthService
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
-import org.koin.core.module.Module
 import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class LoginScreenSpecification {
-
-    @Rule
-    @JvmField
-    val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
     private val username = "validUsername"
     private val password = "validPassword"
@@ -50,7 +39,7 @@ class LoginScreenSpecification {
     @Test
     fun should_perform_login() = runBlocking<Unit> {
         authService.createUser(registrationData)
-        launchLogin(rule) {
+        launchLogin {
             typeUsername(username)
             typePassword(password)
             tapOnLogin()
@@ -61,7 +50,7 @@ class LoginScreenSpecification {
 
     @Test
     fun should_show_empty_username_error() {
-        launchLogin(rule) {
+        launchLogin {
             tapOnLogin()
         } verify {
             emptyUsernameErrorIsDisplayed()
@@ -70,7 +59,7 @@ class LoginScreenSpecification {
 
     @Test
     fun should_show_empty_password_error() {
-        launchLogin(rule) {
+        launchLogin {
             typeUsername(username)
             tapOnLogin()
         } verify {
@@ -82,7 +71,7 @@ class LoginScreenSpecification {
     fun should_display_incorrect_credentials_error() = runBlocking<Unit> {
         val registrationData1 = RegistrationData(username.reversed(), password, "::about::")
         authService.createUser(registrationData1)
-        launchLogin(rule) {
+        launchLogin {
             typeUsername(username)
             typePassword(password)
             tapOnLogin()
@@ -93,10 +82,12 @@ class LoginScreenSpecification {
 
     @Test
     fun should_display_offline_error() = runBlocking {
-        val replaceModule = moduleWithOfflineAuthService()
+        val replaceModule = module {
+            factory<AuthenticationService>(override = true) { OfflineAuthService() }
+        }
         loadKoinModules(replaceModule)
 
-        launchLogin(rule) {
+        launchLogin {
             typeUsername(username)
             typePassword(password)
             tapOnLogin()
@@ -115,12 +106,5 @@ class LoginScreenSpecification {
             factory<AuthenticationService>(override = true) { InMemoryAuthService(get()) }
         }
         loadKoinModules(resetModule)
-    }
-
-    private suspend fun moduleWithOfflineAuthService(): Module {
-        val offlineService = mock<AuthenticationService>()
-        given(offlineService.login(LoginData(username, password)))
-            .willThrow(NetworkUnavailableException())
-        return module { factory(override = true) { offlineService } }
     }
 }

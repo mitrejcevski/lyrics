@@ -1,10 +1,16 @@
 package nl.jovmit.lyrics.main.details
 
+<<<<<<< HEAD
 import android.content.Context
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
 import kotlinx.coroutines.runBlocking
+=======
+import androidx.test.core.app.ActivityScenario.launch
+import androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu
+import androidx.test.espresso.action.ViewActions.click
+>>>>>>> Update UI tests dependencies
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.Song
@@ -17,6 +23,7 @@ annotation class SongDetailsScreenRobot
 fun launchSongsOverviewScreen(
     block: SongDetailsRobot.() -> Unit
 ): SongDetailsRobot {
+<<<<<<< HEAD
     val scenario = launch(MainActivity::class.java)
     val activity = runBlocking {
         suspendCoroutine<MainActivity> { continuation ->
@@ -26,17 +33,21 @@ fun launchSongsOverviewScreen(
         }
     }
     return SongDetailsRobot(activity).apply(block)
+=======
+    launch(MainActivity::class.java)
+    return SongDetailsRobot().apply(block)
+>>>>>>> Update UI tests dependencies
 }
 
 @SongDetailsScreenRobot
-class SongDetailsRobot(private val context: Context) {
+class SongDetailsRobot {
 
     fun tapOnSongWithTitle(songTitle: String) {
         text(songTitle) perform click()
     }
 
     fun tapOnDeleteAction() {
-        openActionBarOverflowOrOptionsMenu(context)
+        openContextualActionModeOverflowMenu()
         text(R.string.delete) perform click()
     }
 

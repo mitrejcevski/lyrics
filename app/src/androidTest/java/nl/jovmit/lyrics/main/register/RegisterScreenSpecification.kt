@@ -1,36 +1,26 @@
 package nl.jovmit.lyrics.main.register
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.runBlocking
-import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.auth.AuthenticationService
 import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.data.user.User
-import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.main.preferences.PreferencesManager
+import nl.jovmit.lyrics.main.stubs.OfflineAuthService
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
-import org.koin.core.module.Module
 import org.koin.dsl.module
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class RegisterScreenSpecification {
-
-    @Rule
-    @JvmField
-    val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
     private val userId = UUID.randomUUID().toString()
     private val username = "validUsername"
@@ -52,7 +42,7 @@ class RegisterScreenSpecification {
 
     @Test
     fun should_open_login() {
-        launchRegistration(rule) {
+        launchRegistration {
             tapOnAlreadyHaveAnAccount()
         } verify {
             loginScreenIsDisplayed()
@@ -61,7 +51,7 @@ class RegisterScreenSpecification {
 
     @Test
     fun should_show_empty_username_error() {
-        launchRegistration(rule) {
+        launchRegistration {
             tapOnCreateAccount()
         } verify {
             emptyUsernameErrorIsDisplayed()
@@ -70,7 +60,7 @@ class RegisterScreenSpecification {
 
     @Test
     fun should_show_empty_password_error() {
-        launchRegistration(rule) {
+        launchRegistration {
             typeUsername(username)
             tapOnCreateAccount()
         } verify {
@@ -80,7 +70,7 @@ class RegisterScreenSpecification {
 
     @Test
     fun should_perform_registration() {
-        launchRegistration(rule) {
+        launchRegistration {
             typeUsername(username)
             typePassword(password)
             tapOnCreateAccount()
@@ -92,7 +82,7 @@ class RegisterScreenSpecification {
     @Test
     fun should_skip_registration_when_user_was_logged_in() {
         preferencesManager.loggedInUser(loggedInUser)
-        launchRegistration(rule) {
+        launchRegistration {
             //no operation
         } verify {
             songsOverviewScreenIsDisplayed()
@@ -102,7 +92,7 @@ class RegisterScreenSpecification {
     @Test
     fun should_display_username_taken_error() = runBlocking<Unit> {
         authService.createUser(RegistrationData(username, password, about))
-        launchRegistration(rule) {
+        launchRegistration {
             typeUsername(username)
             typePassword(password)
             tapOnCreateAccount()
@@ -112,11 +102,13 @@ class RegisterScreenSpecification {
     }
 
     @Test
-    fun should_display_offline_error() = runBlocking {
-        val replaceModule = moduleWithOfflineAuthService()
+    fun should_display_offline_error() {
+        val replaceModule = module {
+            factory<AuthenticationService>(override = true) { OfflineAuthService() }
+        }
         loadKoinModules(replaceModule)
 
-        launchRegistration(rule) {
+        launchRegistration {
             typeUsername(username)
             typePassword(password)
             tapOnCreateAccount()
@@ -135,12 +127,5 @@ class RegisterScreenSpecification {
             factory<AuthenticationService>(override = true) { InMemoryAuthService(get()) }
         }
         loadKoinModules(resetModule)
-    }
-
-    private suspend fun moduleWithOfflineAuthService(): Module {
-        val offlineService = mock<AuthenticationService>()
-        given(offlineService.createUser(RegistrationData(username, password, "")))
-            .willThrow(NetworkUnavailableException())
-        return module { factory(override = true) { offlineService } }
     }
 }

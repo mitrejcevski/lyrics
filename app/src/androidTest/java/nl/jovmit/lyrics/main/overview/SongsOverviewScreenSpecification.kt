@@ -7,9 +7,10 @@ import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.UnavailableSongService
 import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.data.user.User
-import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.main.preferences.PreferencesManager
+import nl.jovmit.lyrics.main.stubs.SongsServiceUnableToSearchSongs
+import nl.jovmit.lyrics.main.stubs.SongsServiceUnableToFetchSongs
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
@@ -18,6 +19,7 @@ import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
+import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class SongsOverviewScreenSpecification {
@@ -148,7 +150,7 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun should_log_out_user() {
-        launchSongsOverview(rule) {
+        launchSongsOverview {
             tapOnLogout()
         } verify {
             registrationScreenIsDisplayed()

@@ -1,8 +1,7 @@
 package nl.jovmit.lyrics.main.login
 
-import android.content.Intent
+import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
 
@@ -10,10 +9,9 @@ import nl.jovmit.lyrics.main.MainActivity
 annotation class LoginRobot
 
 fun launchLogin(
-    rule: ActivityTestRule<MainActivity>,
     block: LoginScreenRobot.() -> Unit
 ): LoginScreenRobot {
-    rule.launchActivity(Intent())
+    launch(MainActivity::class.java)
     R.id.registrationAlreadyRegisteredLabel perform click()
     return LoginScreenRobot().apply(block)
 }
