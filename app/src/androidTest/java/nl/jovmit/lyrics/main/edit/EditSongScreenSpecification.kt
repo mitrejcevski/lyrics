@@ -1,7 +1,6 @@
 package nl.jovmit.lyrics.main.edit
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.UnavailableSongService
@@ -81,7 +80,7 @@ class EditSongScreenSpecification {
     }
 
     @Test
-    fun show_error_when_song_updating_fails() = runBlocking<Unit> {
+    fun show_error_when_song_updating_fails() {
         val replaceModule = module {
             val songsService = SongsServiceUnableToUpdateSong(songsList)
             factory<SongsService>(override = true) { songsService }

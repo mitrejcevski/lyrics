@@ -69,8 +69,8 @@ class LoginScreenSpecification {
 
     @Test
     fun should_display_incorrect_credentials_error() = runBlocking<Unit> {
-        val registrationData1 = RegistrationData(username.reversed(), password, "::about::")
-        authService.createUser(registrationData1)
+        val registrationData = RegistrationData(username.reversed(), password, "::about::")
+        authService.createUser(registrationData)
         launchLogin {
             typeUsername(username)
             typePassword(password)
@@ -81,7 +81,7 @@ class LoginScreenSpecification {
     }
 
     @Test
-    fun should_display_offline_error() = runBlocking {
+    fun should_display_offline_error() {
         val replaceModule = module {
             factory<AuthenticationService>(override = true) { OfflineAuthService() }
         }

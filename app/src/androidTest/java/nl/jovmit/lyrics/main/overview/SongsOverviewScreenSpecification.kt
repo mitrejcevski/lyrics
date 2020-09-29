@@ -1,7 +1,6 @@
 package nl.jovmit.lyrics.main.overview
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.UnavailableSongService
@@ -9,8 +8,8 @@ import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.main.preferences.PreferencesManager
-import nl.jovmit.lyrics.main.stubs.SongsServiceUnableToSearchSongs
 import nl.jovmit.lyrics.main.stubs.SongsServiceUnableToFetchSongs
+import nl.jovmit.lyrics.main.stubs.SongsServiceUnableToSearchSongs
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
@@ -57,7 +56,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_display_empty_state_when_no_songs_added() = runBlocking {
+    fun should_display_empty_state_when_no_songs_added() {
         val replaceModule = setupModule(InMemorySongsService(IdGenerator(), emptySongsList))
 
         launchSongsOverview { } verify {
@@ -68,14 +67,14 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_not_display_empty_state_when_songs_added() = runBlocking<Unit> {
+    fun should_not_display_empty_state_when_songs_added() {
         launchSongsOverview { } verify {
             songsEmptyStateIsGone()
         }
     }
 
     @Test
-    fun should_display_loaded_songs() = runBlocking<Unit> {
+    fun should_display_loaded_songs() {
         launchSongsOverview { } verify {
             songTitleAndSingerAreDisplayed(song)
             songTitleAndSingerAreDisplayed(anotherSong)
@@ -83,8 +82,9 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_display_error_if_loading_songs_fails() = runBlocking {
-        setupModule(UnavailableSongService(null))
+    fun should_display_error_if_loading_songs_fails() {
+        val songsService = SongsServiceUnableToFetchSongs()
+        val replaceModule = setupModule(songsService)
 
         launchSongsOverview { } verify {
             loadingErrorIsDisplayed()
@@ -94,7 +94,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_open_new_song_screen_upon_click_on_new_song_button() = runBlocking<Unit> {
+    fun should_open_new_song_screen_upon_click_on_new_song_button() {
         launchSongsOverview {
             clickOnNewSongButton()
         } verify {
@@ -103,7 +103,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_open_song_details_screen() = runBlocking<Unit> {
+    fun should_open_song_details_screen() {
         launchSongsOverview {
             tapOnSongWithTitle(song.songTitle.value)
         } verify {
@@ -112,7 +112,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_perform_search() = runBlocking<Unit> {
+    fun should_perform_search() {
         val queryMatchingFirstSong = "lyrics"
         launchSongsOverview {
             typeSearchQuery(queryMatchingFirstSong)
@@ -135,7 +135,7 @@ class SongsOverviewScreenSpecification {
     }
 
     @Test
-    fun should_display_search_error() = runBlocking {
+    fun should_display_search_error() {
         val query = "query"
         setupModule(UnavailableSongService(null))
 
