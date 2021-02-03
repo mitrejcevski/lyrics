@@ -11,12 +11,12 @@ apply from: '../release_notes_generator.gradle'
 
 android {
 
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "nl.jovmit.lyrics"
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion 24
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "nl.jovmit.lyrics.TestAppRunner"
