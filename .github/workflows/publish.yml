@@ -25,12 +25,13 @@ jobs:
         keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
         keyPassword: ${{ secrets.KEYSTORE_PRIVATE_KEY_PASSWORD }}
 
-#     - name: Tag Release
-#       run: |
-#         version_name=${GITHUB_REF##*/}
-#         echo "Tagging release with tag $version_name"
-#         git tag $version_name release/$version_name
-#         git push origin --tags
+    - name: Tag Release
+      run: |
+          ./gradlew releaseNotes
+        tagName="$(git describe --abbrev=0 --tags)"
+        versionFromTag=${tagName#*_}
+        versionCode=$((versionFromTag+1))
+        git push origin --tags
     - name: Create service_account.json
       run: echo '${{ secrets.GOOGLE_SERVICES_API }}' > service_account.json
 
