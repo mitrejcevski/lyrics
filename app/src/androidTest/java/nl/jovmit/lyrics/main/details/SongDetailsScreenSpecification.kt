@@ -2,6 +2,7 @@ package nl.jovmit.lyrics.main.details
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import nl.jovmit.lyrics.main.InMemorySongsService
+import nl.jovmit.lyrics.main.SongsService
 import nl.jovmit.lyrics.main.data.song.*
 import org.junit.After
 import org.junit.Before

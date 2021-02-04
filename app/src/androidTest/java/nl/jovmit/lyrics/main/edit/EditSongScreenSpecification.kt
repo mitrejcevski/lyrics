@@ -3,7 +3,6 @@ package nl.jovmit.lyrics.main.edit
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.UnavailableSongService
 import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.stubs.SongsServiceUnableToUpdateSong
 import nl.jovmit.lyrics.utils.IdGenerator
@@ -13,6 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class EditSongScreenSpecification {

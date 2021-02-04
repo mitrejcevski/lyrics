@@ -3,7 +3,6 @@ package nl.jovmit.lyrics.main.overview
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import nl.jovmit.lyrics.main.InMemorySongsService
 import nl.jovmit.lyrics.main.SongsService
-import nl.jovmit.lyrics.main.UnavailableSongService
 import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
@@ -22,8 +21,6 @@ import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class SongsOverviewScreenSpecification {
-
-    private lateinit var module: Module
 
     private val song = Song(
         SongId("SongId"),
@@ -137,15 +134,13 @@ class SongsOverviewScreenSpecification {
     @Test
     fun should_display_search_error() {
         val query = "query"
-        setupModule(UnavailableSongService(null))
+        setupModule(SongsServiceUnableToSearchSongs())
 
         launchSongsOverview {
             typeSearchQuery(query)
         } verify {
             searchErrorIsDisplayed()
         }
-
-        unloadKoinModules(replaceModule)
     }
 
     @Test
