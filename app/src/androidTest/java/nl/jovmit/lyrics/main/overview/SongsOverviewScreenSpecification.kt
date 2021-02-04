@@ -1,36 +1,24 @@
 package nl.jovmit.lyrics.main.overview
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.InMemorySongsService
-import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.SongsService
+import nl.jovmit.lyrics.main.UnavailableSongService
 import nl.jovmit.lyrics.main.data.song.*
-import nl.jovmit.lyrics.main.exceptions.SongsServiceException
 import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 
 @RunWith(AndroidJUnit4::class)
 class SongsOverviewScreenSpecification {
 
-    @Rule
-    @JvmField
-    val rule = ActivityTestRule(MainActivity::class.java, true, false)
-
-    @Mock
-    private lateinit var songsService: SongsService
     private lateinit var module: Module
 
     private val song = Song(
@@ -54,7 +42,6 @@ class SongsOverviewScreenSpecification {
 
     @Before
     fun set_up() {
-        MockitoAnnotations.initMocks(this)
         loadKoinModules(songsOverviewModule)
     }
 
@@ -62,7 +49,7 @@ class SongsOverviewScreenSpecification {
     fun should_display_empty_state_when_no_songs_added() = runBlocking {
         setupModule(InMemorySongsService(IdGenerator(), emptySongsList))
 
-        launchSongsOverview(rule) { } verify {
+        launchSongsOverview { } verify {
             songsEmptyStateIsDisplayed()
         }
 
@@ -71,14 +58,14 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun should_not_display_empty_state_when_songs_added() = runBlocking<Unit> {
-        launchSongsOverview(rule) { } verify {
+        launchSongsOverview { } verify {
             songsEmptyStateIsGone()
         }
     }
 
     @Test
     fun should_display_loaded_songs() = runBlocking<Unit> {
-        launchSongsOverview(rule) { } verify {
+        launchSongsOverview { } verify {
             songTitleAndSingerAreDisplayed(song)
             songTitleAndSingerAreDisplayed(anotherSong)
         }
@@ -86,10 +73,9 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun should_display_error_if_loading_songs_fails() = runBlocking {
-        given(songsService.fetchAllSongs()).willThrow(SongsServiceException())
-        setupModule(songsService)
+        setupModule(UnavailableSongService(null))
 
-        launchSongsOverview(rule) { } verify {
+        launchSongsOverview { } verify {
             loadingErrorIsDisplayed()
         }
 
@@ -98,7 +84,7 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun should_open_new_song_screen_upon_click_on_new_song_button() = runBlocking<Unit> {
-        launchSongsOverview(rule) {
+        launchSongsOverview {
             clickOnNewSongButton()
         } verify {
             newSongScreenIsDisplayed()
@@ -107,7 +93,7 @@ class SongsOverviewScreenSpecification {
 
     @Test
     fun should_open_song_details_screen() = runBlocking<Unit> {
-        launchSongsOverview(rule) {
+        launchSongsOverview {
             tapOnSongWithTitle(song.songTitle.value)
         } verify {
             songDetailsScreenIsOpened()
@@ -117,7 +103,7 @@ class SongsOverviewScreenSpecification {
     @Test
     fun should_perform_search() = runBlocking<Unit> {
         val queryMatchingFirstSong = "lyrics"
-        launchSongsOverview(rule) {
+        launchSongsOverview {
             typeSearchQuery(queryMatchingFirstSong)
         } verify {
             songTitleAndSingerAreDisplayed(song)
@@ -128,7 +114,7 @@ class SongsOverviewScreenSpecification {
     @Test
     fun display_all_songs_once_search_is_closed() {
         val queryMatchingFirstSong = "lyrics"
-        launchSongsOverview(rule) {
+        launchSongsOverview {
             typeSearchQuery(queryMatchingFirstSong)
             closeSearch()
         } verify {
@@ -140,11 +126,9 @@ class SongsOverviewScreenSpecification {
     @Test
     fun display_search_error() = runBlocking {
         val query = "query"
-        given(songsService.fetchAllSongs()).willReturn(songsList)
-        given(songsService.search(query)).willThrow(SongsServiceException())
-        setupModule(songsService)
+        setupModule(UnavailableSongService(null))
 
-        launchSongsOverview(rule) {
+        launchSongsOverview {
             typeSearchQuery(query)
         } verify {
             searchErrorIsDisplayed()

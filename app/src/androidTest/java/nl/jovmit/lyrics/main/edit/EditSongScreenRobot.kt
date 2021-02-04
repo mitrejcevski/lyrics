@@ -1,8 +1,7 @@
 package nl.jovmit.lyrics.main.edit
 
-import android.content.Intent
+import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.Song
@@ -11,10 +10,9 @@ import nl.jovmit.lyrics.main.data.song.Song
 annotation class EditSongScreenRobot
 
 fun launchMainScreenScreen(
-    rule: ActivityTestRule<MainActivity>,
     block: EditSongRobot.() -> Unit
 ): EditSongRobot {
-    rule.launchActivity(Intent())
+    launch(MainActivity::class.java)
     return EditSongRobot().apply(block)
 }
 
