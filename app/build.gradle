@@ -22,20 +22,10 @@ android {
         testInstrumentationRunner "nl.jovmit.lyrics.TestAppRunner"
     }
 
-    signingConfigs {
-        release {
-            storeFile file(System.getenv("HOME") + "/keystores/jovmit")
-            storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
-            keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
-            keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
 
