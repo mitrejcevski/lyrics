@@ -27,7 +27,7 @@ jobs:
 
     - name: Tag Release
       run: |
-          ./gradlew releaseNotes
+        ./gradlew releaseNotes
         tagName="$(git describe --abbrev=0 --tags)"
         versionFromTag=${tagName#*_}
         versionCode=$((versionFromTag+1))
