@@ -15,23 +15,18 @@ task releaseNotes {
 private void createTag(String tag, String message) {
     println(tag)
     println(message)
-    exec {
-        commandLine "git", "tag", "-a", tag, "-m", message
-    }
+    ["git", "tag", "-a", tag, "-m", message].execute()
 }
 
-private String commitMessagesSince(String lastTag) {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        if (lastTag.trim().isEmpty()) {
-            commandLine "git", "log", "--oneline"
-        } else {
-            commandLine "git", "log", "$lastTag..HEAD", "--oneline"
-        }
-        standardOutput = stdout
+private static String commitMessagesSince(String lastTag) {
+    def output
+    if (lastTag.trim().isEmpty()) {
+        output = ["git", "log", "--oneline"].execute().text.trim()
+    } else {
+        output = ["git", "log", "$lastTag..HEAD", "--oneline"].execute().text.trim()
     }
     def linesBuilder = new StringBuilder()
-    def lines = stdout.toString().split("\n")
+    def lines = output.toString().split("\n")
     lines.each { line ->
         if (line.trim().isEmpty()) {
             throw new GradleException("No new commits since the last tag")
