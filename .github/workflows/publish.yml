@@ -13,21 +13,32 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Set selected color
-      run: java -version
-    - name: Gradle cache
-      uses: actions/cache@v1
+    - name: Assemble Release Bundle
+      run: |
+          ./gradlew bundleRelease
+    - name: Sign Release
+      uses: r0adkll/sign-android-release@v1
       with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}-${{ hashFiles('buildSrc/src/main/kotlin/**/*.kt') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-    - name: Gradle cache wrapper
-      uses: actions/cache@v1
+        releaseDirectory: app/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
+        alias: ${{ secrets.KEYSTORE_ALIAS }}
+        keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEYSTORE_PRIVATE_KEY_PASSWORD }}
+
+#     - name: Tag Release
+#       run: |
+#         version_name=${GITHUB_REF##*/}
+#         echo "Tagging release with tag $version_name"
+#         git tag $version_name release/$version_name
+#         git push origin --tags
+    - name: Create service_account.json
+      run: echo '${{ secrets.GOOGLE_SERVICES_API }}' > service_account.json
+
+    - name: Deploy to Alpha
+      uses: r0adkll/upload-google-play@v1
       with:
-        path: ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-wrapper${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-wrapper
-    - name: Gradle actions
-      run: ./gradlew testDebugUnitTest :app:bundleRelease publishReleaseBundle
+        serviceAccountJson: service_account.json
+        packageName: nl.jovmit.lyrics
+        releaseFile: app/build/outputs/bundle/release/app-release.aab
+        track: alpha
+        whatsNewDirectory: distribution/
