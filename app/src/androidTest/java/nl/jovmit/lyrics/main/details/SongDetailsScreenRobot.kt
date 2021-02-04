@@ -1,23 +1,31 @@
 package nl.jovmit.lyrics.main.details
 
 import android.content.Context
-import android.content.Intent
+import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.rule.ActivityTestRule
+import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.Song
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @DslMarker
 annotation class SongDetailsScreenRobot
 
 fun launchSongsOverviewScreen(
-    rule: ActivityTestRule<MainActivity>,
     block: SongDetailsRobot.() -> Unit
 ): SongDetailsRobot {
-    rule.launchActivity(Intent())
-    return SongDetailsRobot(rule.activity).apply(block)
+    val scenario = launch(MainActivity::class.java)
+    val activity = runBlocking {
+        suspendCoroutine<MainActivity> { continuation ->
+            scenario.onActivity {
+                continuation.resume(it)
+            }
+        }
+    }
+    return SongDetailsRobot(activity).apply(block)
 }
 
 @SongDetailsScreenRobot

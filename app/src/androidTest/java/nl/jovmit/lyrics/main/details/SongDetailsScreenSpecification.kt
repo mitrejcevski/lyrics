@@ -1,15 +1,12 @@
 package nl.jovmit.lyrics.main.details
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.main.InMemorySongsService
-import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.*
 import nl.jovmit.lyrics.main.testModuleWithCustomSongsService
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
@@ -17,10 +14,6 @@ import org.koin.core.context.unloadKoinModules
 
 @RunWith(AndroidJUnit4::class)
 class SongDetailsScreenSpecification {
-
-    @Rule
-    @JvmField
-    val rule = ActivityTestRule(MainActivity::class.java, true, false)
 
     private val song = Song(
         SongId("::irrelevant song id::"),
@@ -41,7 +34,7 @@ class SongDetailsScreenSpecification {
 
     @Test
     fun should_display_all_song_properties() {
-        launchSongsOverviewScreen(rule) {
+        launchSongsOverviewScreen {
             tapOnSongWithTitle(song.songTitle.value)
         } verify {
             songTitleIsDisplayed(song)
@@ -52,7 +45,7 @@ class SongDetailsScreenSpecification {
 
     @Test
     fun should_prompt_before_deleting_song() {
-        launchSongsOverviewScreen(rule) {
+        launchSongsOverviewScreen {
             tapOnSongWithTitle(song.songTitle.value)
             tapOnDeleteAction()
         } verify {

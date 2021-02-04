@@ -1,12 +1,11 @@
 package nl.jovmit.lyrics.main.overview
 
-import android.content.Intent
 import androidx.appcompat.widget.SearchView
+import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import androidx.test.rule.ActivityTestRule
 import nl.jovmit.lyrics.*
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.Song
@@ -15,10 +14,9 @@ import nl.jovmit.lyrics.main.data.song.Song
 annotation class SongsOverviewScreenRobot
 
 fun launchSongsOverview(
-    rule: ActivityTestRule<MainActivity>,
     block: SongsOverviewRobot.() -> Unit
 ): SongsOverviewRobot {
-    rule.launchActivity(Intent())
+    launch(MainActivity::class.java)
     return SongsOverviewRobot().apply(block)
 }
 
