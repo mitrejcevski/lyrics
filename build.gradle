@@ -1,11 +1,11 @@
 buildscript {
 
-    ext.kotlinVersion = '1.4.21'
+    ext.kotlinVersion = '1.6.21'
     ext.koinVersion = '2.1.5'
-    ext.coroutinesVersion = '1.4.2'
+    ext.coroutinesVersion = '1.6.4'
     ext.mockitoKotlinVersion = '2.2.0'
-    ext.androidArchNavigationVersion = '2.3.3'
-    ext.activityKtxVersion = '1.1.0'
+    ext.androidArchNavigationVersion = '2.5.3'
+    ext.activityKtxVersion = '1.6.1'
     ext.fragmentKtxVersion = '1.2.5'
     ext.materialVersion = '1.2.1'
     ext.swipeRefreshLayoutVersion = '1.1.0'
@@ -16,9 +16,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.google.gms:google-services:4.3.5'
+        classpath 'com.google.gms:google-services:4.3.14'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$androidArchNavigationVersion"
     }
 }
