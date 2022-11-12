@@ -8,7 +8,7 @@ plugins {
 apply from: '../release_notes_generator.gradle'
 
 android {
-
+    namespace 'nl.jovmit.lyrics'
     compileSdk 33
 
     defaultConfig {
