@@ -8,18 +8,21 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentLoginBinding
-import nl.jovmit.lyrics.extensions.*
+import nl.jovmit.lyrics.extensions.hideKeyboard
+import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.extensions.onAnyTextChange
+import nl.jovmit.lyrics.extensions.resetError
+import nl.jovmit.lyrics.extensions.setError
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.CredentialsValidationResult
 import nl.jovmit.lyrics.main.data.result.LoginResult
-import nl.jovmit.lyrics.main.data.user.User
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class Login : Fragment() {
 
     private val loginViewModel by viewModel<LoginViewModel>()
-    private val infoViewModel by sharedViewModel<InfoViewModel>()
+    private val infoViewModel by activityViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentLoginBinding
 
@@ -27,7 +30,7 @@ class Login : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         layout = FragmentLoginBinding.inflate(inflater)
         return layout.root
     }
@@ -85,6 +88,7 @@ class Login : Fragment() {
             when (it) {
                 is CredentialsValidationResult.EmptyUsername -> showEmptyUsernameError()
                 is CredentialsValidationResult.EmptyPassword -> showEmptyPasswordError()
+                else -> {}
             }
         }
     }

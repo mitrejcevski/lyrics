@@ -1,55 +1,65 @@
 package nl.jovmit.lyrics.main.add
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentNewSongBinding
-import nl.jovmit.lyrics.extensions.*
+import nl.jovmit.lyrics.extensions.getSystemService
+import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.extensions.onAnyTextChange
+import nl.jovmit.lyrics.extensions.resetError
+import nl.jovmit.lyrics.extensions.setError
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.NewSongResult
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class NewSong : Fragment() {
 
     private val newSongViewModel by inject<NewSongViewModel>()
-    private val infoViewModel by sharedViewModel<InfoViewModel>()
+    private val infoViewModel by activityViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentNewSongBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+    private val menuProvider = object : MenuProvider {
+
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.song_editor_menu, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            if (menuItem.itemId == R.id.actionDone) {
+                triggerNewSongSubmission()
+                return true
+            }
+            return false
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         layout = FragmentNewSongBinding.inflate(inflater)
         return layout.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         layout.newSongTitleEditText.onAnyTextChange { layout.newSongTitleInput.resetError() }
         layout.newSongPerformerEditText.onAnyTextChange { layout.newSongPerformerInput.resetError() }
         layout.newSongLyricEditText.onAnyTextChange { layout.newSongLyricInput.resetError() }
         observeNewSongLiveData()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.song_editor_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.actionDone) {
-            triggerNewSongSubmission()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun observeNewSongLiveData() {
@@ -61,6 +71,7 @@ class NewSong : Fragment() {
                 is NewSongResult.EmptyLyrics -> displayEmptyLyricsError()
                 is NewSongResult.SongAdded -> displaySongAddingSuccess()
                 is NewSongResult.ErrorAddingSong -> displayErrorSavingSong()
+                is NewSongResult.Valid -> {}
             }
         }
     }

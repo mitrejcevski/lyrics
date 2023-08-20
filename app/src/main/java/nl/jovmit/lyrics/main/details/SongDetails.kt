@@ -1,7 +1,13 @@
 package nl.jovmit.lyrics.main.details
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -12,46 +18,53 @@ import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.song.Song
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SongDetails : Fragment() {
 
     private val navArguments by navArgs<SongDetailsArgs>()
     private val songDetailsViewModel by viewModel<SongDetailsViewModel>()
-    private val infoViewModel by sharedViewModel<InfoViewModel>()
+    private val infoViewModel by activityViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentSongDetailsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+    private val menuProvider = object : MenuProvider {
+
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.song_details_menu, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.actionDelete -> {
+                    deleteSong()
+                    true
+                }
+
+                R.id.actionEdit -> {
+                    editSong()
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         layout = FragmentSongDetailsBinding.inflate(inflater)
         return layout.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         observeSongDetailsLiveData()
         songDetailsViewModel.fetchSongById(navArguments.songId)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.song_details_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.actionDelete -> deleteSong()
-            R.id.actionEdit -> editSong()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun editSong() {
@@ -71,6 +84,7 @@ class SongDetails : Fragment() {
                 is SongResult.Fetched -> displaySongData(it.song)
                 is SongResult.Deleted -> onSongDeleted()
                 is SongResult.ErrorDeleting -> displayErrorDeletingSong()
+                else -> {}
             }
         }
     }

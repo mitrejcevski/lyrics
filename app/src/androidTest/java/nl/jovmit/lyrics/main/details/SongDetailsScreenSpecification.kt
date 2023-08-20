@@ -23,7 +23,7 @@ class SongDetailsScreenSpecification {
     )
 
     private val songsOverviewModule = module {
-        factory<SongsService>(override = true) { InMemorySongsService(get(), listOf(song)) }
+        factory<SongsService>() { InMemorySongsService(get(), listOf(song)) }
     }
 
     @Before
@@ -56,7 +56,7 @@ class SongDetailsScreenSpecification {
     fun tearDown() {
         unloadKoinModules(songsOverviewModule)
         val resetModule = module {
-            factory<SongsService>(override = true) { InMemorySongsService(get()) }
+            factory<SongsService>() { InMemorySongsService(get()) }
         }
         loadKoinModules(resetModule)
     }

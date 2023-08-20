@@ -8,20 +8,24 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentRegisterBinding
-import nl.jovmit.lyrics.extensions.*
+import nl.jovmit.lyrics.extensions.hideKeyboard
+import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.extensions.onAnyTextChange
+import nl.jovmit.lyrics.extensions.resetError
+import nl.jovmit.lyrics.extensions.setError
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.CredentialsValidationResult
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class Register : Fragment() {
 
     private val registerViewModel by viewModel<RegisterViewModel>()
     private val userPreferencesViewModel by viewModel<UserPreferencesViewModel>()
-    private val infoViewModel by sharedViewModel<InfoViewModel>()
+    private val infoViewModel by activityViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentRegisterBinding
 
@@ -29,7 +33,7 @@ class Register : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         layout = FragmentRegisterBinding.inflate(inflater)
         return layout.root
     }
@@ -95,6 +99,7 @@ class Register : Fragment() {
             when (it) {
                 is CredentialsValidationResult.EmptyUsername -> showEmptyUsernameError()
                 is CredentialsValidationResult.EmptyPassword -> showEmptyPasswordError()
+                else -> {}
             }
         }
     }

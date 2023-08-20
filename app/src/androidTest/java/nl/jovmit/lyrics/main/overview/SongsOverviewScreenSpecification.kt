@@ -38,8 +38,8 @@ class SongsOverviewScreenSpecification {
     private val songsList = listOf(song, anotherSong)
     private val songsOverviewModule = module {
         val service = InMemorySongsService(IdGenerator(), songsList)
-        factory<SongsService>(override = true) { service }
-        factory<PreferencesManager>(override = true) {
+        factory<SongsService>() { service }
+        factory<PreferencesManager>() {
             InMemoryPreferencesManager().also {
                 val loggedInUser = User("userId", "username", "password", "about")
                 it.loggedInUser(loggedInUser)
@@ -154,7 +154,7 @@ class SongsOverviewScreenSpecification {
 
     private fun setupModule(songsService: SongsService): Module {
         val module = module {
-            factory(override = true) { songsService }
+            factory() { songsService }
         }
         loadKoinModules(module)
         return module
@@ -164,8 +164,8 @@ class SongsOverviewScreenSpecification {
     fun tear_down() {
         unloadKoinModules(songsOverviewModule)
         val resetModule = module {
-            factory<SongsService>(override = true) { InMemorySongsService(get()) }
-            factory<PreferencesManager>(override = true) { InMemoryPreferencesManager() }
+            factory<SongsService>() { InMemorySongsService(get()) }
+            factory<PreferencesManager>() { InMemoryPreferencesManager() }
         }
         loadKoinModules(resetModule)
     }

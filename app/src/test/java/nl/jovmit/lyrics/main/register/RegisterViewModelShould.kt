@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyBlocking
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
@@ -72,7 +73,7 @@ class RegisterViewModelShould {
 
         viewModel.register(username, password, about)
 
-        verifyZeroInteractions(authRepository)
+        verifyNoMoreInteractions(authRepository)
     }
 
     @Test

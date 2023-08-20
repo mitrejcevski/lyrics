@@ -1,7 +1,5 @@
 package nl.jovmit.lyrics.main.auth
 
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.main.data.user.LoginData
 import nl.jovmit.lyrics.main.data.user.RegistrationData
@@ -9,6 +7,8 @@ import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 import nl.jovmit.lyrics.main.exceptions.UserNotFoundException
 import nl.jovmit.lyrics.main.exceptions.UsernameTakenException
 import nl.jovmit.lyrics.utils.RegistrationDataBuilder.Companion.aRegistrationData
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.regex.Pattern

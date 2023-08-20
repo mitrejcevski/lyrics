@@ -27,8 +27,8 @@ class LoginScreenSpecification {
     private val authService = InMemoryAuthService(IdGenerator())
 
     private val loginModule = module {
-        factory<PreferencesManager>(override = true) { preferencesManager }
-        factory<AuthenticationService>(override = true) { authService }
+        factory<PreferencesManager>() { preferencesManager }
+        factory<AuthenticationService>() { authService }
     }
 
     @Before
@@ -83,7 +83,7 @@ class LoginScreenSpecification {
     @Test
     fun should_display_offline_error() {
         val replaceModule = module {
-            factory<AuthenticationService>(override = true) { OfflineAuthService() }
+            factory<AuthenticationService>() { OfflineAuthService() }
         }
         loadKoinModules(replaceModule)
 
@@ -102,8 +102,8 @@ class LoginScreenSpecification {
     fun tearDown() {
         unloadKoinModules(loginModule)
         val resetModule = module {
-            factory<PreferencesManager>(override = true) { InMemoryPreferencesManager() }
-            factory<AuthenticationService>(override = true) { InMemoryAuthService(get()) }
+            factory<PreferencesManager>() { InMemoryPreferencesManager() }
+            factory<AuthenticationService>() { InMemoryAuthService(get()) }
         }
         loadKoinModules(resetModule)
     }

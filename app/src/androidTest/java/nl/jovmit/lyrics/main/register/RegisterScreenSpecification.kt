@@ -31,8 +31,8 @@ class RegisterScreenSpecification {
     private val loggedInUser = User(userId, username, password, about)
 
     private val registrationModule = module {
-        factory<PreferencesManager>(override = true) { preferencesManager }
-        factory<AuthenticationService>(override = true) { authService }
+        factory<PreferencesManager>() { preferencesManager }
+        factory<AuthenticationService>() { authService }
     }
 
     @Before
@@ -104,7 +104,7 @@ class RegisterScreenSpecification {
     @Test
     fun should_display_offline_error() {
         val replaceModule = module {
-            factory<AuthenticationService>(override = true) { OfflineAuthService() }
+            factory<AuthenticationService>() { OfflineAuthService() }
         }
         loadKoinModules(replaceModule)
 
@@ -123,8 +123,8 @@ class RegisterScreenSpecification {
     fun tearDown() {
         unloadKoinModules(registrationModule)
         val resetModule = module {
-            factory<PreferencesManager>(override = true) { InMemoryPreferencesManager() }
-            factory<AuthenticationService>(override = true) { InMemoryAuthService(get()) }
+            factory<PreferencesManager>() { InMemoryPreferencesManager() }
+            factory<AuthenticationService>() { InMemoryAuthService(get()) }
         }
         loadKoinModules(resetModule)
     }

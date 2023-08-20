@@ -32,7 +32,7 @@ class EditSongScreenSpecification {
     private val songsList = listOf(song, anotherSong)
     private val songsOverviewModule = module {
         val service = InMemorySongsService(IdGenerator(), songsList)
-        factory<SongsService>(override = true) { service }
+        factory<SongsService>() { service }
     }
 
     @Before
@@ -83,7 +83,7 @@ class EditSongScreenSpecification {
     fun show_error_when_song_updating_fails() {
         val replaceModule = module {
             val songsService = SongsServiceUnableToUpdateSong(songsList)
-            factory<SongsService>(override = true) { songsService }
+            factory<SongsService>() { songsService }
         }
         loadKoinModules(replaceModule)
 

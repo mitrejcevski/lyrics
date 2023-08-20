@@ -1,24 +1,24 @@
 buildscript {
 
-    ext.kotlinVersion = '1.6.21'
-    ext.koinVersion = '2.1.5'
-    ext.coroutinesVersion = '1.6.4'
+    ext.kotlinVersion = '1.8.20'
+    ext.koinVersion = '3.4.3'
+    ext.coroutinesVersion = '1.7.2'
     ext.mockitoKotlinVersion = '2.2.0'
-    ext.androidArchNavigationVersion = '2.5.3'
-    ext.activityKtxVersion = '1.6.1'
-    ext.fragmentKtxVersion = '1.2.5'
+    ext.androidArchNavigationVersion = '2.7.0'
+    ext.activityKtxVersion = '1.7.2'
+    ext.fragmentKtxVersion = '1.6.1'
     ext.materialVersion = '1.2.1'
     ext.swipeRefreshLayoutVersion = '1.1.0'
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.gms:google-services:4.3.15'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$androidArchNavigationVersion"
     }
 }
@@ -27,10 +27,6 @@ allprojects {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

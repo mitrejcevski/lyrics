@@ -1,6 +1,7 @@
 package nl.jovmit.lyrics.main.add
 
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
@@ -52,6 +53,6 @@ class NewSongViewModelShould {
         viewModel.addNewSong(title, "", lyrics)
         viewModel.addNewSong(title, performer, "")
 
-        verifyZeroInteractions(songsRepository)
+        verifyNoMoreInteractions(songsRepository)
     }
 }

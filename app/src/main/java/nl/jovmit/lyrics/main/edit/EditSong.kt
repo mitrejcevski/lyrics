@@ -1,7 +1,13 @@
 package nl.jovmit.lyrics.main.edit
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,7 +22,7 @@ import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
 import nl.jovmit.lyrics.main.details.SongDetailsViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditSong : Fragment() {
@@ -24,25 +30,35 @@ class EditSong : Fragment() {
     private val navArguments by navArgs<EditSongArgs>()
     private val updateSongViewModel by viewModel<UpdateSongViewModel>()
     private val songDetailViewModel by viewModel<SongDetailsViewModel>()
-    private val infoViewModel by sharedViewModel<InfoViewModel>()
+    private val infoViewModel by activityViewModel<InfoViewModel>()
 
     private lateinit var layout: FragmentEditSongBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+    private val menuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.song_editor_menu, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            if (menuItem.itemId == R.id.actionDone) {
+                updateSong()
+                return true
+            }
+            return false
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         layout = FragmentEditSongBinding.inflate(inflater)
         return layout.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         observeSongDetail()
         observeSongUpdate()
         songDetailViewModel.fetchSongById(navArguments.songId)
@@ -53,6 +69,7 @@ class EditSong : Fragment() {
             when (it) {
                 is SongResult.Loading -> displayLoading(it.loading)
                 is SongResult.Fetched -> applySongValues(it.song)
+                else -> {}
             }
         }
     }
@@ -69,17 +86,6 @@ class EditSong : Fragment() {
         layout.editSongLyricEditText.setText(song.songLyric.lyrics)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.song_editor_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.actionDone) {
-            updateSong()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun updateSong() {
         val title = SongTitle(layout.editSongTitleEditText.text.toString())
         val performer = SongPerformer(layout.editSongPerformerEditText.text.toString())
@@ -93,6 +99,7 @@ class EditSong : Fragment() {
                 is SongResult.Loading -> displayLoading(it.loading)
                 is SongResult.Updated -> handleSuccessfulSongUpdate()
                 is SongResult.ErrorUpdating -> handleFailedSongUpdate()
+                else -> {}
             }
         }
     }

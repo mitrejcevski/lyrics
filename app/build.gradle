@@ -9,12 +9,12 @@ apply from: '../release_notes_generator.gradle'
 
 android {
     namespace 'nl.jovmit.lyrics'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "nl.jovmit.lyrics"
         minSdkVersion 24
-        targetSdk 33
+        targetSdk 34
         versionCode 16
         versionName "1.0"
         testInstrumentationRunner "nl.jovmit.lyrics.TestAppRunner"
@@ -31,8 +31,13 @@ android {
         enabled = true
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     testOptions {
@@ -47,31 +52,32 @@ android {
 }
 
 dependencies {
-    implementation "com.google.android.material:material:1.7.0"
+    implementation "com.google.android.material:material:1.9.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
     implementation "androidx.activity:activity-ktx:$activityKtxVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
-    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.core:core-ktx:1.10.1"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-    implementation "org.koin:koin-android:$koinVersion"
-    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+    implementation "io.insert-koin:koin-core:$koinVersion"
+    implementation "io.insert-koin:koin-android:$koinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$androidArchNavigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$androidArchNavigationVersion"
-    implementation 'com.google.firebase:firebase-firestore:24.4.0'
+    implementation 'com.google.firebase:firebase-firestore:24.7.0'
 
-    androidTestImplementation "androidx.test.ext:junit:1.1.4"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     androidTestImplementation "androidx.test:rules:1.5.0"
 
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.9.1"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:5.9.1"
-    testImplementation "org.koin:koin-test:$koinVersion"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.9.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.9.2"
+    testImplementation "io.insert-koin:koin-test:$koinVersion"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
-    testImplementation("org.mockito:mockito-junit-jupiter:3.6.28")
+    testImplementation "org.mockito:mockito-junit-jupiter:3.6.28"
+    testImplementation "org.mockito:mockito-inline:5.2.0"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.9.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.9.2"
 }

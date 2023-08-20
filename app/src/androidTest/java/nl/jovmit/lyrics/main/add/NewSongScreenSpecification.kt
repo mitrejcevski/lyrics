@@ -54,7 +54,7 @@ class NewSongScreenSpecification {
     @Test
     fun should_show_error_saving_song() {
         val replaceModule = module {
-            factory<SongsService>(override = true) { SongsServiceUnableToAddSong() }
+            factory<SongsService>() { SongsServiceUnableToAddSong() }
         }
         loadKoinModules(replaceModule)
 
@@ -72,7 +72,7 @@ class NewSongScreenSpecification {
     @After
     fun tearDown() {
         val resetModule = module {
-            factory<SongsService>(override = true) { InMemorySongsService(get()) }
+            factory<SongsService>() { InMemorySongsService(get()) }
         }
         loadKoinModules(resetModule)
     }

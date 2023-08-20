@@ -1,65 +1,74 @@
 package nl.jovmit.lyrics.main.overview
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentSongsOverviewBinding
-import nl.jovmit.lyrics.extensions.*
+import nl.jovmit.lyrics.extensions.applyDefaultColors
+import nl.jovmit.lyrics.extensions.listen
+import nl.jovmit.lyrics.extensions.onCollapse
+import nl.jovmit.lyrics.extensions.onQuerySubmit
+import nl.jovmit.lyrics.extensions.setupWithLinearLayoutManager
 import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SongsOverview : Fragment() {
 
     private val songsAdapter: SongsAdapter by lazy { SongsAdapter() }
     private val songsViewModel by viewModel<SongsViewModel>()
-    private val infoViewModel by sharedViewModel<InfoViewModel>()
+    private val infoViewModel by activityViewModel<InfoViewModel>()
     private val userPreferencesViewModel by viewModel<UserPreferencesViewModel>()
 
     private lateinit var layout: FragmentSongsOverviewBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+    private val menuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.songs_overview_menu, menu)
+            val searchMenuItem = menu.findItem(R.id.actionSearch)
+            val searchView = searchMenuItem.actionView as SearchView
+            searchView.onQuerySubmit { songsViewModel.search(it) }
+            searchMenuItem.onCollapse { songsViewModel.fetchSongs() }
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            if (menuItem.itemId == R.id.actionLogout) {
+                performLogout()
+                return true
+            }
+            return false
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         layout = FragmentSongsOverviewBinding.inflate(inflater)
         return layout.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         layout.songsOverviewSwipeRefresh.applyDefaultColors()
         layout.songsOverviewSwipeRefresh.setOnRefreshListener { fetchSongs() }
         layout.songsOverviewNewSongButton.setOnClickListener { openNewSong() }
         setupRecyclerView()
         observeSongsLiveData()
         fetchSongs()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.songs_overview_menu, menu)
-        val searchMenuItem = menu.findItem(R.id.actionSearch)
-        val searchView = searchMenuItem.actionView as SearchView
-        searchView.onQuerySubmit { songsViewModel.search(it) }
-        searchMenuItem.onCollapse { songsViewModel.fetchSongs() }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.actionLogout) {
-            performLogout()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun performLogout() {
