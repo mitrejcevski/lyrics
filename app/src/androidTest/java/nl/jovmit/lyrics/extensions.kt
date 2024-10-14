@@ -20,7 +20,7 @@ import android.widget.AutoCompleteTextView
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 
-val toolbarBackButton: ViewInteraction = onView(withContentDescription(R.string.abc_action_bar_up_description))
+val toolbarBackButton: ViewInteraction = onView(withContentDescription("Navigate Up"))
 
 val isDisplayed: ViewAssertion = matches(isDisplayed())
 
