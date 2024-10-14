@@ -18,6 +18,7 @@ import nl.jovmit.lyrics.main.overview.SongsRepository
 import nl.jovmit.lyrics.main.overview.SongsViewModel
 import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.main.preferences.PreferencesManager
+import nl.jovmit.lyrics.main.preferences.SharedPreferencesManager
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
 import nl.jovmit.lyrics.main.register.RegisterViewModel
 import nl.jovmit.lyrics.utils.IdGenerator
@@ -31,14 +32,14 @@ val mainModule = module {
     single { FirebaseFirestore.getInstance() }
     single<CoroutineDispatchers> { AppCoroutineDispatchers() }
     single { IdGenerator() }
-//    single<SongsService> { FirebaseSongsService(get()) }
-    single<SongsService> { InMemorySongsService(IdGenerator(), generateSongs()) }
+    single<SongsService> { FirebaseSongsService(get()) }
+//    single<SongsService> { InMemorySongsService(IdGenerator(), generateSongs()) }
     factory { SongsRepository(get()) }
     factory { CredentialsValidator() }
     single<AuthenticationService> { InMemoryAuthService(get()) }
     factory { AuthenticationRepository(get()) }
-    single<PreferencesManager> { InMemoryPreferencesManager() }
-//    single<PreferencesManager> { SharedPreferencesManager(get()) }
+//    single<PreferencesManager> { InMemoryPreferencesManager() }
+    single<PreferencesManager> { SharedPreferencesManager(get()) }
 
     viewModel { SongsViewModel(get(), get()) }
     viewModel { NewSongViewModel(get(), get()) }
