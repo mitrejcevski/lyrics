@@ -16,7 +16,7 @@ android {
         minSdkVersion 24
         targetSdk 34
         versionCode 16
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "nl.jovmit.lyrics.TestAppRunner"
     }
 
