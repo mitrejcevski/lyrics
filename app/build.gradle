@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("com.google.gms.google-services")
-    id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.navigation.safe.args)
 }
 
 apply from: '../release_notes_generator.gradle'
@@ -52,6 +52,16 @@ android {
 }
 
 dependencies {
+    def kotlinVersion = '1.8.20'
+    def koinVersion = '3.4.3'
+    def coroutinesVersion = '1.7.2'
+    def mockitoKotlinVersion = '2.2.0'
+    def androidArchNavigationVersion = '2.7.0'
+    def activityKtxVersion = '1.7.2'
+    def fragmentKtxVersion = '1.6.1'
+    def materialVersion = '1.2.1'
+    def swipeRefreshLayoutVersion = '1.1.0'
+
     implementation "com.google.android.material:material:1.9.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
     implementation "androidx.activity:activity-ktx:$activityKtxVersion"
