@@ -1,4 +1,4 @@
-task releaseNotes {
+tasks.register("releaseNotes") {
     doLast {
         println("Generating release notes")
         def lastTag = "git describe --tags --abbrev=0".execute().text.trim()
