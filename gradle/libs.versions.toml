@@ -6,10 +6,48 @@
     kotlinVersion = "1.8.20"
     googleServicesVersion = "4.4.2"
     androidArchNavigationVersion = "2.7.0"
+    koinVersion = "3.4.3"
+    coroutinesVersion = "1.7.2"
+    mockitoKotlinVersion = "2.2.0"
+    activityKtxVersion = "1.7.2"
+    fragmentKtxVersion = "1.6.1"
+    swipeRefreshLayoutVersion = "1.1.0"
 
 [libraries]
+android-material = { module = "com.google.android.material:material", version = "1.9.0" }
+androidx-swipeToRefresh = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipeRefreshLayoutVersion" }
+androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "activityKtxVersion" }
+androidx-fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtxVersion" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.10.1" }
+androidx-constraint-layout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
+androidx-navigation = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidArchNavigationVersion" }
+androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidArchNavigationVersion" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinVersion" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinVersion" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version = "24.7.0" }
+
+androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.1.5" }
+androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version = "3.5.1" }
+androidx-test-rules = { module = "androidx.test:rules", version = "1.5.0" }
+
+jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.9.2" }
+jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version = "5.9.2" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinVersion" }
+androidx-testing = { module = "androidx.arch.core:core-testing", version = "2.2.0" }
+mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version.ref = "mockitoKotlinVersion" }
+mockito-jupiter = { module = "org.mockito:mockito-junit-jupiter", version = "5.18.0" }
+mockito-inline = { module = "org.mockito:mockito-inline", version = "5.2.0" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesVersion" }
+jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version = "5.9.2" }
 
 [bundles]
+androidx = ["android-material", "androidx-swipeToRefresh", "androidx-activity", "androidx-fragment", "androidx-core-ktx", "androidx-constraint-layout", "androidx-navigation", "androidx-navigation-fragment"]
+koin = ["koin-core", "koin-android"]
+coroitines = ["coroutines-core", "coroutines-android"]
+ui-test = ["androidx-test-junit", "androidx-test-espresso", "androidx-test-rules"]
+unit-test = ["jupiter-api", "jupiter-params", "koin-test", "androidx-testing", "mockito-kotlin", "mockito-jupiter", "mockito-inline", "coroutines-test", "jupiter-engine"]
 
 [plugins]
     android-application = { id = "com.android.application", version.ref = "agpVersion" }
