@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.navigation.safe.args)
+    alias(libs.plugins.kotlin.compose)
 }
 
 apply(from = rootProject.file("release_notes_generator.gradle"))
@@ -30,6 +31,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     compileOptions {
@@ -51,10 +53,14 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.koin)
     implementation(libs.bundles.coroitines)
+    implementation(libs.bundles.compose)
     implementation(libs.firebase.firestore)
+
+    debugImplementation(libs.bundles.compose.debug)
 
     androidTestImplementation(libs.bundles.ui.test)
 
