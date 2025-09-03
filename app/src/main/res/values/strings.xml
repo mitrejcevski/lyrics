@@ -33,4 +33,6 @@
     <string name="errorEmptyPassword">Password required</string>
     <string name="errorIncorrectCredentials">Incorrect login credentials</string>
     <string name="logout">Logout</string>
+    <string name="cdNavigateUp">Navigate Up</string>
+    <string name="cdActionDone">Done</string>
 </resources>
