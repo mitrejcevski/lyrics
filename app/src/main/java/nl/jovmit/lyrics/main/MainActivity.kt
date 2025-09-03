@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navigationController)
         navigationController.addOnDestinationChangedListener { _, destination, _ ->
             setupToolbarBackButtonBasedOn(destination)
+            setupToolbarVisibilityBasedOn(destination)
         }
     }
 
@@ -45,6 +46,14 @@ class MainActivity : AppCompatActivity() {
             else -> true
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(showToolbarBackButton)
+    }
+
+    private fun setupToolbarVisibilityBasedOn(destination: NavDestination) {
+        if (destination.id == R.id.newSong) {
+            supportActionBar?.hide()
+        } else {
+            supportActionBar?.show()
+        }
     }
 
     private fun observeInfoViewModel() {
