@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -19,7 +20,9 @@ import nl.jovmit.lyrics.extensions.onAnyTextChange
 import nl.jovmit.lyrics.extensions.resetError
 import nl.jovmit.lyrics.extensions.setError
 import nl.jovmit.lyrics.main.InfoViewModel
+import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.result.NewSongResult
+import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -50,16 +53,26 @@ class NewSong : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        layout = FragmentNewSongBinding.inflate(inflater)
-        return layout.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    NewSongScreen(
+                        onNavigateUp = { (requireActivity() as MainActivity).onSupportNavigateUp() },
+                        onSongSaved = { displaySongAddingSuccess() }
+                    )
+                }
+            }
+        }
+//        layout = FragmentNewSongBinding.inflate(inflater)
+//        return layout.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        layout.newSongTitleEditText.onAnyTextChange { layout.newSongTitleInput.resetError() }
-        layout.newSongPerformerEditText.onAnyTextChange { layout.newSongPerformerInput.resetError() }
-        layout.newSongLyricEditText.onAnyTextChange { layout.newSongLyricInput.resetError() }
-        observeNewSongLiveData()
+//        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
+//        layout.newSongTitleEditText.onAnyTextChange { layout.newSongTitleInput.resetError() }
+//        layout.newSongPerformerEditText.onAnyTextChange { layout.newSongPerformerInput.resetError() }
+//        layout.newSongLyricEditText.onAnyTextChange { layout.newSongLyricInput.resetError() }
+//        observeNewSongLiveData()
     }
 
     private fun observeNewSongLiveData() {
