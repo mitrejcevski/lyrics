@@ -12,6 +12,7 @@ class InMemorySongsService(
 ) : SongsService {
 
     private val songs = mutableListOf<Song>()
+    private var isUnavailable = false
 
     init {
         this.songs.addAll(songsList)
@@ -22,6 +23,7 @@ class InMemorySongsService(
     }
 
     override suspend fun addNewSong(newSongData: SongData) {
+        if (isUnavailable) throw SongsServiceException("Cannot add song")
         with(newSongData) {
             val songId = SongId(idGenerator.next())
             val newSong = Song(songId, songTitle, songPerformer, songLyric)
@@ -53,5 +55,9 @@ class InMemorySongsService(
             Song(SongId(songId), songTitle, songPerformer, songLyric)
         }
         songs[songPosition] = updatedSong
+    }
+
+    fun setUnavailable() {
+        isUnavailable = true
     }
 }
