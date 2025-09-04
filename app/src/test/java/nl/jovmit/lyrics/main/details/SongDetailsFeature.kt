@@ -1,6 +1,7 @@
 package nl.jovmit.lyrics.main.details
 
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.inOrder
 import kotlinx.coroutines.runBlocking
@@ -44,7 +45,7 @@ class SongDetailsFeature {
         songsService = InMemorySongsService(idGenerator)
         val songsRepository = SongsRepository(songsService)
         val dispatchers = TestCoroutineDispatchers()
-        songDetailsViewModel = SongDetailsViewModel(songsRepository, dispatchers)
+        songDetailsViewModel = SongDetailsViewModel(songsRepository, dispatchers, SavedStateHandle())
         songDetailsViewModel.songDetailsLiveData().observeForever(songDetailsLiveDataObserver)
     }
 

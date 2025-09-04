@@ -1,5 +1,6 @@
 package nl.jovmit.lyrics.main.details
 
+import androidx.lifecycle.SavedStateHandle
 import com.nhaarman.mockitokotlin2.verifyBlocking
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.CoroutineDispatchers
@@ -22,7 +23,7 @@ class SongDetailsViewModelShould {
     @BeforeEach
     fun set_up() {
         val dispatchers: CoroutineDispatchers = TestCoroutineDispatchers()
-        songDetailsViewModel = SongDetailsViewModel(songsRepository, dispatchers)
+        songDetailsViewModel = SongDetailsViewModel(songsRepository, dispatchers, SavedStateHandle())
     }
 
     @Test

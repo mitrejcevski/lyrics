@@ -47,6 +47,7 @@ class InMemorySongsService(
     }
 
     override suspend fun deleteSongById(songId: String) {
+        if (isUnavailable) throw SongsServiceException("Cannot delete song")
         songs.removeAll { it.songId.value == songId }
     }
 

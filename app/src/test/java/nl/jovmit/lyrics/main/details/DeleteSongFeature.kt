@@ -1,6 +1,7 @@
 package nl.jovmit.lyrics.main.details
 
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import com.nhaarman.mockitokotlin2.inOrder
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
@@ -37,7 +38,7 @@ class DeleteSongFeature {
         val songsService = InMemorySongsService(idGenerator, songs)
         val songsRepository = SongsRepository(songsService)
         val dispatchers = TestCoroutineDispatchers()
-        songDetailsViewModel = SongDetailsViewModel(songsRepository, dispatchers)
+        songDetailsViewModel = SongDetailsViewModel(songsRepository, dispatchers, SavedStateHandle())
         songDetailsViewModel.songDetailsLiveData().observeForever(songDetailsLiveDataObserver)
     }
 
