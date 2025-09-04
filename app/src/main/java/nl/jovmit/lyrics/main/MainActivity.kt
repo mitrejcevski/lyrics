@@ -49,10 +49,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbarVisibilityBasedOn(destination: NavDestination) {
-        if (destination.id == R.id.newSong) {
-            supportActionBar?.hide()
-        } else {
-            supportActionBar?.show()
+        when(destination.id) {
+            R.id.newSong -> supportActionBar?.hide()
+            R.id.songsOverview -> supportActionBar?.hide()
+            else -> supportActionBar?.show()
         }
     }
 
