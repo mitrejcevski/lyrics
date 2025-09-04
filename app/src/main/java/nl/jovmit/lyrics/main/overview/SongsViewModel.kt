@@ -1,76 +1,72 @@
 package nl.jovmit.lyrics.main.overview
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.delay
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.common.CoroutineViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
 
 class SongsViewModel(
-    private val songsRepository: SongsRepository,
-    private val dispatchers: CoroutineDispatchers
-) : CoroutineViewModel(dispatchers) {
+  private val songsRepository: SongsRepository,
+  private val dispatchers: CoroutineDispatchers
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SongsOverviewScreenState())
-    val uiState: StateFlow<SongsOverviewScreenState> = _uiState
+  private val _uiState = MutableStateFlow(SongsOverviewScreenState())
+  val uiState: StateFlow<SongsOverviewScreenState> = _uiState
 
-    private val songsLiveData = MutableLiveData<SongsResult>()
-    fun songsLiveData(): LiveData<SongsResult> = songsLiveData
+  fun updateSearchQuery(newQuery: String) {
+    _uiState.update { it.copy(searchQuery = newQuery) }
+  }
 
-    fun updateSearchQuery(newQuery: String) {
-        _uiState.update { it.copy(searchQuery = newQuery) }
+  fun dismissSongsLoadingError() {
+    _uiState.update { it.copy(isErrorLoadingSongs = false) }
+  }
+
+  fun dismissSongsSearchingError() {
+    _uiState.update { it.copy(isErrorSearching = false) }
+  }
+
+  fun fetchSongs() {
+    _uiState.update { it.copy(isLoading = true) }
+    viewModelScope.launch {
+      val songsResult = withContext(dispatchers.background) {
+        songsRepository.fetchAllSongs()
+      }
+      onSongsResult(songsResult)
     }
+  }
 
-    fun dismissSongsLoadingError() {
-        _uiState.update { it.copy(isErrorLoadingSongs = false) }
+  fun performSearch() {
+    _uiState.update { it.copy(isLoading = true) }
+    viewModelScope.launch {
+      val result = withContext(dispatchers.background) {
+        songsRepository.searchSongs(uiState.value.searchQuery)
+      }
+      onSongsResult(result)
     }
+  }
 
-    fun dismissSongsSearchingError() {
-        _uiState.update { it.copy(isErrorSearching = false) }
+  private fun onSongsResult(result: SongsResult) {
+    when (result) {
+      is SongsResult.Fetched -> onSongsLoaded(result)
+      is SongsResult.FetchingError -> onErrorLoadingSongs()
+      is SongsResult.SearchError -> onErrorSearchingSongs()
     }
+  }
 
-    fun fetchSongs() {
-        songsLiveData.value = SongsResult.Loading(true)
-        _uiState.update { it.copy(isLoading = true) }
-        launch {
-            val songsResult = withContext(dispatchers.background) {
-                songsRepository.fetchAllSongs()
-            }
-            onSongsResult(songsResult)
-            songsLiveData.value = songsResult
-            songsLiveData.value = SongsResult.Loading(false)
-        }
-    }
+  private fun onSongsLoaded(result: SongsResult.Fetched) {
+    _uiState.update { it.copy(isLoading = false, songs = result.songs) }
+  }
 
-    fun performSearch() {
-        search(uiState.value.searchQuery)
-    }
+  private fun onErrorSearchingSongs() {
+    _uiState.update { it.copy(isLoading = false, isErrorSearching = true) }
+  }
 
-    fun search(query: String) {
-        songsLiveData.value = SongsResult.Loading(true)
-        _uiState.update { it.copy(isLoading = true) }
-        launch {
-            val result = withContext(dispatchers.background) {
-                songsRepository.searchSongs(query)
-            }
-            onSongsResult(result)
-            songsLiveData.value = result
-            songsLiveData.value = SongsResult.Loading(false)
-        }
-    }
-
-    private fun onSongsResult(result: SongsResult) {
-        when (result) {
-            is SongsResult.Fetched -> _uiState.update { it.copy(isLoading = false, songs = result.songs) }
-            is SongsResult.FetchingError -> _uiState.update { it.copy(isLoading = false, isErrorLoadingSongs = true) }
-            is SongsResult.SearchError -> _uiState.update { it.copy(isLoading = false, isErrorSearching = true) }
-            else -> {}
-        }
-    }
+  private fun onErrorLoadingSongs() {
+    _uiState.update { it.copy(isLoading = false, isErrorLoadingSongs = true) }
+  }
 }
