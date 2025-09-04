@@ -1,7 +1,5 @@
 package nl.jovmit.lyrics.main.add
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,10 +19,6 @@ class NewSongViewModel(
   private val songsRepository: SongsRepository,
   private val dispatchers: CoroutineDispatchers
 ) : ViewModel() {
-
-  private val newSongLiveData = MutableLiveData<NewSongResult>()
-
-  fun newSongLiveData(): LiveData<NewSongResult> = newSongLiveData
 
   private val _uiState = MutableStateFlow(NewSongScreenState())
   val uiState: StateFlow<NewSongScreenState> = _uiState
@@ -46,28 +40,17 @@ class NewSongViewModel(
   }
 
   fun saveSong() {
-    addNewSong(
-      title = uiState.value.songTitle,
-      performer = uiState.value.performerName,
-      lyrics = uiState.value.lyrics
-    )
-  }
-
-  fun addNewSong(title: String, performer: String, lyrics: String) {
     viewModelScope.launch {
       _uiState.update { it.copy(isLoading = true) }
-      newSongLiveData.value = NewSongResult.Loading(true)
       val result = withContext(dispatchers.background) {
-        val newSong = createSongFor(title, performer, lyrics)
+        val newSong = createSongData()
         submitSongToRepository(newSong)
       }
-      updateUiStateFor(result)
-      newSongLiveData.value = result
-      newSongLiveData.value = NewSongResult.Loading(false)
+      onNewSongResult(result)
     }
   }
 
-  private fun updateUiStateFor(result: NewSongResult) {
+  private fun onNewSongResult(result: NewSongResult) {
     when (result) {
       is NewSongResult.SongAdded -> onSongAdded()
       is NewSongResult.ErrorAddingSong -> onErrorAddingSong()
@@ -107,11 +90,11 @@ class NewSongViewModel(
     }
   }
 
-  private fun createSongFor(title: String, performer: String, lyrics: String): SongData {
+  private fun createSongData(): SongData {
     return SongData(
-      SongTitle(title),
-      SongPerformer(performer),
-      SongLyrics(lyrics)
+      SongTitle(uiState.value.songTitle),
+      SongPerformer(uiState.value.performerName),
+      SongLyrics(uiState.value.lyrics)
     )
   }
 }
