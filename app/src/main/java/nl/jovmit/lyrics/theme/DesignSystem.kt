@@ -30,6 +30,9 @@ data class AppTypography(
   val description: TextStyle,
   val buttonLabel: TextStyle,
   val emptyStateLabel: TextStyle,
+  val labelLarge: TextStyle,
+  val labelMedium: TextStyle,
+  val bodyDetails: TextStyle
 )
 
 @Immutable
@@ -68,7 +71,10 @@ val localAppTypography = staticCompositionLocalOf {
     body = TextStyle.Default,
     description = TextStyle.Default,
     buttonLabel = TextStyle.Default,
-    emptyStateLabel = TextStyle.Default
+    emptyStateLabel = TextStyle.Default,
+    labelLarge = TextStyle.Default,
+    labelMedium = TextStyle.Default,
+    bodyDetails = TextStyle.Default
   )
 }
 

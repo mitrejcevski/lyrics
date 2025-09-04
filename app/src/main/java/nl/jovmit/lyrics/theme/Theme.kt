@@ -59,6 +59,18 @@ private val typography = AppTypography(
   emptyStateLabel = TextStyle(
     fontSize = 20.sp,
     fontWeight = FontWeight.Medium,
+  ),
+  labelLarge = TextStyle(
+    fontSize = 28.sp,
+    fontWeight = FontWeight.Normal
+  ),
+  labelMedium = TextStyle(
+    fontSize = 20.sp,
+    fontWeight = FontWeight.Normal
+  ),
+  bodyDetails = TextStyle(
+    fontSize = 20.sp,
+    fontWeight = FontWeight.W400
   )
 )
 
