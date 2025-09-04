@@ -19,6 +19,7 @@ class InMemorySongsService(
     }
 
     override suspend fun fetchAllSongs(): List<Song> {
+        if (isUnavailable) throw SongsServiceException("Cannot load songs")
         return songs
     }
 
@@ -37,6 +38,7 @@ class InMemorySongsService(
     }
 
     override suspend fun search(query: String): List<Song> {
+        if (isUnavailable) throw SongsServiceException("Cannot add song")
         return songs.filter {
             it.songTitle.value.contains(query, ignoreCase = true) ||
                     it.songPerformer.name.contains(query, ignoreCase = true) ||
