@@ -8,12 +8,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentSongsOverviewBinding
-import nl.jovmit.lyrics.extensions.applyDefaultColors
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.extensions.onCollapse
 import nl.jovmit.lyrics.extensions.onQuerySubmit
@@ -22,6 +22,7 @@ import nl.jovmit.lyrics.main.InfoViewModel
 import nl.jovmit.lyrics.main.data.result.SongsResult
 import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
+import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -45,7 +46,7 @@ class SongsOverview : Fragment() {
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             if (menuItem.itemId == R.id.actionLogout) {
-                performLogout()
+                openRegistration()
                 return true
             }
             return false
@@ -57,22 +58,32 @@ class SongsOverview : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        layout = FragmentSongsOverviewBinding.inflate(inflater)
-        return layout.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    SongsOverviewScreen(
+                        onAddNewSong = { openNewSong() },
+                        onLoggedOut = { openRegistration() },
+                        onOpenSongDetails = { openSongDetails(it) }
+                    )
+                }
+            }
+        }
+//        layout = FragmentSongsOverviewBinding.inflate(inflater)
+//        return layout.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        layout.songsOverviewSwipeRefresh.applyDefaultColors()
-        layout.songsOverviewSwipeRefresh.setOnRefreshListener { fetchSongs() }
-        layout.songsOverviewNewSongButton.setOnClickListener { openNewSong() }
-        setupRecyclerView()
-        observeSongsLiveData()
-        fetchSongs()
+//        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
+//        layout.songsOverviewSwipeRefresh.applyDefaultColors()
+//        layout.songsOverviewSwipeRefresh.setOnRefreshListener { fetchSongs() }
+//        layout.songsOverviewNewSongButton.setOnClickListener { openNewSong() }
+//        setupRecyclerView()
+//        observeSongsLiveData()
+//        fetchSongs()
     }
 
-    private fun performLogout() {
-        userPreferencesViewModel.clearLoggedInUser()
+    private fun openRegistration() {
         val destination = SongsOverviewDirections.openRegistration()
         findNavController().navigate(destination)
     }
