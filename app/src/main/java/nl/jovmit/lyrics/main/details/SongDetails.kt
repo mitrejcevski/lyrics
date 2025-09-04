@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -16,8 +17,10 @@ import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentSongDetailsBinding
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.main.InfoViewModel
+import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.song.Song
+import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -43,7 +46,7 @@ class SongDetails : Fragment() {
                 }
 
                 R.id.actionEdit -> {
-                    editSong()
+                    editSong("")
                     true
                 }
 
@@ -57,18 +60,29 @@ class SongDetails : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        layout = FragmentSongDetailsBinding.inflate(inflater)
-        return layout.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    SongDetailsScreen(
+                        onNavigateUp = {(requireActivity() as MainActivity).onSupportNavigateUp()},
+                        onEditSong = { editSong(it) },
+                        onSongDeleted = { onSongDeleted() }
+                    )
+                }
+            }
+        }
+//        layout = FragmentSongDetailsBinding.inflate(inflater)
+//        return layout.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        observeSongDetailsLiveData()
-        songDetailsViewModel.fetchSongById(navArguments.songId)
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
+//        observeSongDetailsLiveData()
+//        songDetailsViewModel.fetchSongById(navArguments.songId)
+//    }
 
-    private fun editSong() {
-        val direction = SongDetailsDirections.editSong(navArguments.songId)
+    private fun editSong(songId: String) {
+        val direction = SongDetailsDirections.editSong(songId)
         findNavController().navigate(direction)
     }
 
