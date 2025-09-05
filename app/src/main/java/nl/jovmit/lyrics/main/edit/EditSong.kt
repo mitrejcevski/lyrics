@@ -9,9 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionManager
+import kotlinx.coroutines.launch
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentEditSongBinding
 import nl.jovmit.lyrics.extensions.listen
@@ -61,15 +65,16 @@ class EditSong : Fragment() {
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         observeSongDetail()
         observeSongUpdate()
-        songDetailViewModel.fetchSongById(navArguments.songId)
+        songDetailViewModel.loadSong()
     }
 
     private fun observeSongDetail() {
-        songDetailViewModel.songDetailsLiveData().listen(viewLifecycleOwner) {
-            when (it) {
-                is SongResult.Loading -> displayLoading(it.loading)
-                is SongResult.Fetched -> applySongValues(it.song)
-                else -> {}
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                songDetailViewModel.uiState.collect { state ->
+                    displayLoading(state.isLoading)
+                    if (state.song != null) { applySongValues(state.song) }
+                }
             }
         }
     }
