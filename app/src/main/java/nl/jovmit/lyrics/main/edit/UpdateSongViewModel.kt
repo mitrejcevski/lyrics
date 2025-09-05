@@ -1,15 +1,14 @@
 package nl.jovmit.lyrics.main.edit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.jovmit.lyrics.common.CoroutineDispatchers
-import nl.jovmit.lyrics.common.CoroutineViewModel
 import nl.jovmit.lyrics.main.data.result.NewSongResult
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.song.Song
@@ -27,15 +26,12 @@ class UpdateSongViewModel(
   private val songsRepository: SongsRepository,
   private val dispatchers: CoroutineDispatchers,
   savedStateHandle: SavedStateHandle
-) : CoroutineViewModel(dispatchers) {
+) : ViewModel() {
 
   private val args = savedStateHandle.toEditSongArgs()
 
   private val _uiState = MutableStateFlow(EditSongScreenState())
   val uiState: StateFlow<EditSongScreenState> = _uiState
-
-  private val updateLiveData = MutableLiveData<SongResult>()
-  fun updateSongLiveData(): LiveData<SongResult> = updateLiveData
 
   fun setSongData(song: Song) {
     _uiState.update {
@@ -64,54 +60,65 @@ class UpdateSongViewModel(
   }
 
   fun updateSong() {
-    val state = uiState.value
-    updateSong(
-      args.songId,
-      SongTitle(state.songTitle),
-      SongPerformer(state.songPerformer),
-      SongLyrics(state.songLyrics)
-    )
+    val songData = createSongData()
+    val validationResult = songData.validate()
+    if (validationResult != NewSongResult.Valid) {
+      onSongDataValidationResult(validationResult)
+    } else {
+      performSongUpdate(songData)
+    }
   }
 
-  fun updateSong(
-    songId: String,
-    songTitle: SongTitle,
-    songPerformer: SongPerformer,
-    songLyrics: SongLyrics
-  ) {
-    _uiState.update { it.copy(isLoading = true) }
-    launch {
-      updateLiveData.value = SongResult.Loading(true)
+  private fun performSongUpdate(songData: SongData) {
+    viewModelScope.launch {
+      _uiState.update { it.copy(isLoading = true) }
       val result = withContext(dispatchers.background) {
-        val songData = SongData(songTitle, songPerformer, songLyrics)
-        val validationResult = songData.validate()
-        onSongDataValidationResult(validationResult)
-        if (validationResult != NewSongResult.Valid) {
-          SongResult.NotFound
-        } else {
-          songsRepository.updateSong(songId, songData)
-        }
+        songsRepository.updateSong(args.songId, songData)
       }
       onSongUpdateResult(result)
-      updateLiveData.value = result
-      updateLiveData.value = SongResult.Loading(false)
     }
   }
 
   private fun onSongDataValidationResult(result: NewSongResult) {
     when (result) {
-      NewSongResult.EmptyTitle -> _uiState.update { it.copy(isLoading = false, isEmptySongTitleError = true) }
-      NewSongResult.EmptyPerformer -> _uiState.update { it.copy(isLoading = false, isEmptyPerformerNameError = true) }
-      NewSongResult.EmptyLyrics -> _uiState.update { it.copy(isLoading = false, isEmptyLyricsError = true) }
+      NewSongResult.EmptyTitle -> onEmptyTitleError()
+      NewSongResult.EmptyPerformer -> onEmptyPerformerError()
+      NewSongResult.EmptyLyrics -> onEmptyLyricsError()
       else -> {}
     }
   }
 
   private fun onSongUpdateResult(result: SongResult) {
     when (result) {
-      SongResult.Updated -> _uiState.update { it.copy(isLoading = false, songUpdated = true) }
-      SongResult.ErrorUpdating -> _uiState.update { it.copy(isLoading = false, isErrorSavingSong = true) }
+      SongResult.Updated -> onSongUpdated()
+      SongResult.ErrorUpdating -> onErrorUpdatingSong()
       else -> {}
     }
   }
+
+  private fun onErrorUpdatingSong() {
+    _uiState.update { it.copy(isLoading = false, isErrorSavingSong = true) }
+  }
+
+  private fun onSongUpdated() {
+    _uiState.update { it.copy(isLoading = false, songUpdated = true) }
+  }
+
+  private fun onEmptyLyricsError() {
+    _uiState.update { it.copy(isLoading = false, isEmptyLyricsError = true) }
+  }
+
+  private fun onEmptyPerformerError() {
+    _uiState.update { it.copy(isLoading = false, isEmptyPerformerNameError = true) }
+  }
+
+  private fun onEmptyTitleError() {
+    _uiState.update { it.copy(isLoading = false, isEmptySongTitleError = true) }
+  }
+
+  private fun createSongData(): SongData = SongData(
+    SongTitle(uiState.value.songTitle),
+    SongPerformer(uiState.value.songPerformer),
+    SongLyrics(uiState.value.songLyrics)
+  )
 }
