@@ -1,6 +1,7 @@
 package nl.jovmit.lyrics.main.edit
 
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import com.nhaarman.mockitokotlin2.inOrder
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
@@ -43,7 +44,7 @@ class EditSongFeature {
     fun setUp() {
         val songsRepository = SongsRepository(InMemorySongsService(IdGenerator(), songs))
         val dispatchers = TestCoroutineDispatchers()
-        updateSongViewModel = UpdateSongViewModel(songsRepository, dispatchers)
+        updateSongViewModel = UpdateSongViewModel(songsRepository, dispatchers, SavedStateHandle())
         updateSongViewModel.updateSongLiveData().observeForever(updateSongLiveDataObserver)
     }
 
