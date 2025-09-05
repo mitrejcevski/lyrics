@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -20,12 +21,14 @@ import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.databinding.FragmentEditSongBinding
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.main.InfoViewModel
+import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.data.song.Song
 import nl.jovmit.lyrics.main.data.song.SongLyrics
 import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
 import nl.jovmit.lyrics.main.details.SongDetailsViewModel
+import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -57,16 +60,26 @@ class EditSong : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        layout = FragmentEditSongBinding.inflate(inflater)
-        return layout.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    EditSongScreen(
+                        onNavigateUp = { (requireActivity() as MainActivity).onSupportNavigateUp() },
+                        onSongUpdated = { handleSuccessfulSongUpdate() }
+                    )
+                }
+            }
+        }
+//        layout = FragmentEditSongBinding.inflate(inflater)
+//        return layout.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        observeSongDetail()
-        observeSongUpdate()
-        songDetailViewModel.loadSong()
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
+//        observeSongDetail()
+//        observeSongUpdate()
+//        songDetailViewModel.loadSong()
+//    }
 
     private fun observeSongDetail() {
         viewLifecycleOwner.lifecycleScope.launch {
