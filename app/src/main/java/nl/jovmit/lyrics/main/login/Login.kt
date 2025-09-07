@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
@@ -14,8 +15,10 @@ import nl.jovmit.lyrics.extensions.onAnyTextChange
 import nl.jovmit.lyrics.extensions.resetError
 import nl.jovmit.lyrics.extensions.setError
 import nl.jovmit.lyrics.main.InfoViewModel
+import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.result.CredentialsValidationResult
 import nl.jovmit.lyrics.main.data.result.LoginResult
+import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -31,21 +34,31 @@ class Login : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        layout = FragmentLoginBinding.inflate(inflater)
-        return layout.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    LoginScreen(
+                        onNavigateUp = { (requireActivity() as MainActivity).onSupportNavigateUp() },
+                        onLoggedIn = { onLoggedIn() }
+                    )
+                }
+            }
+        }
+//        layout = FragmentLoginBinding.inflate(inflater)
+//        return layout.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        layout.loginActionButton.setOnClickListener { triggerLogin() }
-        layout.loginUsernameEditText.onAnyTextChange {
-            layout.loginUsernameTextInput.resetError()
-        }
-        layout.loginPasswordEditText.onAnyTextChange {
-            layout.loginPasswordTextInput.resetError()
-        }
-        observeLoginLiveData()
-        observeCredentialsValidationLiveData()
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        layout.loginActionButton.setOnClickListener { triggerLogin() }
+//        layout.loginUsernameEditText.onAnyTextChange {
+//            layout.loginUsernameTextInput.resetError()
+//        }
+//        layout.loginPasswordEditText.onAnyTextChange {
+//            layout.loginPasswordTextInput.resetError()
+//        }
+//        observeLoginLiveData()
+//        observeCredentialsValidationLiveData()
+//    }
 
     private fun triggerLogin() {
         val username = layout.loginUsernameEditText.text.toString()
@@ -70,7 +83,7 @@ class Login : Fragment() {
     }
 
     private fun onLoggedIn() {
-        layout.loginUsernameEditText.hideKeyboard()
+//        layout.loginUsernameEditText.hideKeyboard()
         val destination = LoginDirections.openSongsOverview()
         findNavController().navigate(destination)
     }
