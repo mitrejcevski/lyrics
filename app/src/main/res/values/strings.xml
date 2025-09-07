@@ -37,4 +37,5 @@
     <string name="cdNavigateUp">Navigate Up</string>
     <string name="cdActionDone">Done</string>
     <string name="cdActionMore">More Menu</string>
+    <string name="cdTogglePassword">Toggle Password Visibility</string>
 </resources>
