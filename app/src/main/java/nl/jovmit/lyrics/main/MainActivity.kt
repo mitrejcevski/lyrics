@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             R.id.songsOverview -> supportActionBar?.hide()
             R.id.songDetails -> supportActionBar?.hide()
             R.id.editSong -> supportActionBar?.hide()
+            R.id.login -> supportActionBar?.hide()
             else -> supportActionBar?.show()
         }
     }
