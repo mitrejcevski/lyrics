@@ -12,6 +12,7 @@ class InMemoryAuthService(
     private val idGenerator: IdGenerator
 ) : AuthenticationService {
 
+    private var isOffline: Boolean = false
     private val users = mutableListOf<User>()
 
     override suspend fun createUser(registrationData: RegistrationData): User {
@@ -23,6 +24,7 @@ class InMemoryAuthService(
     }
 
     override suspend fun login(loginData: LoginData): User {
+        if (isOffline) throw NetworkUnavailableException()
         validate(loginData)
         val result = users.find { it.username == loginData.username }
         return if (result?.password == loginData.password) {
@@ -30,6 +32,10 @@ class InMemoryAuthService(
         } else {
             throw UserNotFoundException()
         }
+    }
+
+    fun setOffline() {
+        isOffline = true
     }
 
     private fun validate(registrationData: RegistrationData) {
