@@ -10,6 +10,7 @@ import nl.jovmit.lyrics.main.auth.CredentialsValidator
 import nl.jovmit.lyrics.main.auth.InMemoryAuthService
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
+import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import nl.jovmit.lyrics.utils.IdGenerator
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,6 +36,7 @@ class RegisterFeature {
     private val startLoading = RegisterResult.Loading(true)
     private val stopLoading = RegisterResult.Loading(false)
     private val registered = RegisterResult.Registered(user)
+    private val preferences = InMemoryPreferencesManager()
 
     private lateinit var registerViewModel: RegisterViewModel
 
@@ -44,7 +46,12 @@ class RegisterFeature {
         val authService = InMemoryAuthService(idGenerator)
         val authRepository = AuthenticationRepository(authService)
         val dispatchers = TestCoroutineDispatchers()
-        registerViewModel = RegisterViewModel(credentialsValidator, authRepository, dispatchers)
+        registerViewModel = RegisterViewModel(
+          credentialsValidator,
+          authRepository,
+          preferences,
+          dispatchers
+        )
         registerViewModel.registrationLiveData().observeForever(registrationObserver)
         whenever(idGenerator.next()).thenReturn(userId)
     }

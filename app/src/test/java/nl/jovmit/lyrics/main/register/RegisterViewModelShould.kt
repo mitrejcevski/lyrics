@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.runBlocking
 import nl.jovmit.lyrics.InstantTaskExecutorExtension
 import nl.jovmit.lyrics.common.TestCoroutineDispatchers
@@ -17,6 +16,7 @@ import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.result.RegisterResult.Registered
 import nl.jovmit.lyrics.main.data.user.RegistrationData
 import nl.jovmit.lyrics.main.data.user.User
+import nl.jovmit.lyrics.main.preferences.InMemoryPreferencesManager
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -47,13 +47,19 @@ class RegisterViewModelShould {
     private val registrationData = RegistrationData(username, password, about)
     private val user = User(userId, username, password, about)
     private val registered = Registered(user)
+    private val preferences = InMemoryPreferencesManager()
 
     private lateinit var viewModel: RegisterViewModel
 
     @BeforeEach
     fun setUp() {
         val dispatchers = TestCoroutineDispatchers()
-        viewModel = RegisterViewModel(credentialsValidator, authRepository, dispatchers)
+        viewModel = RegisterViewModel(
+          credentialsValidator,
+          authRepository,
+          preferences,
+          dispatchers
+        )
         viewModel.credentialsValidationLiveData().observeForever(credentialsValidationObserver)
         viewModel.registrationLiveData().observeForever(registrationLiveDataObserver)
     }
