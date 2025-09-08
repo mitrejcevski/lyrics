@@ -18,17 +18,13 @@ import nl.jovmit.lyrics.main.data.song.SongPerformer
 import nl.jovmit.lyrics.main.data.song.SongTitle
 import nl.jovmit.lyrics.main.overview.SongsRepository
 
-private fun SavedStateHandle.toEditSongArgs(): EditSongArgs {
-  return EditSongArgs(songId = get("songId") ?: "")
-}
-
 class UpdateSongViewModel(
   private val songsRepository: SongsRepository,
   private val dispatchers: CoroutineDispatchers,
   savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-  private val args = savedStateHandle.toEditSongArgs()
+  private val args = EditSongDestination(savedStateHandle)
 
   private val _uiState = MutableStateFlow(EditSongScreenState())
   val uiState: StateFlow<EditSongScreenState> = _uiState

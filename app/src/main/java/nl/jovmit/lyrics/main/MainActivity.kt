@@ -1,6 +1,7 @@
 package nl.jovmit.lyrics.main
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -10,6 +11,7 @@ import nl.jovmit.lyrics.databinding.ActivityMainBinding
 import nl.jovmit.lyrics.extensions.listen
 import nl.jovmit.lyrics.main.data.result.InfoResult
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
+import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -24,11 +26,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        layout = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(layout.root)
-        setupToolbar()
-        observeInfoViewModel()
-        performLoggedInUserCheck()
+        setContent {
+            AppTheme {
+                AppRoot()
+            }
+        }
+//        layout = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(layout.root)
+//        setupToolbar()
+//        observeInfoViewModel()
+//        performLoggedInUserCheck()
     }
 
     private fun setupToolbar() {

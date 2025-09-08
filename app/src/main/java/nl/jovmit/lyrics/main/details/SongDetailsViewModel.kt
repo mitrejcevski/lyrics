@@ -12,17 +12,13 @@ import nl.jovmit.lyrics.common.CoroutineDispatchers
 import nl.jovmit.lyrics.main.data.result.SongResult
 import nl.jovmit.lyrics.main.overview.SongsRepository
 
-private fun SavedStateHandle.toSongDetailsNavArgs(): SongDetailsArgs {
-  return SongDetailsArgs(get("songId") ?: "")
-}
-
 class SongDetailsViewModel(
   private val songsRepository: SongsRepository,
   private val dispatchers: CoroutineDispatchers,
   savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-  private val args = savedStateHandle.toSongDetailsNavArgs()
+  private val args = SongDetailsDestination(savedStateHandle)
 
   private val _uiState = MutableStateFlow(SongDetailsScreenState())
   val uiState: StateFlow<SongDetailsScreenState> = _uiState
