@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.jovmit.lyrics.R
@@ -18,6 +19,7 @@ import nl.jovmit.lyrics.main.data.result.CredentialsValidationResult
 import nl.jovmit.lyrics.main.data.result.RegisterResult
 import nl.jovmit.lyrics.main.data.user.User
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
+import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,22 +36,32 @@ class Register : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        layout = FragmentRegisterBinding.inflate(inflater)
-        return layout.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    RegisterScreen(
+                        onRegistered = { onRegistrationSuccess() },
+                        onHaveAnAccount = { openLogin() }
+                    )
+                }
+            }
+        }
+//        layout = FragmentRegisterBinding.inflate(inflater)
+//        return layout.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        layout.registrationAlreadyRegisteredLabel.setOnClickListener { openLogin() }
-        layout.registrationRegisterButton.setOnClickListener { triggerRegistration() }
-        layout.registrationUsernameEditText.onAnyTextChange {
-            layout.registrationUsernameTextInput.resetError()
-        }
-        layout.registrationPasswordEditText.onAnyTextChange {
-            layout.registrationPasswordTextInput.resetError()
-        }
-        observeRegistrationLiveData()
-        observeCredentialsValidationLiveData()
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        layout.registrationAlreadyRegisteredLabel.setOnClickListener { openLogin() }
+//        layout.registrationRegisterButton.setOnClickListener { triggerRegistration() }
+//        layout.registrationUsernameEditText.onAnyTextChange {
+//            layout.registrationUsernameTextInput.resetError()
+//        }
+//        layout.registrationPasswordEditText.onAnyTextChange {
+//            layout.registrationPasswordTextInput.resetError()
+//        }
+//        observeRegistrationLiveData()
+//        observeCredentialsValidationLiveData()
+//    }
 
     private fun openLogin() {
         val destination = RegisterDirections.openLogin()
@@ -67,7 +79,7 @@ class Register : Fragment() {
         registerViewModel.registrationLiveData().listen(viewLifecycleOwner) {
             when (it) {
                 is RegisterResult.Loading -> toggleLoading(it.loading)
-                is RegisterResult.Registered -> onRegistrationSuccess(it.user)
+                is RegisterResult.Registered -> onRegistrationSuccess()
                 is RegisterResult.UsernameTakenError -> showUsernameTakenError()
                 is RegisterResult.OfflineError -> showOfflineError()
             }
@@ -79,9 +91,9 @@ class Register : Fragment() {
         layout.registrationLoading.visibility = visibility
     }
 
-    private fun onRegistrationSuccess(user: User) {
-        userPreferencesViewModel.setLoggedInUser(user)
-        layout.registrationUsernameEditText.hideKeyboard()
+    private fun onRegistrationSuccess() {
+//        userPreferencesViewModel.setLoggedInUser(user)
+//        layout.registrationUsernameEditText.hideKeyboard()
         val destination = RegisterDirections.openSongsOverview()
         findNavController().navigate(destination)
     }
