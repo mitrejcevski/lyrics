@@ -14,6 +14,7 @@
     activityKtxVersion = "1.10.1"
     fragmentKtxVersion = "1.8.9"
     swipeRefreshLayoutVersion = "1.1.0"
+    composeNavVersion = "2.9.3"
 
 [libraries]
 android-material = { module = "com.google.android.material:material", version = "1.12.0" }
@@ -24,12 +25,14 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.17.0" }
 androidx-constraint-layout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
 androidx-navigation = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidArchNavigationVersion" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidArchNavigationVersion" }
+androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavVersion" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinVersion" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinVersion" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinVersion" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore", version = "26.0.0" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBomVersion" }
 #androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
@@ -61,7 +64,7 @@ truth = { module = "com.google.truth:truth", version = "1.4.4" }
 androidx = ["android-material", "androidx-swipeToRefresh", "androidx-activity", "androidx-fragment", "androidx-core-ktx", "androidx-constraint-layout", "androidx-navigation", "androidx-navigation-fragment"]
 koin = ["koin-core", "koin-android", "koin-compose"]
 coroitines = ["coroutines-core", "coroutines-android"]
-compose = ["androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "androidx-material-icons"]
+compose = ["androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "androidx-material-icons", "kotlinx-serialization", "androidx-compose-navigation"]
 compose-debug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
 ui-test = ["androidx-test-junit", "androidx-test-espresso", "androidx-test-rules", "androidx-compose-test"]
 unit-test = ["jupiter-api", "jupiter-params", "koin-test", "androidx-testing", "mockito-kotlin", "mockito-jupiter", "mockito-inline", "coroutines-test", "jupiter-engine", "truth"]
@@ -72,4 +75,4 @@ unit-test = ["jupiter-api", "jupiter-params", "koin-test", "androidx-testing", "
     google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesVersion" }
     navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidArchNavigationVersion" }
     kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
-#    kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
+    kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
