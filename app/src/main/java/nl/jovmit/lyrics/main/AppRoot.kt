@@ -1,5 +1,10 @@
 package nl.jovmit.lyrics.main
 
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Left
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Right
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,7 +30,11 @@ fun AppRoot() {
   NavHost(
     modifier = Modifier.fillMaxSize(),
     navController = navController,
-    startDestination = RegistrationDestination
+    startDestination = RegistrationDestination,
+    enterTransition = { slideIntoContainer(towards = Left, animationSpec = tween()) },
+    exitTransition = { scaleOut(targetScale = .9f, animationSpec = tween()) },
+    popEnterTransition = { scaleIn(initialScale = .9f, animationSpec = tween()) },
+    popExitTransition = { slideOutOfContainer(towards = Right, animationSpec = tween()) },
   ) {
     registrationScreen(
       onRegistered = { navController.navigateToSongsOverview() },
