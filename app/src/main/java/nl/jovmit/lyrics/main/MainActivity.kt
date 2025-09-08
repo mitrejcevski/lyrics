@@ -1,13 +1,13 @@
 package nl.jovmit.lyrics.main
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import nl.jovmit.lyrics.main.preferences.UserPreferencesViewModel
 import nl.jovmit.lyrics.theme.AppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     private val userPreferencesViewModel by viewModel<UserPreferencesViewModel>()
 

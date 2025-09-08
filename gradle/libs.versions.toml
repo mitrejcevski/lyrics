@@ -11,18 +11,13 @@
     activityComposeVersion = "1.10.1"
     coroutinesVersion = "1.10.2"
     mockitoKotlinVersion = "2.2.0"
-    activityKtxVersion = "1.10.1"
-    fragmentKtxVersion = "1.8.9"
     swipeRefreshLayoutVersion = "1.1.0"
     composeNavVersion = "2.9.3"
 
 [libraries]
 android-material = { module = "com.google.android.material:material", version = "1.12.0" }
 androidx-swipeToRefresh = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipeRefreshLayoutVersion" }
-androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "activityKtxVersion" }
-androidx-fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtxVersion" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.17.0" }
-androidx-constraint-layout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
 androidx-navigation = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidArchNavigationVersion" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidArchNavigationVersion" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavVersion" }
@@ -35,7 +30,7 @@ firebase-firestore = { module = "com.google.firebase:firebase-firestore", versio
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBomVersion" }
-#androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -61,7 +56,7 @@ jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version = 
 truth = { module = "com.google.truth:truth", version = "1.4.4" }
 
 [bundles]
-androidx = ["android-material", "androidx-swipeToRefresh", "androidx-activity", "androidx-fragment", "androidx-core-ktx", "androidx-constraint-layout", "androidx-navigation", "androidx-navigation-fragment"]
+androidx = ["android-material", "androidx-swipeToRefresh", "androidx-activity-compose", "androidx-core-ktx", "androidx-navigation", "androidx-navigation-fragment"]
 koin = ["koin-core", "koin-android", "koin-compose"]
 coroitines = ["coroutines-core", "coroutines-android"]
 compose = ["androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "androidx-material-icons", "kotlinx-serialization", "androidx-compose-navigation"]
