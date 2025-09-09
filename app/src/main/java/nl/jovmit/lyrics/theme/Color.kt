@@ -2,14 +2,10 @@ package nl.jovmit.lyrics.theme
 
 import androidx.compose.ui.graphics.Color
 
-val WhiteTransparent = Color(0x66ffffff)
-
 val ColorError = Color(0xFFE91E63)
 val ColorOnError = Color(0xFFFFFFFF)
 val InfoMessageTextColor = Color(0xFFFFFFFF)
-val InfoMessageTextColorDark = Color(0xFF000000)
 val SuccessColor = Color(0xFF009688)
-val TextColorBody1 = Color(0xFF919599)
 
 val ColorBackground = Color(0xFFffffff)
 val ColorBackgroundDark = Color(0xFF000000)
