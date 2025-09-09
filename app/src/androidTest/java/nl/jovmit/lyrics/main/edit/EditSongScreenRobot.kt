@@ -1,70 +1,91 @@
 package nl.jovmit.lyrics.main.edit
 
-import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.espresso.action.ViewActions.*
-import nl.jovmit.lyrics.*
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextReplacement
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.Song
+
+private typealias MainActivityRule = AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 
 @DslMarker
 annotation class EditSongScreenRobot
 
 fun launchMainScreenScreen(
-    block: EditSongRobot.() -> Unit
+  rule: MainActivityRule,
+  block: EditSongRobot.() -> Unit
 ): EditSongRobot {
-    launch(MainActivity::class.java)
-    return EditSongRobot().apply(block)
+  return EditSongRobot(rule).apply(block)
 }
 
 @EditSongScreenRobot
-class EditSongRobot {
+class EditSongRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun tapOnSong(value: String) {
-        text(value) perform click()
-    }
+  fun tapOnSong(value: String) {
+    rule.onNodeWithText(value)
+      .performClick()
+  }
 
-    fun tapOnEditSongMenuItem() {
-        R.id.actionEdit perform click()
-    }
+  fun tapOnEditSongMenuItem() {
+    rule.onNodeWithTag("editAction")
+      .performClick()
+  }
 
-    fun replaceSongTitleWith(updatedSongTitle: String) {
-        R.id.editSongTitleEditText perform clearText()
-        R.id.editSongTitleEditText perform typeText(updatedSongTitle)
-    }
+  fun replaceSongTitleWith(updatedSongTitle: String) {
+    rule.onNodeWithTag("songTitle")
+      .performTextReplacement(updatedSongTitle)
+  }
 
-    fun tapOnDoneMenuItem() {
-        R.id.actionDone perform click()
-    }
+  fun tapOnDoneMenuItem() {
+    rule.onNodeWithTag("actionDone")
+      .performClick()
+  }
 
-    infix fun verify(
-        block: EditSongVerificationRobot.() -> Unit
-    ): EditSongVerificationRobot {
-        return EditSongVerificationRobot().apply(block)
-    }
+  infix fun verify(
+    block: EditSongVerificationRobot.() -> Unit
+  ): EditSongVerificationRobot {
+    return EditSongVerificationRobot(rule).apply(block)
+  }
 }
 
 @EditSongScreenRobot
-class EditSongVerificationRobot {
+class EditSongVerificationRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun editScreenIsGettingLaunchedFor(song: Song) {
-        text(R.string.edit) check isDisplayed
-        text(song.songTitle.value) check isDisplayed
-        text(song.songPerformer.name) check isDisplayed
-        text(song.songLyric.lyrics) check isDisplayed
-    }
+  fun editScreenIsGettingLaunchedFor(song: Song) {
+    val editText = rule.activity.getString(R.string.edit)
+    rule.onNodeWithText(editText).assertIsDisplayed()
+    rule.onNodeWithText(song.songTitle.value).assertIsDisplayed()
+    rule.onNodeWithText(song.songPerformer.name).assertIsDisplayed()
+    rule.onNodeWithText(song.songLyric.lyrics).assertIsDisplayed()
+  }
 
-    fun songDetailArePresentFor(updatedSong: Song) {
-        text(R.string.songDetails) check isDisplayed
-        text(updatedSong.songTitle.value) check isDisplayed
-        text(updatedSong.songPerformer.name) check isDisplayed
-        text(updatedSong.songLyric.lyrics) check isDisplayed
-    }
+  @OptIn(ExperimentalTestApi::class)
+  fun songDetailArePresentFor(updatedSong: Song) {
+    val songDetailsText = rule.activity.getString(R.string.songDetails)
+    rule.waitUntilExactlyOneExists(hasText(songDetailsText))
+    rule.onNodeWithText(updatedSong.songTitle.value).assertIsDisplayed()
+    rule.onNodeWithText(updatedSong.songPerformer.name).assertIsDisplayed()
+    rule.onNodeWithText(updatedSong.songLyric.lyrics).assertIsDisplayed()
+  }
 
-    fun successUpdatingSongMessageShown() {
-        text(R.string.success) check isDisplayed
-    }
+  fun successUpdatingSongMessageShown() {
+    val successLabel = rule.activity.getString(R.string.success)
+    rule.onNodeWithText(successLabel).assertIsDisplayed()
+  }
 
-    fun unableSongEditingErrorShown() {
-        text(R.string.errorUnableToEditSong) check isDisplayed
-    }
+  fun unableSongEditingErrorShown() {
+    val errorLabel = rule.activity.getString(R.string.errorUnableToEditSong)
+    rule.onNodeWithText(errorLabel).assertIsDisplayed()
+  }
 }

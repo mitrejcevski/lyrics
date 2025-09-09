@@ -7,11 +7,11 @@ import nl.jovmit.lyrics.main.data.user.User
 
 open class StubAuthService : AuthenticationService {
 
-    override suspend fun createUser(registrationData: RegistrationData): User {
-        TODO("not implemented")
-    }
+  override suspend fun createUser(registrationData: RegistrationData): User {
+    TODO("not implemented")
+  }
 
-    override suspend fun login(loginData: LoginData): User {
-        TODO("not implemented")
-    }
+  override suspend fun login(loginData: LoginData): User {
+    TODO("not implemented")
+  }
 }

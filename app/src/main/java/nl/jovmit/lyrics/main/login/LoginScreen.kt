@@ -117,7 +117,7 @@ private fun LoginScreenContent(
         val passwordFocusRequester = FocusRequester()
         val focusManager = LocalFocusManager.current
         SingleLineTextInput(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier.fillMaxWidth().testTag("username"),
           value = state.username,
           onValueChanged = onUsernameUpdated,
           labelValue = stringResource(R.string.username),
@@ -130,7 +130,9 @@ private fun LoginScreenContent(
           )
         )
         PasswordInput(
-          modifier = Modifier.fillMaxWidth().focusRequester(passwordFocusRequester),
+          modifier = Modifier.fillMaxWidth()
+            .focusRequester(passwordFocusRequester)
+            .testTag("password"),
           value = state.password,
           onValueChanged = onPasswordUpdated,
           errorLabel = if (state.isEmptyPasswordError) stringResource(R.string.errorEmptyPassword) else null,
@@ -146,7 +148,7 @@ private fun LoginScreenContent(
         )
         Spacer(Modifier.height(AppTheme.size.s))
         PrimaryButton(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier.fillMaxWidth().testTag("loginButton"),
           onClick = {
             focusManager.clearFocus()
             onLogin()

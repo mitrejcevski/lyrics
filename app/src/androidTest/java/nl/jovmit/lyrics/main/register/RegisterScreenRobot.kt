@@ -1,70 +1,94 @@
 package nl.jovmit.lyrics.main.register
 
-import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.espresso.action.ViewActions.*
-import nl.jovmit.lyrics.*
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.main.MainActivity
+
+private typealias MainActivityRule = AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 
 @DslMarker
 annotation class RegistrationScreenRobot
 
 fun launchRegistration(
-    block: RegisterScreenRobot.() -> Unit
+  rule: MainActivityRule,
+  block: RegisterScreenRobot.() -> Unit
 ): RegisterScreenRobot {
-    launch(MainActivity::class.java)
-    return RegisterScreenRobot().apply(block)
+  return RegisterScreenRobot(rule).apply(block)
 }
 
 @RegistrationScreenRobot
-class RegisterScreenRobot {
+class RegisterScreenRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun tapOnAlreadyHaveAnAccount() {
-        R.id.registrationAlreadyRegisteredLabel perform click()
-    }
+  @OptIn(ExperimentalTestApi::class)
+  fun tapOnAlreadyHaveAnAccount() {
+    val hasAccount = rule.activity.getString(R.string.alreadyRegistered)
+    rule.onNodeWithText(hasAccount).performClick()
+  }
 
-    fun typeUsername(username: String) {
-        R.id.registrationUsernameEditText.perform(typeText(username), closeSoftKeyboard())
-    }
+  fun typeUsername(username: String) {
+    rule.onNodeWithTag("username").performTextInput(username)
+  }
 
-    fun typePassword(password: String) {
-        R.id.registrationPasswordEditText.perform(typeText(password), closeSoftKeyboard())
-    }
+  fun typePassword(password: String) {
+    rule.onNodeWithTag("password").performTextInput(password)
+  }
 
-    fun tapOnCreateAccount() {
-        R.id.registrationRegisterButton perform click()
-    }
+  fun tapOnCreateAccount() {
+    rule.onNodeWithTag("registerAction").performClick()
+  }
 
-    infix fun verify(block: RegisterVerificationRobot.() -> Unit): RegisterVerificationRobot {
-        return RegisterVerificationRobot().apply(block)
-    }
+  infix fun verify(block: RegisterVerificationRobot.() -> Unit): RegisterVerificationRobot {
+    return RegisterVerificationRobot(rule).apply(block)
+  }
 }
 
 @RegistrationScreenRobot
-class RegisterVerificationRobot {
+class RegisterVerificationRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun loginScreenIsDisplayed() {
-        R.id.loginUsernameEditText check isDisplayed
-        R.id.loginPasswordEditText check isDisplayed
-    }
+  fun loginScreenIsDisplayed() {
+    val login = rule.activity.getString(R.string.login)
+    rule.onAllNodesWithText(login)[0].assertIsDisplayed()
+  }
 
-    fun emptyUsernameErrorIsDisplayed() {
-        text(R.string.errorEmptyUsername) check isDisplayed
-    }
+  fun emptyUsernameErrorIsDisplayed() {
+    val usernameRequired = rule.activity.getString(R.string.errorEmptyUsername)
+    rule.onNodeWithText(usernameRequired).assertIsDisplayed()
+  }
 
-    fun emptyPasswordErrorIsDisplayed() {
-        text(R.string.errorEmptyPassword) check isDisplayed
-    }
+  fun emptyPasswordErrorIsDisplayed() {
+    val passwordRequired = rule.activity.getString(R.string.errorEmptyPassword)
+    rule.onNodeWithText(passwordRequired).assertIsDisplayed()
+  }
 
-    fun songsOverviewScreenIsDisplayed() {
-        R.id.songsOverviewRecycler check isDisplayed
-    }
+  @OptIn(ExperimentalTestApi::class)
+  fun songsOverviewScreenIsDisplayed() {
+    val search = rule.activity.getString(R.string.search)
+    rule.waitUntilExactlyOneExists(hasText(search))
+    rule.onNodeWithTag("newSong")
+      .assertIsDisplayed()
+  }
 
-    fun usernameTakenErrorIsDisplayed() {
-        text(R.string.errorUsernameTaken) check isDisplayed
-    }
+  fun usernameTakenErrorIsDisplayed() {
+    val registrationError = rule.activity.getString(R.string.errorUsernameTaken)
+    rule.onNodeWithText(registrationError).assertIsDisplayed()
+  }
 
-    fun offlineErrorIsDisplayed() {
-        text(R.string.errorNoNetworkConnection) check isDisplayed
-    }
+  fun offlineErrorIsDisplayed() {
+    val offlineError = rule.activity.getString(R.string.errorNoNetworkConnection)
+    rule.onNodeWithText(offlineError).assertIsDisplayed()
+  }
 }
 

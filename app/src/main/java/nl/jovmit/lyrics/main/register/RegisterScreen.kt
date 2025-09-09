@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -107,7 +108,9 @@ private fun RegisterScreenContent(
         val focusManager = LocalFocusManager.current
         val passwordFocusRequester = FocusRequester()
         SingleLineTextInput(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier
+            .fillMaxWidth()
+            .testTag("username"),
           value = state.username,
           onValueChanged = onUpdateUsername,
           errorLabel = if (state.isEmptyUsernameError) stringResource(R.string.errorEmptyUsername) else null,
@@ -119,7 +122,8 @@ private fun RegisterScreenContent(
         PasswordInput(
           modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(passwordFocusRequester),
+            .focusRequester(passwordFocusRequester)
+            .testTag("password"),
           value = state.password,
           onValueChanged = onUpdatePassword,
           errorLabel = if (state.isEmptyPasswordError) stringResource(R.string.errorEmptyPassword) else null,
@@ -129,7 +133,8 @@ private fun RegisterScreenContent(
         SingleLineTextInput(
           modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(aboutFocusRequester),
+            .focusRequester(aboutFocusRequester)
+            .testTag("aboutMe"),
           value = state.aboutMe,
           onValueChanged = onUpdateAboutMe,
           labelValue = stringResource(R.string.about),
@@ -142,14 +147,16 @@ private fun RegisterScreenContent(
           )
         )
         PrimaryButton(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier.fillMaxWidth().testTag("registerAction"),
           labelValue = stringResource(R.string.createUser),
           onClick = onRegister,
           showLoading = state.isLoading
         )
         Spacer(Modifier.height(AppTheme.size.l))
         Text(
-          modifier = Modifier.clickable { onHaveAnAccount() },
+          modifier = Modifier
+            .testTag("gotAccountLabel")
+            .clickable { onHaveAnAccount() },
           text = stringResource(R.string.alreadyRegistered),
           style = AppTheme.typography.body,
           color = AppTheme.colorScheme.colorPrimary

@@ -1,64 +1,88 @@
 package nl.jovmit.lyrics.main.add
 
-import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.espresso.action.ViewActions.*
-import nl.jovmit.lyrics.*
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.main.MainActivity
+
+private typealias MainActivityRule = AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 
 @DslMarker
 annotation class NewSongScreenRobot
 
 fun launchNewSongScreen(
-    block: NewSongRobot.() -> Unit
+  rule: MainActivityRule,
+  block: NewSongRobot.() -> Unit
 ): NewSongRobot {
-    launch(MainActivity::class.java)
-    R.id.songsOverviewNewSongButton perform click()
-    return NewSongRobot().apply(block)
+  rule.onNodeWithTag("newSong").performClick()
+  return NewSongRobot(rule).apply(block)
 }
 
 @NewSongScreenRobot
-class NewSongRobot {
+class NewSongRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun typeSongTitle(title: String) {
-        R.id.newSongTitleEditText.perform(typeText(title), closeSoftKeyboard())
-    }
+  fun typeSongTitle(title: String) {
+    rule.onNodeWithTag("newSongTitle")
+      .performTextInput(title)
+  }
 
-    fun typeSongPerformer(performer: String) {
-        R.id.newSongPerformerEditText.perform(typeText(performer), closeSoftKeyboard())
-    }
+  fun typeSongPerformer(performer: String) {
+    rule.onNodeWithTag("newSongPerformer")
+      .performTextInput(performer)
+  }
 
-    fun typeSongLyrics(lyrics: String) {
-        R.id.newSongLyricEditText.perform(typeText(lyrics), closeSoftKeyboard())
-    }
+  fun typeSongLyrics(lyrics: String) {
+    rule.onNodeWithTag("newSongLyrics")
+      .performTextInput(lyrics)
+  }
 
-    infix fun submit(
-        block: NewSongVerificationRobot.() -> Unit
-    ): NewSongVerificationRobot {
-        R.id.actionDone perform click()
-        return NewSongVerificationRobot().apply(block)
-    }
+  infix fun submit(
+    block: NewSongVerificationRobot.() -> Unit
+  ): NewSongVerificationRobot {
+    rule.onNodeWithTag("actionDone").performClick()
+    return NewSongVerificationRobot(rule).apply(block)
+  }
 }
 
 @NewSongScreenRobot
-class NewSongVerificationRobot {
+class NewSongVerificationRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun emptySongTitleErrorIsDisplayed() {
-        text(R.string.errorEmptySongTitle) check isDisplayed
-    }
+  fun emptySongTitleErrorIsDisplayed() {
+    val emptyTitleError = rule.activity.getString(R.string.errorEmptySongTitle)
+    rule.onNodeWithText(emptyTitleError)
+      .assertIsDisplayed()
+  }
 
-    fun emptySongPerformerErrorIsDisplayed() {
-        text(R.string.errorEmptySongPerformer) check isDisplayed
-    }
+  fun emptySongPerformerErrorIsDisplayed() {
+    val emptyPerformerError = rule.activity.getString(R.string.errorEmptySongPerformer)
+    rule.onNodeWithText(emptyPerformerError)
+      .assertIsDisplayed()
+  }
 
-    fun emptySongLyricsErrorIsDisplayed() {
-        text(R.string.errorEmptySongLyrics) check isDisplayed
-    }
+  fun emptySongLyricsErrorIsDisplayed() {
+    val emptyLyricsError = rule.activity.getString(R.string.errorEmptySongLyrics)
+    rule.onNodeWithText(emptyLyricsError)
+      .assertIsDisplayed()
+  }
 
-    fun verifySongBeingSaved() {
-        text(R.string.success) check isDisplayed
-    }
+  fun verifySongBeingSaved() {
+    val successMessage = rule.activity.getString(R.string.success)
+    rule.onNodeWithText(successMessage)
+      .assertIsDisplayed()
+  }
 
-    fun verifyErrorSavingSong() {
-        text(R.string.errorSavingSong) check isDisplayed
-    }
+  fun verifyErrorSavingSong() {
+    val errorMessage = rule.activity.getString(R.string.errorSavingSong)
+    rule.onNodeWithText(errorMessage)
+      .assertIsDisplayed()
+  }
 }

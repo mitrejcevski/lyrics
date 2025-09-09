@@ -43,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -117,6 +118,7 @@ private fun SongsOverviewScreenContent(
     },
     floatingActionButton = {
       ExtendedFloatingActionButton(
+        modifier = Modifier.testTag("newSong"),
         containerColor = AppTheme.colorScheme.colorPrimary,
         contentColor = AppTheme.colorScheme.colorOnPrimary,
         onClick = onAddNewSong,
@@ -183,6 +185,7 @@ private fun SongsSearchBar(
     ),
     inputField = {
       SearchBarDefaults.InputField(
+        modifier = Modifier.testTag("searchText"),
         query = state.searchQuery,
         onQueryChange = onQueryUpdate,
         onSearch = { onSearch() },
@@ -195,6 +198,9 @@ private fun SongsSearchBar(
         ),
         leadingIcon = {
           IconButton(
+            modifier = Modifier.testTag(
+              if (isSearchExpanded) "navigateUp" else "search"
+            ),
             onClick = {
               if (isSearchExpanded) {
                 onQueryUpdate("")
@@ -323,6 +329,7 @@ private fun OverflowMenu(
 ) {
   var showMenu by remember { mutableStateOf(false) }
   IconButton(
+    modifier = Modifier.testTag("actionOverflow"),
     onClick = { showMenu = !showMenu }
   ) {
     Icon(

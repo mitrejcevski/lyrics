@@ -7,11 +7,11 @@ import nl.jovmit.lyrics.main.exceptions.NetworkUnavailableException
 
 class OfflineAuthService : StubAuthService() {
 
-    override suspend fun createUser(registrationData: RegistrationData): User {
-        throw NetworkUnavailableException()
-    }
+  override suspend fun createUser(registrationData: RegistrationData): User {
+    throw NetworkUnavailableException()
+  }
 
-    override suspend fun login(loginData: LoginData): User {
-        throw NetworkUnavailableException()
-    }
+  override suspend fun login(loginData: LoginData): User {
+    throw NetworkUnavailableException()
+  }
 }

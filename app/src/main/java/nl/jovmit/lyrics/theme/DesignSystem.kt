@@ -20,7 +20,9 @@ data class AppColorScheme(
   val colorOnPrimary: Color,
   val colorOnSecondary: Color,
   val colorError: Color,
-  val colorOnError: Color
+  val colorOnError: Color,
+  val colorSuccess: Color,
+  val colorOnSuccess: Color
 )
 
 @Immutable
@@ -61,7 +63,9 @@ val localAppColorScheme = staticCompositionLocalOf {
     colorOnPrimary = Color.Unspecified,
     colorOnSecondary = Color.Unspecified,
     colorError = Color.Unspecified,
-    colorOnError = Color.Unspecified
+    colorOnError = Color.Unspecified,
+    colorSuccess = Color.Unspecified,
+    colorOnSuccess = Color.Unspecified
   )
 }
 

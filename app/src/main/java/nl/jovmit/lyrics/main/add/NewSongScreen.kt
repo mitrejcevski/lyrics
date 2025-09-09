@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.common.composables.ErrorBanner
+import nl.jovmit.lyrics.common.composables.InfoBanner
 import nl.jovmit.lyrics.common.composables.MultiLineTextInput
 import nl.jovmit.lyrics.common.composables.SingleLineTextInput
 import nl.jovmit.lyrics.theme.AppTheme
@@ -47,12 +48,6 @@ fun NewSongScreen(
 ) {
   val uiState by newSongViewModel.uiState.collectAsStateWithLifecycle()
 
-  LaunchedEffect(uiState.songAdded) {
-    if (uiState.songAdded) {
-      onSongSaved()
-    }
-  }
-
   NewSongScreenContent(
     state = uiState,
     onNavigateUp = onNavigateUp,
@@ -60,7 +55,8 @@ fun NewSongScreen(
     onUpdateSongTitle = newSongViewModel::updateSongTitle,
     onUpdatePerformer = newSongViewModel::updatePerformerName,
     onUpdateLyrics = newSongViewModel::updateLyrics,
-    onErrorBannerDismiss = newSongViewModel::dismissAddSongError
+    onErrorBannerDismiss = newSongViewModel::dismissAddSongError,
+    onSuccessBannerDismiss = onSongSaved
   )
 }
 
@@ -73,7 +69,8 @@ private fun NewSongScreenContent(
   onUpdateSongTitle: (newValue: String) -> Unit,
   onUpdatePerformer: (newValue: String) -> Unit,
   onUpdateLyrics: (newValue: String) -> Unit,
-  onErrorBannerDismiss: () -> Unit
+  onErrorBannerDismiss: () -> Unit,
+  onSuccessBannerDismiss: () -> Unit
 ) {
   Scaffold(
     containerColor = AppTheme.colorScheme.background,
@@ -103,7 +100,10 @@ private fun NewSongScreenContent(
           )
         },
         actions = {
-          IconButton(onClick = onSaveSong) {
+          IconButton(
+            modifier = Modifier.testTag("actionDone"),
+            onClick = onSaveSong
+          ) {
             Icon(
               imageVector = Icons.Default.Check,
               contentDescription = stringResource(R.string.cdActionDone)
@@ -128,7 +128,7 @@ private fun NewSongScreenContent(
       ) {
         val performerFocusRequester = FocusRequester()
         SingleLineTextInput(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier.fillMaxWidth().testTag("newSongTitle"),
           value = state.songTitle,
           onValueChanged = onUpdateSongTitle,
           labelValue = stringResource(R.string.songTitle),
@@ -144,7 +144,8 @@ private fun NewSongScreenContent(
         SingleLineTextInput(
           modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(performerFocusRequester),
+            .focusRequester(performerFocusRequester)
+            .testTag("newSongPerformer"),
           value = state.performerName,
           onValueChanged = onUpdatePerformer,
           labelValue = stringResource(R.string.singerName),
@@ -160,7 +161,8 @@ private fun NewSongScreenContent(
         MultiLineTextInput(
           modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(lyricsFocusRequester),
+            .focusRequester(lyricsFocusRequester)
+            .testTag("newSongLyrics"),
           value = state.lyrics,
           onValueChanged = onUpdateLyrics,
           labelValue = stringResource(R.string.songLyric),
@@ -180,7 +182,13 @@ private fun NewSongScreenContent(
         modifier = Modifier.fillMaxWidth(),
         visible = state.errorAddingSong,
         label = stringResource(R.string.errorSavingSong),
-        onDismiss = { onErrorBannerDismiss() }
+        onDismiss =  onErrorBannerDismiss
+      )
+      InfoBanner(
+        modifier = Modifier.fillMaxWidth(),
+        visible = state.songAdded,
+        label = stringResource(R.string.success),
+        onDismiss = onSuccessBannerDismiss
       )
     }
   }
@@ -197,7 +205,8 @@ private fun PreviewNewSongScreenContent() {
       onUpdateSongTitle = {},
       onUpdatePerformer = {},
       onUpdateLyrics = {},
-      onErrorBannerDismiss = {}
+      onErrorBannerDismiss = {},
+      onSuccessBannerDismiss = {}
     )
   }
 }

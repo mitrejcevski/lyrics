@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.common.composables.ErrorBanner
+import nl.jovmit.lyrics.common.composables.InfoBanner
 import nl.jovmit.lyrics.common.composables.MultiLineTextInput
 import nl.jovmit.lyrics.common.composables.SingleLineTextInput
 import nl.jovmit.lyrics.main.details.SongDetailsScreenState
@@ -64,12 +65,6 @@ fun EditSongScreen(
     }
   }
 
-  LaunchedEffect(editSongScreenState.songUpdated) {
-    if (editSongScreenState.songUpdated) {
-      onSongUpdated()
-    }
-  }
-
   EditSongScreenContent(
     songDetailsState = songDetailsUiState,
     editSongState = editSongScreenState,
@@ -78,7 +73,8 @@ fun EditSongScreen(
     onUpdateSongLyrics = updateSongViewModel::updateSongLyrics,
     onSaveSongEdits = updateSongViewModel::updateSong,
     onErrorBannerDismiss = updateSongViewModel::dismissErrorBanner,
-    onNavigateUp = onNavigateUp
+    onSongUpdated = onSongUpdated,
+    onNavigateUp = onNavigateUp,
   )
 }
 
@@ -92,6 +88,7 @@ private fun EditSongScreenContent(
   onUpdateSongLyrics: (String) -> Unit,
   onSaveSongEdits: () -> Unit,
   onErrorBannerDismiss: () -> Unit,
+  onSongUpdated: () -> Unit,
   onNavigateUp: () -> Unit,
 ) {
   Scaffold(
@@ -131,7 +128,10 @@ private fun EditSongScreenContent(
               )
             }
           } else {
-            IconButton(onClick = onSaveSongEdits) {
+            IconButton(
+              modifier = Modifier.testTag("actionDone"),
+              onClick = onSaveSongEdits
+            ) {
               Icon(
                 imageVector = Icons.Default.Done,
                 contentDescription = stringResource(R.string.edit)
@@ -157,7 +157,9 @@ private fun EditSongScreenContent(
       ) {
         val performerFocusRequester = FocusRequester()
         SingleLineTextInput(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier
+            .fillMaxWidth()
+            .testTag("songTitle"),
           value = editSongState.songTitle,
           onValueChanged = onUpdateSongTitle,
           labelValue = stringResource(R.string.songTitle),
@@ -173,7 +175,8 @@ private fun EditSongScreenContent(
         SingleLineTextInput(
           modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(performerFocusRequester),
+            .focusRequester(performerFocusRequester)
+            .testTag("songPerformer"),
           value = editSongState.songPerformer,
           onValueChanged = onUpdateSongPerformer,
           labelValue = stringResource(R.string.singerName),
@@ -189,7 +192,8 @@ private fun EditSongScreenContent(
         MultiLineTextInput(
           modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(lyricsFocusRequester),
+            .focusRequester(lyricsFocusRequester)
+            .testTag("songLyrics"),
           value = editSongState.songLyrics,
           onValueChanged = onUpdateSongLyrics,
           labelValue = stringResource(R.string.songLyric),
@@ -209,7 +213,13 @@ private fun EditSongScreenContent(
         modifier = Modifier.fillMaxWidth(),
         visible = editSongState.isErrorSavingSong,
         label = stringResource(R.string.errorUnableToEditSong),
-        onDismiss = { onErrorBannerDismiss() }
+        onDismiss = onErrorBannerDismiss
+      )
+      InfoBanner(
+        modifier = Modifier.fillMaxWidth(),
+        visible = editSongState.songUpdated,
+        label = stringResource(R.string.success),
+        onDismiss = onSongUpdated
       )
     }
   }
@@ -227,6 +237,7 @@ private fun PreviewEditSongScreen() {
       onUpdateSongLyrics = {},
       onSaveSongEdits = {},
       onErrorBannerDismiss = {},
+      onSongUpdated = {},
       onNavigateUp = {}
     )
   }

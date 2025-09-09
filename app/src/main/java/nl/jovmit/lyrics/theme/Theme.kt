@@ -23,7 +23,9 @@ private val darkColorScheme = AppColorScheme(
   colorOnPrimary = ColorOnPrimaryDark,
   colorOnSecondary = ColorOnSecondaryDark,
   colorError = ColorError,
-  colorOnError = ColorOnError
+  colorOnError = ColorOnError,
+  colorSuccess = SuccessColor,
+  colorOnSuccess = InfoMessageTextColor
 )
 
 private val lightColorScheme = AppColorScheme(
@@ -36,7 +38,9 @@ private val lightColorScheme = AppColorScheme(
   colorOnPrimary = ColorOnPrimary,
   colorOnSecondary = ColorOnSecondary,
   colorError = ColorError,
-  colorOnError = ColorOnError
+  colorOnError = ColorOnError,
+  colorSuccess = SuccessColor,
+  colorOnSuccess = InfoMessageTextColor
 )
 
 private val typography = AppTypography(

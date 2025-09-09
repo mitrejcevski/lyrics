@@ -23,5 +23,7 @@ fun NavGraphBuilder.songsOverviewScreen(
 }
 
 fun NavController.navigateToSongsOverview() {
-  navigate(SongsOverviewDestination)
+  navigate(SongsOverviewDestination) {
+    popUpTo(graph.id)
+  }
 }

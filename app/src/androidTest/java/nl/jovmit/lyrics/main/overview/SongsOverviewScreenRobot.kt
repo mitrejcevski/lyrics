@@ -1,96 +1,128 @@
 package nl.jovmit.lyrics.main.overview
 
-import androidx.appcompat.widget.SearchView
-import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.espresso.Espresso.*
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import nl.jovmit.lyrics.*
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertAll
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.requestFocus
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import nl.jovmit.lyrics.R
 import nl.jovmit.lyrics.main.MainActivity
 import nl.jovmit.lyrics.main.data.song.Song
+
+private typealias MainActivityRule = AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 
 @DslMarker
 annotation class SongsOverviewScreenRobot
 
 fun launchSongsOverview(
-    block: SongsOverviewRobot.() -> Unit
+  rule: MainActivityRule,
+  block: SongsOverviewRobot.() -> Unit
 ): SongsOverviewRobot {
-    launch(MainActivity::class.java)
-    return SongsOverviewRobot().apply(block)
+  return SongsOverviewRobot(rule).apply(block)
 }
 
 @SongsOverviewScreenRobot
-class SongsOverviewRobot {
+class SongsOverviewRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun clickOnNewSongButton() {
-        R.id.songsOverviewNewSongButton perform click()
-    }
+  fun clickOnNewSongButton() {
+    rule.onNodeWithTag("newSong").performClick()
+  }
 
-    fun tapOnSongWithTitle(songTitle: String) {
-        text(songTitle) perform click()
-    }
+  fun tapOnSongWithTitle(songTitle: String) {
+    rule.onNodeWithText(songTitle).performClick()
+  }
 
-    fun typeSearchQuery(query: String) {
-        R.id.actionSearch perform click()
-        onView(isAssignableFrom(SearchView::class.java)).perform(submitText(query))
-    }
+  @OptIn(ExperimentalTestApi::class)
+  fun typeSearchQuery(query: String) {
+    val searchText = rule.activity.getString(R.string.search)
+    rule.waitUntilExactlyOneExists(hasText(searchText))
+    rule.onNodeWithTag("searchText")
+      .requestFocus()
+      .performTextInput(query)
+    rule.onNodeWithTag("searchText").performImeAction()
+  }
 
-    fun closeSearch() {
-        pressBackUnconditionally()
-        pressBackUnconditionally()
-    }
+  fun closeSearch() {
+    rule.onNodeWithTag("navigateUp").performClick()
+  }
 
-    fun tapOnLogout() {
-        openContextualActionModeOverflowMenu()
-        text(R.string.logout) perform click()
-    }
+  fun tapOnLogout() {
+    val logoutLabel = rule.activity.getString(R.string.logout)
+    rule.onNodeWithTag("actionOverflow").performClick()
+    rule.onNodeWithText(logoutLabel).performClick()
+  }
 
-    infix fun verify(
-        function: SongsOverviewVerificationRobot.() -> Unit
-    ): SongsOverviewVerificationRobot {
-        return SongsOverviewVerificationRobot().apply(function)
-    }
+  infix fun verify(
+    function: SongsOverviewVerificationRobot.() -> Unit
+  ): SongsOverviewVerificationRobot {
+    return SongsOverviewVerificationRobot(rule).apply(function)
+  }
 }
 
 @SongsOverviewScreenRobot
-class SongsOverviewVerificationRobot {
+class SongsOverviewVerificationRobot(
+  private val rule: MainActivityRule
+) {
 
-    fun songsEmptyStateIsDisplayed() {
-        R.id.songsOverviewEmptyStateLabel check isDisplayed
-        R.id.songsOverviewEmptyStateLabel hasText R.string.emptySongsList
-    }
+  fun songsEmptyStateIsDisplayed() {
+    val emptyList = rule.activity.getString(R.string.emptySongsList)
+    rule.onNodeWithText(emptyList).assertIsDisplayed()
+  }
 
-    fun songsEmptyStateIsGone() {
-        R.id.songsOverviewEmptyStateLabel check isNotDisplayed
-    }
+  fun songsEmptyStateIsGone() {
+    val emptyList = rule.activity.getString(R.string.emptySongsList)
+    rule.onNodeWithText(emptyList).assertIsNotDisplayed()
+  }
 
-    fun songTitleAndSingerAreDisplayed(song: Song) {
-        text(song.songTitle.value) check isDisplayed
-        text(song.songPerformer.name) check isDisplayed
-    }
+  fun songTitleAndSingerAreDisplayed(song: Song) {
+    rule.onAllNodesWithText(song.songTitle.value).assertAll(hasText(song.songTitle.value))
+    rule.onAllNodesWithText(song.songPerformer.name).assertAll(hasText(song.songTitle.value))
+  }
 
-    fun songTitleAndSingerNotDisplayed(song: Song) {
-        text(song.songTitle.value) check doesNotExist
-        text(song.songPerformer.name) check doesNotExist
-    }
+  fun songTitleAndSingerNotDisplayed(song: Song) {
+    rule.onNodeWithText(song.songTitle.value).assertDoesNotExist()
+    rule.onNodeWithText(song.songPerformer.name).assertDoesNotExist()
+  }
 
-    fun loadingErrorIsDisplayed() {
-        text(R.string.errorFetchingSongs) check isDisplayed
-    }
+  @OptIn(ExperimentalTestApi::class)
+  fun loadingErrorIsDisplayed() {
+    val cantLoadMessage = rule.activity.getString(R.string.errorFetchingSongs)
+    rule.waitUntilExactlyOneExists(hasText(cantLoadMessage))
+    rule.onNodeWithText(cantLoadMessage)
+      .assertIsDisplayed()
+  }
 
-    fun newSongScreenIsDisplayed() {
-        text(R.string.newSong) check isDisplayed
-    }
+  fun newSongScreenIsDisplayed() {
+    val newSong = rule.activity.getString(R.string.newSong)
+    rule.onNodeWithText(newSong)
+      .assertIsDisplayed()
+  }
 
-    fun songDetailsScreenIsOpened() {
-        text(R.string.songDetails) check isDisplayed
-    }
+  fun songDetailsScreenIsOpened() {
+    val errorMessage = rule.activity.getString(R.string.songDetails)
+    rule.onNodeWithText(errorMessage)
+      .assertIsDisplayed()
+  }
 
-    fun searchErrorIsDisplayed() {
-        text(R.string.errorSearchingSong)
-    }
+  fun searchErrorIsDisplayed() {
+    val errorMessage = rule.activity.getString(R.string.errorSearchingSong)
+    rule.onNodeWithText(errorMessage)
+      .assertIsDisplayed()
+  }
 
-    fun registrationScreenIsDisplayed() {
-        R.id.registrationUsernameEditText check isDisplayed
-    }
+  fun registrationScreenIsDisplayed() {
+    val registrationLabel = rule.activity.getString(R.string.createUser)
+    rule.onAllNodesWithText(registrationLabel).assertAll(hasText(registrationLabel))
+  }
 }

@@ -131,6 +131,7 @@ private fun SongDetailsScreenContent(
         },
         actions = {
           IconButton(
+            modifier = Modifier.testTag("editAction"),
             onClick = { onEditSong(state.song?.songId?.value ?: "") },
             enabled = state.song != null
           ) {
